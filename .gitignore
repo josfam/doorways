@@ -1,3 +1,6 @@
+# virtual envs
+venv*/
+
 # vite app with react-ts template
 
 # Logs
@@ -27,6 +30,8 @@ dist-ssr
 
 # diagramming tools
 *.drawio
+*.bkp
+*.dtmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
