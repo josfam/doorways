@@ -1,3 +1,7 @@
+"""Contains schemas for transition-type-related classes.
+A transition can be of the type 'entry' or 'exit'
+"""
+
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from .base import Base

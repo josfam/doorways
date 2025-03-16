@@ -1,3 +1,8 @@
+"""Contains schemas for "entry-exit times"-related classes.
+An entry-exit time represents an entry or exit event, with more
+information attached, including the time that this event was captured.
+"""
+
 from sqlalchemy import Column, Integer, String, ForeignKey, Text, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime as dt, timezone as tz

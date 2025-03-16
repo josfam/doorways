@@ -1,3 +1,7 @@
+"""Contains schemas for course-related classes. A course is a program that can
+be taken by a student, akin to a major
+"""
+
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from .base import Base

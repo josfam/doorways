@@ -1,3 +1,7 @@
+"""Contains schemas for the base class from which all other models classes will
+inherit.
+"""
+
 from sqlalchemy.orm import DeclarativeBase
 
 

@@ -1,3 +1,5 @@
+"""Contains schemas for user-related classes."""
+
 from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from .base import Base

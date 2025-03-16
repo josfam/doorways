@@ -1,3 +1,8 @@
+"""Contains schemas for "entry-exit belongings"-related classes.
+An entry-exit belonging represents a belonging that's recorded at the time
+of entry or exit.
+"""
+
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from .base import Base

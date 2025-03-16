@@ -1,3 +1,5 @@
+"""Contains schemas for faculty-related classes."""
+
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from .base import Base

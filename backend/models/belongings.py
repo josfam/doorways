@@ -1,3 +1,7 @@
+"""Contains schemas for belongings-related classes.
+A belonging is an item, with more descriptive information attached to it.
+"""
+
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from .base import Base

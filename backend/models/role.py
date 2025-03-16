@@ -1,3 +1,7 @@
+"""Contains schemas for role-related classes.
+A user can be a lecturer, student, or admin.
+"""
+
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from .base import Base

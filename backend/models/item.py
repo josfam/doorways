@@ -1,3 +1,7 @@
+"""Contains schemas for item-related classes.
+An item is a singular generically named object.
+"""
+
 from sqlalchemy import Column, Integer, String
 from .base import Base
 
