@@ -14,8 +14,8 @@ class User(Base):
     email = Column(String(120), nullable=False)
     surname = Column(String(240), nullable=False)
     givenName = Column(String(240), nullable=False)
-    phoneNumber = Column(String(60))
-    roleId = Column(Integer, ForeignKey('roles.id'))
+    phoneNumber = Column(String(60), nullable=False)
+    roleId = Column(Integer, ForeignKey('roles.id'), nullable=False)
 
     # A user can have one role
     role = relationship('Role', back_populates='users', uselist=False)
