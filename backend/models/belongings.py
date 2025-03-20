@@ -22,8 +22,6 @@ class Belonging(Base):
 
     # relationships:
     # with the user (the owner)
-    user = relationship(
-        'User', back_populates='belongings', cascade="all, delete-orphan"
-    )
+    user = relationship('User', back_populates='belongings')
     # with the item
     item = relationship('Item', back_populates='belongings')
