@@ -1,9 +1,10 @@
-from backend.storage.database import create_tables
+from backend.storage.database import create_tables, pre_populate_tables
 
 from fastapi import FastAPI
 
 # create all tables
 create_tables()
+pre_populate_tables()
 
 app = FastAPI()
 

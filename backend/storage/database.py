@@ -1,3 +1,6 @@
+import csv
+import sys
+from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from backend.models.base import Base
@@ -26,6 +29,10 @@ engine = create_engine(url=db_url)
 session_factory = sessionmaker(bind=engine)
 session_local = scoped_session(session_factory=session_factory)
 
+# file operations
+drop_tables_first = True
+pre_population_dir = Path.cwd() / 'storage' / 'pre_populated_content'
+
 
 def get_db():
     """Yields a new database session to the caller"""
@@ -38,4 +45,45 @@ def get_db():
 
 def create_tables():
     """Creates the tables / relations in the database"""
+    if drop_tables_first:
+        Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+
+
+def pre_populate_faculties():
+    """Pre-populate the faculties table with predefined faculties"""
+    faculty_file = pre_population_dir / 'faculties.csv'
+    with open(faculty_file, 'r', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        reader.__next__()  # skip the header
+        for line in reader:
+            if not len(line):
+                continue
+            faculty_name = line[0].strip()
+            faculty = Faculty()
+            faculty.name = faculty_name
+            session = session_local()
+            session.add(faculty)
+            session.commit()
+            session.close()
+    sys.exit()
+
+
+def pre_populate_courses():
+    """Pre-populate the courses table with predefined courses"""
+    ...
+
+
+def pre_populate_roles():
+    """Pre-populate the roles table with predefined roles"""
+    ...
+
+
+def pre_populate_transition_types():
+    """Pre-populate the transition types table with predefined roles"""
+    ...
+
+
+def pre_populate_tables():
+    """Pre-populate the items table with predefined generic items"""
+    pre_populate_faculties()
