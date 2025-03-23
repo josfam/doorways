@@ -84,12 +84,24 @@ def pre_populate_courses():
         print(f'Error inserting courses to db: {e}')
     finally:
         session.close()
-    sys.exit()
 
 
 def pre_populate_roles():
     """Pre-populate the roles table with predefined roles"""
-    ...
+    roles_file = pre_population_dir / 'roles.csv'
+    with open(roles_file, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        roles = [Role(line['role name']) for line in reader]
+    session = session_local()
+    try:
+        session.add_all(roles)
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        print(f'Error inserting roles to db: {e}')
+    finally:
+        session.close()
+    sys.exit()
 
 
 def pre_populate_transition_types():
@@ -101,3 +113,4 @@ def pre_populate_tables():
     """Pre-populate the items table with predefined generic items"""
     pre_populate_faculties()
     pre_populate_courses()
+    pre_populate_roles()
