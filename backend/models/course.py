@@ -13,6 +13,7 @@ class Course(Base):
     __tablename__ = 'courses'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
+    course_code = Column(String(30), nullable=False)
     name = Column(String(120), nullable=False)
 
     # relationship with students
