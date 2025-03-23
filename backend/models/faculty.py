@@ -15,3 +15,7 @@ class Faculty(Base):
 
     #  relationship with lecturers
     lecturers = relationship('Lecturer', back_populates='faculty')
+
+    def __init__(self, name: str):
+        """Initialize the Faculty instance"""
+        self.name = name

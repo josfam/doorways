@@ -54,19 +54,14 @@ def pre_populate_faculties():
     """Pre-populate the faculties table with predefined faculties"""
     faculty_file = pre_population_dir / 'faculties.csv'
     with open(faculty_file, 'r', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        reader.__next__()  # skip the header
+        reader = csv.DictReader(f)
         for line in reader:
-            if not len(line):
-                continue
-            faculty_name = line[0].strip()
-            faculty = Faculty()
-            faculty.name = faculty_name
+            faculty_name = line['faculty name']
+            faculty = Faculty(faculty_name)
             session = session_local()
             session.add(faculty)
             session.commit()
             session.close()
-    sys.exit()
 
 
 def pre_populate_courses():
