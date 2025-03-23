@@ -55,13 +55,16 @@ def pre_populate_faculties():
     faculty_file = pre_population_dir / 'faculties.csv'
     with open(faculty_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
-        for line in reader:
-            faculty_name = line['faculty name']
-            faculty = Faculty(faculty_name)
-            session = session_local()
-            session.add(faculty)
-            session.commit()
-            session.close()
+        faculties = [Faculty(line['faculty name']) for line in reader]
+    session = session_local()
+    try:
+        session.add_all(faculties)
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        print(f'Error inserting faculties to db: {e}')
+    finally:
+        session.close()
 
 
 def pre_populate_courses():
