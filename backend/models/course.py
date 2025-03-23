@@ -14,7 +14,12 @@ class Course(Base):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     course_code = Column(String(30), nullable=False)
-    name = Column(String(120), nullable=False)
+    course_name = Column(String(120), nullable=False)
 
     # relationship with students
     students = relationship('Student', back_populates='course')
+
+    def __init__(self, course_code: str, course_name: str):
+        """Initialize the Course instance"""
+        self.course_code = course_code
+        self.course_name = course_name
