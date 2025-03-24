@@ -13,11 +13,11 @@ class Role(Base):
     __tablename__ = 'roles'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    role_name = Column(String(160))
+    name = Column(String(160))
 
     # relationship. A role can be assigned to many users
     users = relationship('User', back_populates='role')
 
     def __init__(self, role_name: str):
         """Initialize the Role instance"""
-        self.role_name = role_name
+        self.name = role_name
