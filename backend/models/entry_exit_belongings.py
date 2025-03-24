@@ -14,7 +14,7 @@ class EntryExitBelonging(Base):
     __tablename__ = 'entryExitBelongings'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    entryExitId = Column(
+    entryExitTimeId = Column(
         Integer, ForeignKey('entryExitTimes.id'), nullable=False
     )
     belongingId = Column(Integer, ForeignKey('belongings.id'), nullable=False)
