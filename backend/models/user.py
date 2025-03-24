@@ -28,6 +28,10 @@ class User(Base):
     student_record = relationship('Student', back_populates='user')
     # with a lecturer
     lecturer_record = relationship('Lecturer', back_populates='user')
+    # with a security guard
+    security_guard_record = relationship(
+        'SecurityGuard', back_populates='user'
+    )
     # with a belonging. Belongings are deleted if the user is deleted
     belongings = relationship(
         'Belonging', back_populates='user', cascade="all, delete-orphan"

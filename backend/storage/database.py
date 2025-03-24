@@ -12,6 +12,7 @@ from backend.models.faculty import Faculty
 from backend.models.item import Item
 from backend.models.lecturer import Lecturer
 from backend.models.role import Role
+from backend.models.security_guard import SecurityGuard
 from backend.models.student import Student
 from backend.models.transition_type import TransitionType
 from backend.models.user import User
