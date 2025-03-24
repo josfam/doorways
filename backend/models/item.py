@@ -18,3 +18,7 @@ class Item(Base):
     # relationships
     # with belonging
     belongings = relationship('Belonging', back_populates='item')
+
+    def __init__(self, name: str):
+        """Initialize the Item instance"""
+        self.name = name

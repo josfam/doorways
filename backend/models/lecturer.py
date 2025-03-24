@@ -18,3 +18,8 @@ class Lecturer(Base):
     user = relationship('User', back_populates='lecturer_record')
     # Faculty relationship
     faculty = relationship('Faculty', back_populates='lecturers')
+
+    def __init__(self, user_id: int, faculty_id: int):
+        """Initialize the Lecturer instance"""
+        self.userId = user_id
+        self.facultyId = faculty_id

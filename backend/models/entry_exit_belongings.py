@@ -24,3 +24,8 @@ class EntryExitBelonging(Base):
     entry_exit_times = relationship(
         'EntryExitTime', back_populates='entry_exit_belongings'
     )
+
+    def __init__(self, entry_exit_time_id: int, belonging_id: int):
+        """Initialize the EntryExitBelonging instance"""
+        self.entryExitTimeId = entry_exit_time_id
+        self.belongingId = belonging_id

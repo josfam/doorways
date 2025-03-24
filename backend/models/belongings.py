@@ -25,3 +25,13 @@ class Belonging(Base):
     user = relationship('User', back_populates='belongings')
     # with the item
     item = relationship('Item', back_populates='belongings')
+
+    def __init__(
+        self, user_id: int, item_id: int, color: str, brand: str, notes: str
+    ):
+        """Initialize the Belonging instance"""
+        self.userId = user_id
+        self.itemId = item_id
+        self.color = color
+        self.brand = brand
+        self.notes = notes

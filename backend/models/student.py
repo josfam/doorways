@@ -18,3 +18,8 @@ class Student(Base):
     user = relationship('User', back_populates='student_record')
     # relationship with course
     course = relationship('Course', back_populates='students')
+
+    def __init__(self, user_id: int, course_id: int):
+        """Initialize the Student instance"""
+        self.userId = user_id
+        self.courseId = course_id

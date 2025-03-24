@@ -32,3 +32,18 @@ class User(Base):
     belongings = relationship(
         'Belonging', back_populates='user', cascade="all, delete-orphan"
     )
+
+    def __init__(
+        self,
+        email: str,
+        surname: str,
+        given_name: str,
+        phone_number: str,
+        role_id: int,
+    ):
+        """Initialize the User instance"""
+        self.email = email
+        self.surname = surname
+        self.givenName = given_name
+        self.phoneNumber = phone_number
+        self.roleId = role_id
