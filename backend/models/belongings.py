@@ -15,7 +15,7 @@ class Belonging(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     userId = Column(Integer, ForeignKey('users.id'), nullable=False)
-    type = Column(Integer, ForeignKey('items.id'), nullable=False)
+    itemId = Column(Integer, ForeignKey('items.id'), nullable=False)
     color = Column(String(60), nullable=False)
     brand = Column(String(60), nullable=True, default='unknown')
     notes = Column(Text, nullable=True, default='')
