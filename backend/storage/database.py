@@ -54,6 +54,10 @@ def create_tables():
 
 def pre_populate_faculties():
     """Pre-populate the faculties table with predefined faculties"""
+    existing_faculties = session_local().query(Faculty).all()
+    if existing_faculties:
+        return
+
     faculty_file = pre_population_dir / 'faculties.csv'
     with open(faculty_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
@@ -71,6 +75,10 @@ def pre_populate_faculties():
 
 def pre_populate_courses():
     """Pre-populate the courses table with predefined courses"""
+    existing_courses = session_local().query(Course).all()
+    if existing_courses:
+        return
+
     courses_file = pre_population_dir / 'courses.csv'
     with open(courses_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
@@ -90,6 +98,10 @@ def pre_populate_courses():
 
 def pre_populate_roles():
     """Pre-populate the roles table with predefined roles"""
+    existing_roles = session_local().query(Role).all()
+    if existing_roles:
+        return
+
     roles_file = pre_population_dir / 'roles.csv'
     with open(roles_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
@@ -107,6 +119,10 @@ def pre_populate_roles():
 
 def pre_populate_transition_types():
     """Pre-populate the transition types table with predefined roles"""
+    existing_transition_types = session_local().query(TransitionType).all()
+    if existing_transition_types:
+        return
+
     transition_types_file = pre_population_dir / 'transition_types.csv'
     with open(transition_types_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
