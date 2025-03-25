@@ -1,6 +1,7 @@
 """Schema validation classes for user-related requests and responses"""
 
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 
 class UserCreate(BaseModel):
@@ -12,3 +13,5 @@ class UserCreate(BaseModel):
     phone_number: str
     role_id: int
     password: str
+    course_id: Optional[int] = None
+    faculty_id: Optional[int] = None
