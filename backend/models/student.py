@@ -15,7 +15,7 @@ class Student(Base):
     courseId = Column(Integer, ForeignKey('courses.id'))
 
     # a student is a user
-    user = relationship('User', back_populates='student_record')
+    user = relationship('User', back_populates='student_record', uselist=False)
     # relationship with course
     course = relationship('Course', back_populates='students')
 
