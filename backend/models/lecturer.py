@@ -15,7 +15,9 @@ class Lecturer(Base):
     facultyId = Column(Integer, ForeignKey('faculties.id'))
 
     # A lecturer is a user
-    user = relationship('User', back_populates='lecturer_record', uselist=False)
+    user = relationship(
+        'User', back_populates='lecturer_record', uselist=False
+    )
     # Faculty relationship
     faculty = relationship('Faculty', back_populates='lecturers')
 

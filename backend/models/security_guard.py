@@ -16,7 +16,9 @@ class SecurityGuard(Base):
     userId = Column(Integer, ForeignKey('users.id'), nullable=False)
 
     # a security guard is a user
-    user = relationship('User', back_populates='security_guard_record', uselist=False)
+    user = relationship(
+        'User', back_populates='security_guard_record', uselist=False
+    )
 
     def __init__(self, user_id: int):
         """Initialize the SecurityGuard instance"""
