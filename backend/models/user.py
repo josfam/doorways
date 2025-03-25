@@ -45,6 +45,7 @@ class User(Base):
         given_name: str,
         phone_number: str,
         role_id: int,
+        password: str
     ):
         """Initialize the User instance"""
         self.email = email
@@ -52,6 +53,7 @@ class User(Base):
         self.givenName = given_name
         self.phoneNumber = phone_number
         self.roleId = role_id
+        self.password = password
 
     def __str__(self):
         return f"User(email='{self.email}', surname='{self.surname}', givenName='{self.givenName}', phoneNumber='{self.phoneNumber}', roleId='{self.roleId}'"

@@ -11,3 +11,4 @@ class UserCreate(BaseModel):
     given_name: str
     phone_number: str
     role_id: int
+    password: str
