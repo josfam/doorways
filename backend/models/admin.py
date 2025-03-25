@@ -15,3 +15,10 @@ class Admin(Base):
 
     # A user can have one admin role
     user = relationship('User', back_populates='admin_record', uselist=False)
+
+    def __init__(self, user_id: int):
+        """Initialize the Admin instance"""
+        self.userId = user_id
+
+    def __str__(self):
+        return f"Admin(id={self.id})"
