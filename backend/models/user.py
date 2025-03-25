@@ -33,6 +33,8 @@ class User(Base):
     security_guard_record = relationship(
         'SecurityGuard', back_populates='user'
     )
+    # with an admin
+    admin_record = relationship('Admin', back_populates='user')
     # with a belonging. Belongings are deleted if the user is deleted
     belongings = relationship(
         'Belonging', back_populates='user', cascade="all, delete-orphan"
@@ -45,7 +47,7 @@ class User(Base):
         given_name: str,
         phone_number: str,
         role_id: int,
-        password: str
+        password: str,
     ):
         """Initialize the User instance"""
         self.email = email
