@@ -16,6 +16,7 @@ class User(Base):
     givenName = Column(String(240), nullable=False)
     phoneNumber = Column(String(60), nullable=False)
     roleId = Column(Integer, ForeignKey('roles.id'), nullable=False)
+    password = Column(String(240), nullable=False)
 
     # A user can have one role
     role = relationship('Role', back_populates='users', uselist=False)
@@ -51,3 +52,6 @@ class User(Base):
         self.givenName = given_name
         self.phoneNumber = phone_number
         self.roleId = role_id
+
+    def __str__(self):
+        return f"User(email='{self.email}', surname='{self.surname}', givenName='{self.givenName}', phoneNumber='{self.phoneNumber}', roleId='{self.roleId}'"
