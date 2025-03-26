@@ -58,4 +58,4 @@ class User(Base):
         self.password = password
 
     def __str__(self):
-        return f"User(email='{self.email}', surname='{self.surname}', givenName='{self.givenName}', phoneNumber='{self.phoneNumber}', roleId='{self.roleId}'"
+        return f"User(id='{self.id}', email='{self.email}', surname='{self.surname}', givenName='{self.givenName}', phoneNumber='{self.phoneNumber}', roleId='{self.roleId}'"
