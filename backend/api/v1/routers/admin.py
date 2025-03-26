@@ -7,6 +7,7 @@ from backend.api.v1.auth.passwords import hash_password
 from backend.models.user import User
 from backend.schema_validation.user_validation import UserCreate
 from backend.api.v1.utils.roles import add_user_to_role_table
+from backend.api.v1.utils.custom_exceptions import MissingUserAttributeError
 
 admin_router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -37,14 +38,21 @@ def add_user(user_data: UserCreate, db: Session = Depends(get_db)):
         password=hashed_pwd,
     )
 
-    db.add(new_user)
-    add_user_to_role_table(
-        role_id=user_data.role_id,
-        user_data=user_data,
-        user=new_user,
-        session=db,
-    )
-    db.commit()
+    try:
+        db.add(new_user)
+        add_user_to_role_table(
+            role_id=user_data.role_id,
+            user_data=user_data,
+            user=new_user,
+            session=db,
+        )
+        db.commit()
+    except MissingUserAttributeError as e:
+        db.rollback()
+        return {'message': str(e)}, status.HTTP_400_BAD_REQUEST
+    except Exception as e:
+        db.rollback()
+        return {'message': str(e)}, status.HTTP_500_INTERNAL_SERVER_ERROR
 
     return {'message': 'User added successfully'}, status.HTTP_201_CREATED
 
