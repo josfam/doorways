@@ -29,7 +29,6 @@ dist-ssr
 *.sw?
 
 # diagramming tools
-*.drawio
 *.bkp
 *.dtmp
 
