@@ -45,6 +45,7 @@ drop_tables_first = int(os.getenv('DROP_TABLES_FIRST', 0))
 
 pre_population_dir = Path.cwd() / 'storage' / 'pre_populated_content'
 
+
 def get_db():
     """Yields a new database session to the caller"""
     session = session_local()
