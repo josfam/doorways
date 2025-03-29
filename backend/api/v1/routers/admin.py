@@ -1,12 +1,18 @@
 """API routes for admin-related actions"""
 
+import sys
 from sqlalchemy.orm import Session
 from typing import List
 from fastapi import APIRouter, status, Depends
 from backend.storage.database import get_db
 from backend.api.v1.auth.passwords import hash_password
 from backend.models.user import User
-from backend.schema_validation.user_validation import UserCreate, UserRead
+from backend.models.student import Student
+from backend.schema_validation.user_validation import (
+    UserCreate,
+    UserRead,
+    StudentRead,
+)
 from backend.api.v1.utils.roles import add_user_to_role_table
 from backend.api.v1.utils.custom_exceptions import MissingUserAttributeError
 
@@ -85,3 +91,20 @@ def get_users(db: Session = Depends(get_db)):
     if not users:
         return {'message': 'No users found'}, status.HTTP_404_NOT_FOUND
     return [UserRead.model_validate(user) for user in users]
+
+
+@admin_router.get(
+    '/users/students',
+    status_code=status.HTTP_200_OK,
+    response_model=List[StudentRead],
+)
+def get_students(db: Session = Depends(get_db)):
+    """Returns all students in the database"""
+    students = db.query(Student).all()
+    users = [
+        {**student.user.to_dict(), 'course_id': student.course_id}
+        for student in students
+    ]
+    if not students:
+        return {'message': 'No students found'}, status.HTTP_404_NOT_FOUND
+    return users
