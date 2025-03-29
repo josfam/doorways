@@ -15,3 +15,20 @@ class UserCreate(BaseModel):
     password: str
     course_id: Optional[int] = None
     faculty_id: Optional[int] = None
+
+
+class UserRead(BaseModel):
+    """Schema validation for reading a user"""
+
+    id: int
+    email: EmailStr
+    surname: str
+    given_name: str
+    phone_number: str
+    role_id: int
+    course_id: Optional[int] = None
+    faculty_id: Optional[int] = None
+
+    class Config:
+        orm_mode = True
+        from_attributes = True

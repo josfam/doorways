@@ -1,11 +1,12 @@
 """API routes for admin-related actions"""
 
 from sqlalchemy.orm import Session
+from typing import List
 from fastapi import APIRouter, status, Depends
 from backend.storage.database import get_db
 from backend.api.v1.auth.passwords import hash_password
 from backend.models.user import User
-from backend.schema_validation.user_validation import UserCreate
+from backend.schema_validation.user_validation import UserCreate, UserRead
 from backend.api.v1.utils.roles import add_user_to_role_table
 from backend.api.v1.utils.custom_exceptions import MissingUserAttributeError
 
@@ -73,3 +74,14 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
 def update_user(user_id: int, db: Session = Depends(get_db)):
     """Updates a user's details"""
     pass
+
+
+@admin_router.get(
+    '/users', status_code=status.HTTP_200_OK, response_model=List[UserRead]
+)
+def get_users(db: Session = Depends(get_db)):
+    """Returns all users in the database"""
+    users = db.query(User).all()
+    if not users:
+        return {'message': 'No users found'}, status.HTTP_404_NOT_FOUND
+    return [UserRead.model_validate(user) for user in users]
