@@ -57,5 +57,16 @@ class User(Base):
         self.role_id = role_id
         self.password = password
 
+    def to_dict(self):
+        """Convert the User instance to a dictionary"""
+        return {
+            'id': self.id,
+            'email': self.email,
+            'surname': self.surname,
+            'given_name': self.given_name,
+            'phone_number': self.phone_number,
+            'role_id': self.role_id,
+        }
+
     def __str__(self):
         return f"User(id='{self.id}', email='{self.email}', surname='{self.surname}', given_name='{self.given_name}', phone_number='{self.phone_number}', role_id='{self.role_id}'"
