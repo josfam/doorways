@@ -1,8 +1,10 @@
 import csv
 import sys
+import os
 from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+from dotenv import load_dotenv
 from backend.models.admin import Admin
 from backend.models.base import Base
 from backend.models.belongings import Belonging
@@ -18,12 +20,19 @@ from backend.models.student import Student
 from backend.models.transition_type import TransitionType
 from backend.models.user import User
 
-db_port = '5432'
-db_name = 'doorways'
-db_user = 'postgres'
-db_host = 'localhost'
-db_password = 'root'
+# load environment variables
+load_dotenv()
+
+db_port = int(os.getenv('DB_PORT')) or 5432
+db_name = os.getenv('DB_NAME') or 'doorways'
+db_user = os.getenv('DB_USER')
+db_host = os.getenv('DB_HOST') or 'localhost'
+db_password = os.getenv('DB_PASSWORD')
 db_url = f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
+
+if not db_user or not db_password:
+    print('Database user or password not set in environment variables.')
+    sys.exit(1)
 
 engine = create_engine(url=db_url)
 
@@ -32,9 +41,9 @@ session_factory = sessionmaker(bind=engine)
 session_local = scoped_session(session_factory=session_factory)
 
 # file operations
-drop_tables_first = True
-pre_population_dir = Path.cwd() / 'storage' / 'pre_populated_content'
+drop_tables_first = int(os.getenv('DROP_TABLES_FIRST', 0))
 
+pre_population_dir = Path.cwd() / 'storage' / 'pre_populated_content'
 
 def get_db():
     """Yields a new database session to the caller"""
