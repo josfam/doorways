@@ -13,7 +13,7 @@ class SecurityGuard(Base):
     __tablename__ = 'securityGuards'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userId = Column(Integer, ForeignKey('users.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
 
     # a security guard is a user
     user = relationship(
@@ -22,4 +22,4 @@ class SecurityGuard(Base):
 
     def __init__(self, user_id: int):
         """Initialize the SecurityGuard instance"""
-        self.userId = user_id
+        self.user_id = user_id

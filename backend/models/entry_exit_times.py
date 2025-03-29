@@ -15,8 +15,8 @@ class EntryExitTime(Base):
     __tablename__ = 'entryExitTimes'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userId = Column(Integer, ForeignKey('users.id'), nullable=False)
-    transitionTypeId = Column(
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    transition_type_id = Column(
         Integer, ForeignKey('transitionTypes.id'), nullable=False
     )
     time = Column(DateTime, nullable=False, default=dt.now(tz.utc))
@@ -33,6 +33,6 @@ class EntryExitTime(Base):
 
     def __init__(self, user_id: int, transition_type_id: int):
         """Initialize the EntryExitTime instance"""
-        self.userId = user_id
-        self.transitionTypeId = transition_type_id
+        self.user_id = user_id
+        self.transition_type_id = transition_type_id
         self.time = dt.now(tz.utc)

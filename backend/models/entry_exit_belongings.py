@@ -14,10 +14,10 @@ class EntryExitBelonging(Base):
     __tablename__ = 'entryExitBelongings'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    entryExitTimeId = Column(
+    entry_exit_time_id = Column(
         Integer, ForeignKey('entryExitTimes.id'), nullable=False
     )
-    belongingId = Column(Integer, ForeignKey('belongings.id'), nullable=False)
+    belonging_id = Column(Integer, ForeignKey('belongings.id'), nullable=False)
 
     # relationships:
     # with entryExitTime
@@ -27,5 +27,5 @@ class EntryExitBelonging(Base):
 
     def __init__(self, entry_exit_time_id: int, belonging_id: int):
         """Initialize the EntryExitBelonging instance"""
-        self.entryExitTimeId = entry_exit_time_id
-        self.belongingId = belonging_id
+        self.entry_exit_time_id = entry_exit_time_id
+        self.belonging_id = belonging_id

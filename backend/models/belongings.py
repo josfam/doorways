@@ -14,8 +14,8 @@ class Belonging(Base):
     __tablename__ = 'belongings'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userId = Column(Integer, ForeignKey('users.id'), nullable=False)
-    itemId = Column(Integer, ForeignKey('items.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    item_id = Column(Integer, ForeignKey('items.id'), nullable=False)
     color = Column(String(60), nullable=False)
     brand = Column(String(60), nullable=True, default='unknown')
     notes = Column(Text, nullable=True, default='')

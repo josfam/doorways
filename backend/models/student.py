@@ -11,8 +11,8 @@ class Student(Base):
     __tablename__ = 'students'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userId = Column(Integer, ForeignKey('users.id'), nullable=False)
-    courseId = Column(Integer, ForeignKey('courses.id'))
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    course_id = Column(Integer, ForeignKey('courses.id'))
 
     # a student is a user
     user = relationship('User', back_populates='student_record', uselist=False)
@@ -21,5 +21,5 @@ class Student(Base):
 
     def __init__(self, user_id: int, course_id: int):
         """Initialize the Student instance"""
-        self.userId = user_id
-        self.courseId = course_id
+        self.user_id = user_id
+        self.course_id = course_id
