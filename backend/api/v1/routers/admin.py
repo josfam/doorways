@@ -8,6 +8,7 @@ from backend.storage.database import get_db
 from backend.api.v1.auth.passwords import hash_password
 from backend.models.user import User
 from backend.models.student import Student
+from backend.models.lecturer import Lecturer
 from backend.schema_validation.user_validation import (
     UserCreate,
     UserRead,
@@ -107,4 +108,18 @@ def get_students(db: Session = Depends(get_db)):
     ]
     if not students:
         return {'message': 'No students found'}, status.HTTP_404_NOT_FOUND
+    return users
+
+
+@admin_router.get('/users/lecturers', status_code=status.HTTP_200_OK)
+def get_lecturers(db: Session = Depends(get_db)):
+    """Returns all lecturers in the database"""
+    lecturers = db.query(Lecturer).all()
+    users = [
+        {**lecturer.user.to_dict(), 'faculty_id': lecturer.faculty_id}
+        for lecturer in lecturers
+    ]
+
+    if not lecturers:
+        return {'message': 'No lecturers found'}, status.HTTP_404_NOT_FOUND
     return users

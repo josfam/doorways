@@ -25,3 +25,11 @@ class Lecturer(Base):
         """Initialize the Lecturer instance"""
         self.user_id = user_id
         self.faculty_id = faculty_id
+
+    def to_dict(self):
+        """Convert the Lecturer instance to a dictionary"""
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'faculty_id': self.faculty_id,
+        }
