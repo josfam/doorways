@@ -9,6 +9,8 @@ from backend.api.v1.auth.passwords import hash_password
 from backend.models.user import User
 from backend.models.student import Student
 from backend.models.lecturer import Lecturer
+from backend.models.security_guard import SecurityGuard
+
 from backend.schema_validation.user_validation import (
     UserCreate,
     UserRead,
@@ -122,4 +124,20 @@ def get_lecturers(db: Session = Depends(get_db)):
 
     if not lecturers:
         return {'message': 'No lecturers found'}, status.HTTP_404_NOT_FOUND
+    return users
+
+
+@admin_router.get('/users/security_guards', status_code=status.HTTP_200_OK)
+def get_security_guards(db: Session = Depends(get_db)):
+    """Returns all security guards in the database"""
+    security_guards = db.query(SecurityGuard).all()
+    users = [
+        security_guard.user.to_dict() for security_guard in security_guards
+    ]
+
+    if not security_guards:
+        return {
+            'message': 'No security guards found'
+        }, status.HTTP_404_NOT_FOUND
+
     return users
