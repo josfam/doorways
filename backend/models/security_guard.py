@@ -23,3 +23,10 @@ class SecurityGuard(Base):
     def __init__(self, user_id: int):
         """Initialize the SecurityGuard instance"""
         self.user_id = user_id
+
+    def to_dict(self):
+        """Convert the SecurityGuard instance to a dictionary"""
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+        }
