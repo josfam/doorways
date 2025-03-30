@@ -17,7 +17,7 @@ from backend.schema_validation.user_validation import (
     StudentRead,
     LecturerRead,
 )
-from backend.api.v1.utils.roles import add_user_to_role_table
+from backend.api.v1.utils.role_utils import add_user_to_role_table
 from backend.api.v1.utils.custom_exceptions import MissingUserAttributeError
 
 admin_router = APIRouter(prefix="/admin", tags=["admin"])
@@ -71,18 +71,6 @@ def add_user(user_data: UserCreate, db: Session = Depends(get_db)):
 @admin_router.post('/users', status_code=status.HTTP_200_OK)
 def add_users(db: Session = Depends(get_db)):
     """Adds multiple users to the database"""
-    pass
-
-
-@admin_router.delete('/user/{user_id}', status_code=status.HTTP_200_OK)
-def delete_user(user_id: int, db: Session = Depends(get_db)):
-    """Deletes a user from the database"""
-    pass
-
-
-@admin_router.patch('/user/{user_id}', status_code=status.HTTP_200_OK)
-def update_user(user_id: int, db: Session = Depends(get_db)):
-    """Updates a user's details"""
     pass
 
 
@@ -150,3 +138,29 @@ def get_security_guards(db: Session = Depends(get_db)):
         }, status.HTTP_404_NOT_FOUND
 
     return users
+
+@admin_router.patch('/user/{user_id}', status_code=status.HTTP_200_OK)
+def update_user(user_id: int, user_data: UserCreate, db: Session = Depends(get_db)):
+    """Updates a user's details"""
+    # Check if user exists
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return {'message': 'User not found'}, status.HTTP_404_NOT_FOUND
+    # Update user details
+    user.email = user_data.email
+    user.surname = user_data.surname
+    user.given_name = user_data.given_name
+    user.phone_number = user_data.phone_number
+    user.role_id = user_data.role_id
+    user.password = hash_password(user_data.password)
+    # Commit changes to the database
+    db.commit()
+    db.refresh(user)
+    return {'message': 'User updated successfully'}, status.HTTP_200_OK
+
+
+
+@admin_router.delete('/user/{user_id}', status_code=status.HTTP_200_OK)
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    """Deletes a user from the database"""
+    pass
