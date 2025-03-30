@@ -15,6 +15,7 @@ from backend.schema_validation.user_validation import (
     UserCreate,
     UserRead,
     StudentRead,
+    LecturerRead,
 )
 from backend.api.v1.utils.roles import add_user_to_role_table
 from backend.api.v1.utils.custom_exceptions import MissingUserAttributeError
@@ -113,7 +114,11 @@ def get_students(db: Session = Depends(get_db)):
     return users
 
 
-@admin_router.get('/users/lecturers', status_code=status.HTTP_200_OK)
+@admin_router.get(
+    '/users/lecturers',
+    status_code=status.HTTP_200_OK,
+    response_model=List[LecturerRead],
+)
 def get_lecturers(db: Session = Depends(get_db)):
     """Returns all lecturers in the database"""
     lecturers = db.query(Lecturer).all()
@@ -127,7 +132,11 @@ def get_lecturers(db: Session = Depends(get_db)):
     return users
 
 
-@admin_router.get('/users/security_guards', status_code=status.HTTP_200_OK)
+@admin_router.get(
+    '/users/security_guards',
+    status_code=status.HTTP_200_OK,
+    response_model=List[UserRead],
+)
 def get_security_guards(db: Session = Depends(get_db)):
     """Returns all security guards in the database"""
     security_guards = db.query(SecurityGuard).all()
