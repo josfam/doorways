@@ -34,17 +34,13 @@ class UserRead(BaseModel):
         from_attributes = True
 
 
-class StudentRead(BaseModel):
+class StudentRead(UserRead):
     """Schema validation for reading a student"""
 
-    id: int
-    email: EmailStr
-    surname: str
-    given_name: str
-    phone_number: str
-    role_id: int
     course_id: int
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+
+class LecturerRead(UserRead):
+    """Schema validation for reading a lecturer"""
+
+    faculty_id: int
