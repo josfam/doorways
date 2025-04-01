@@ -139,8 +139,11 @@ def get_security_guards(db: Session = Depends(get_db)):
 
     return users
 
+
 @admin_router.patch('/user/{user_id}', status_code=status.HTTP_200_OK)
-def update_user(user_id: int, user_data: UserCreate, db: Session = Depends(get_db)):
+def update_user(
+    user_id: int, user_data: UserCreate, db: Session = Depends(get_db)
+):
     """Updates a user's details"""
     # Check if user exists
     user = db.query(User).filter(User.id == user_id).first()
@@ -157,7 +160,6 @@ def update_user(user_id: int, user_data: UserCreate, db: Session = Depends(get_d
     db.commit()
     db.refresh(user)
     return {'message': 'User updated successfully'}, status.HTTP_200_OK
-
 
 
 @admin_router.delete('/user/{user_id}', status_code=status.HTTP_200_OK)
