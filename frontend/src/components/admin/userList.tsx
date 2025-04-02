@@ -1,4 +1,4 @@
-import { Button } from '../ui/button'
+import UserUpdateDialog from './UserUpdateDialog'
 
 const UserList = ({ data }) => {
   return (
@@ -12,9 +12,7 @@ const UserList = ({ data }) => {
           <div className="font-semibold">{user.given_name}</div>
           <div>{`( ${user.id} )`}</div>
           <div className="ml-auto flex gap-4">
-            <Button className="ml-auto w-30 !bg-sky-600 !p-5 hover:!bg-sky-800 active:!bg-sky-900">
-              Update
-            </Button>
+            <UserUpdateDialog data={user} />
           </div>
         </li>
       ))}
