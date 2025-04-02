@@ -10,7 +10,7 @@ const AdminPage = () => {
         <h1 className="text-2xl font-bold">Admin</h1>
       </div>
       <div className="pt-20">
-        <div className="rounded-lg border-2 border-slate-400 bg-slate-400 p-10">
+        <div className="h-[650px] rounded-lg border-2 border-slate-400 bg-slate-400 p-10">
           <Tabs
             defaultValue="students"
             className="flex flex-col gap-8 lg:w-[1400px]"
