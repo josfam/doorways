@@ -24,7 +24,7 @@ const AdminPage = () => {
                   Lecturers
                 </TabsTrigger>
                 <TabsTrigger value="security-guards" className="!bg-white">
-                  Lecturers
+                  Security Guards
                 </TabsTrigger>
               </TabsList>
             </div>
