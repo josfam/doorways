@@ -48,9 +48,6 @@ importers:
       init:
         specifier: ^0.1.2
         version: 0.1.2
-      npx:
-        specifier: ^10.2.2
-        version: 10.2.2
       postcss:
         specifier: ^8.5.3
         version: 8.5.3
@@ -1062,14 +1059,6 @@ packages:
   normalize-range@0.1.2:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
-
-  npx@10.2.2:
-    resolution: {integrity: sha512-eImmySusyeWphzs5iNh791XbZnZG0FSNvM4KSah34pdQQIDsdTDhIwg1sjN3AIVcjGLpbQ/YcfqHPshKZQK1fA==}
-    deprecated: This package is now part of the npm CLI.
-    hasBin: true
-    bundledDependencies:
-      - npm
-      - libnpx
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -2194,8 +2183,6 @@ snapshots:
   node-releases@2.0.19: {}
 
   normalize-range@0.1.2: {}
-
-  npx@10.2.2: {}
 
   optionator@0.9.4:
     dependencies:
