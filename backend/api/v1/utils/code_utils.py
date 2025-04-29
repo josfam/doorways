@@ -24,6 +24,13 @@ class CodeManager:
             cls._instance._start_code_expiry_checker()
         return cls._instance
 
+    @property
+    def code_expiration_time(self) -> int:
+        """
+        Get the expiration time for the codes.
+        """
+        return self.CODE_EXPIRATION_TIME
+
     def _initialize_code_pools(self):
         """Create pool of both used and unused codes"""
         self.codes_available: List[str] = [f"{i:02d}" for i in range(100)]
