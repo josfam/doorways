@@ -3,7 +3,9 @@ Short code manager for temporary access codes during check-in and check-out
 """
 
 import random
-from typing import List, Optional
+import time
+import threading
+from typing import List, Optional, Dict
 
 
 class CodeManager:
@@ -12,29 +14,69 @@ class CodeManager:
     """
 
     _instance = None
+    CODE_EXPIRATION_TIME = 5  # seconds
 
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(CodeManager, cls).__new__(cls)
             cls._instance._initialize_code_pools()
+            cls._instance._start_code_expiry_checker()
         return cls._instance
 
     def _initialize_code_pools(self):
         """Create pool of both used and unused codes"""
         self.codes_available: List[str] = [f"{i:02d}" for i in range(100)]
         self.codes_in_use: List[str] = []
+        self.code_issue_timestamps: Dict[str, float] = (
+            {}
+        )  # when codes were issued
+        self._lock = threading.RLock()  # thread safety
+
+    def _start_code_expiry_checker(self):
+        """Starts the background thread that checks for expired codes"""
+        self._expiry_thread = threading.Thread(
+            target=self._check_expired_codes, daemon=True
+        )
+        self._expiry_thread.start()
+
+    def _check_expired_codes(self):
+        """Checks for expired codes"""
+        while True:
+            time.sleep(1)  # check every second
+            self._release_expired_codes()
+
+    def _release_expired_codes(self):
+        """ "Releases codes that have been used back into the available pool"""
+        current_time = time.time()
+        expired_codes = []
+
+        with self._lock:
+            for code, timestamp in self.code_issue_timestamps.items():
+                if current_time - timestamp > self.CODE_EXPIRATION_TIME:
+                    expired_codes.append(code)
+
+            for code in expired_codes:
+                if code in self.codes_in_use:
+                    self.codes_in_use.remove(code)
+                    self.codes_available.append(code)
+                    del self.code_issue_timestamps[code]
 
     def get_code(self) -> Optional[str]:
         """
         Get a code from the pool of available codes.
         If no codes are available, return None.
         """
-        if not len(self.codes_available):
-            return None
-        code = random.choice(self.codes_available)
-        self.codes_available.remove(code)
-        self.codes_in_use.append(code)
-        return code
+        with self._lock:
+            if not len(self.codes_available):
+                return None
+
+            code = random.choice(self.codes_available)
+            self.codes_available.remove(code)
+            self.codes_in_use.append(code)
+            self.code_issue_timestamps[code] = (
+                time.time()
+            )  # record when this code was issued
+            return code
 
     def release_code(self, code: str) -> bool:
         """
@@ -52,8 +94,9 @@ class CodeManager:
         Show the current state of the code pools.
         """
         return {
-            "codes_available": len(self.codes_available),
-            "codes_in_use": len(self.codes_in_use),
+            "codes_available_count": len(self.codes_available),
+            "codes_used_count": len(self.codes_in_use),
+            "codes_used": [code for code in self.codes_in_use],
         }
 
 
