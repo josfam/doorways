@@ -15,6 +15,7 @@ class CodeManager:
 
     _instance = None
     CODE_EXPIRATION_TIME = 5  # seconds
+    CODE_EXPIRY_CHECK_INTERVAL = 1  # seconds
 
     def __new__(cls):
         if cls._instance is None:
@@ -42,7 +43,9 @@ class CodeManager:
     def _check_expired_codes(self):
         """Checks for expired codes"""
         while True:
-            time.sleep(1)  # check every second
+            time.sleep(
+                self.CODE_EXPIRY_CHECK_INTERVAL
+            )  # check withing a given time
             self._release_expired_codes()
 
     def _release_expired_codes(self):
