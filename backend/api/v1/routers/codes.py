@@ -31,3 +31,10 @@ def show_pool_stats():
         'codes_available': stats['codes_available'],
         'codes_in_use': stats['codes_in_use'],
     }, status.HTTP_200_OK
+
+
+@codes_router.post('/reset-codes', status_code=status.HTTP_200_OK)
+def reset_codes():
+    """Reset the code pools"""
+    code_manager._initialize_code_pools()
+    return {'message': 'Code pools reset successfully'}, status.HTTP_200_OK
