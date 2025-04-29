@@ -55,3 +55,7 @@ class CodeManager:
             "codes_available": len(self.codes_available),
             "codes_in_use": len(self.codes_in_use),
         }
+
+
+# instantiate the CodeManager, for use as a singleton
+code_manager = CodeManager()
