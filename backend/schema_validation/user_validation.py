@@ -44,3 +44,10 @@ class LecturerRead(UserRead):
     """Schema validation for reading a lecturer"""
 
     faculty_id: int
+
+
+class LoginRequest(BaseModel):
+    """Schema validation for login request"""
+
+    email: EmailStr
+    password: str
