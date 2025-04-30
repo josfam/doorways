@@ -1,12 +1,12 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet } from "react-router-dom";
 
 // Container layout that wraps all admin pages
 const AdminLayout = () => {
   return (
-    <main className="flex h-full w-full flex-col items-center overflow-y-scroll">
+    <main className="flex h-full w-full flex-col items-center">
       <Outlet />
     </main>
-  )
-}
+  );
+};
 
-export default AdminLayout
+export default AdminLayout;

@@ -1,4 +1,4 @@
-import UserUpdateDialog from './UserUpdateDialog'
+import UserUpdateDialog from "./UserUpdateDialog";
 
 const UserList = ({ data }) => {
   return (
@@ -17,7 +17,7 @@ const UserList = ({ data }) => {
         </li>
       ))}
     </ul>
-  )
-}
+  );
+};
 
-export default UserList
+export default UserList;
