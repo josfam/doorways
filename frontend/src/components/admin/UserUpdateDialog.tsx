@@ -16,7 +16,7 @@ const UserUpdateDialog = ({ data }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="ml-auto w-30 !bg-sky-600 !p-5 hover:!bg-sky-800 active:!bg-sky-900">
+        <Button className="ml-auto w-30 bg-sky-600 p-5 hover:bg-sky-800 active:bg-sky-900">
           Update
         </Button>
       </DialogTrigger>
