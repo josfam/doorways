@@ -1,15 +1,11 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from 'react-router-dom'
-import './App.css'
-import AdminPage from './pages/AdminPage'
-import AdminLayout from './layouts/AdminLayout'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./App.css";
+import AdminPage from "./pages/AdminPage";
+import AdminLayout from "./layouts/AdminLayout";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // tanstack react-query client
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 function App() {
   return (
@@ -17,7 +13,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Router>
           <Routes>
-            {/* Admin routed */}
+            {/* Admin router */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminPage />}></Route>
             </Route>
@@ -25,7 +21,7 @@ function App() {
         </Router>
       </QueryClientProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
