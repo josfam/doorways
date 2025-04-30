@@ -6,17 +6,17 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from '../ui/dialog'
+} from "../ui/dialog";
 
-import { Button } from '../ui/button'
-import { Input } from '../ui/input'
-import { Label } from '../ui/label'
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 const UserUpdateDialog = ({ data }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="ml-auto w-30 bg-sky-600 p-5 hover:bg-sky-800 active:bg-sky-900">
+        <Button className="w-30 ml-auto bg-sky-600 p-5 hover:bg-sky-800 active:bg-sky-900">
           Update
         </Button>
       </DialogTrigger>
@@ -46,7 +46,7 @@ const UserUpdateDialog = ({ data }) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default UserUpdateDialog
+export default UserUpdateDialog;
