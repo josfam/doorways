@@ -1,7 +1,7 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@radix-ui/react-tabs'
-import StudentList from '../components/admin/StudentList'
-import LecturerList from '../components/admin/LecturerList'
-import SecurityGuardList from '../components/admin/SecurityGuardList'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@radix-ui/react-tabs";
+import StudentList from "../components/admin/StudentList";
+import LecturerList from "../components/admin/LecturerList";
+import SecurityGuardList from "../components/admin/SecurityGuardList";
 
 const AdminPage = () => {
   return (
@@ -41,7 +41,7 @@ const AdminPage = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default AdminPage
+export default AdminPage;
