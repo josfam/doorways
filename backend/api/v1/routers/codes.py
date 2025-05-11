@@ -10,9 +10,10 @@ codes_router = APIRouter(prefix="/codes", tags=["codes"])
 def get_random_code():
     """Get a random code from the pool of available codes"""
     code = code_manager.get_code()
+    expiration_time = code_manager.expiration_time
     if code is None:
         return {"message": "No codes available"}, status.HTTP_404_NOT_FOUND
-    return {"random_code": code}
+    return {"random_code": code, "expiration_time": expiration_time}
 
 
 @codes_router.post("/release-code/{code}", status_code=status.HTTP_200_OK)

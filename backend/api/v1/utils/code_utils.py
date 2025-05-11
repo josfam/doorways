@@ -105,6 +105,13 @@ class CodeManager:
             "codes_used": [code for code in self.codes_in_use],
         }
 
+    @property
+    def expiration_time(self) -> int:
+        """
+        Get the expiration time for the codes.
+        """
+        return self.CODE_EXPIRATION_TIME
+
 
 # instantiate the CodeManager, for use as a singleton
 code_manager = CodeManager()
