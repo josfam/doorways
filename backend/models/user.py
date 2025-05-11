@@ -8,36 +8,34 @@ from .base import Base
 class User(Base):
     """Represents a user of the system"""
 
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String(120), nullable=False)
     surname = Column(String(240), nullable=False)
     given_name = Column(String(240), nullable=False)
     phone_number = Column(String(60), nullable=False)
-    role_id = Column(Integer, ForeignKey('roles.id'), nullable=False)
+    role_id = Column(Integer, ForeignKey("roles.id"), nullable=False)
     password = Column(String(240), nullable=False)
 
     # A user can have one role
-    role = relationship('Role', back_populates='users', uselist=False)
+    role = relationship("Role", back_populates="users", uselist=False)
     # A user can have many belongings, and should be deleted if the user is deleted
     belongings = relationship(
-        'Belonging', back_populates='user', cascade="all, delete-orphan"
+        "Belonging", back_populates="user", cascade="all, delete-orphan"
     )
     # Relationships:
     # with a student
-    student_record = relationship('Student', back_populates='user')
+    student_record = relationship("Student", back_populates="user")
     # with a lecturer
-    lecturer_record = relationship('Lecturer', back_populates='user')
+    lecturer_record = relationship("Lecturer", back_populates="user")
     # with a security guard
-    security_guard_record = relationship(
-        'SecurityGuard', back_populates='user'
-    )
+    security_guard_record = relationship("SecurityGuard", back_populates="user")
     # with an admin
-    admin_record = relationship('Admin', back_populates='user')
+    admin_record = relationship("Admin", back_populates="user")
     # with a belonging. Belongings are deleted if the user is deleted
     belongings = relationship(
-        'Belonging', back_populates='user', cascade="all, delete-orphan"
+        "Belonging", back_populates="user", cascade="all, delete-orphan"
     )
 
     def __init__(
@@ -60,12 +58,12 @@ class User(Base):
     def to_dict(self):
         """Convert the User instance to a dictionary"""
         return {
-            'id': self.id,
-            'email': self.email,
-            'surname': self.surname,
-            'given_name': self.given_name,
-            'phone_number': self.phone_number,
-            'role_id': self.role_id,
+            "id": self.id,
+            "email": self.email,
+            "surname": self.surname,
+            "given_name": self.given_name,
+            "phone_number": self.phone_number,
+            "role_id": self.role_id,
         }
 
     def __str__(self):

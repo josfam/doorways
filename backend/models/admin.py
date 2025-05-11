@@ -8,13 +8,13 @@ from .base import Base
 class Admin(Base):
     """Represents an admin of the system"""
 
-    __tablename__ = 'admins'
+    __tablename__ = "admins"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     # A user can have one admin role
-    user = relationship('User', back_populates='admin_record', uselist=False)
+    user = relationship("User", back_populates="admin_record", uselist=False)
 
     def __init__(self, user_id: int):
         """Initialize the Admin instance"""

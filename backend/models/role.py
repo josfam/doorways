@@ -10,13 +10,13 @@ from .base import Base
 class Role(Base):
     """User roles that exist in the application"""
 
-    __tablename__ = 'roles'
+    __tablename__ = "roles"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(160))
 
     # relationship. A role can be assigned to many users
-    users = relationship('User', back_populates='role')
+    users = relationship("User", back_populates="role")
 
     def __init__(self, role_name: str):
         """Initialize the Role instance"""

@@ -10,14 +10,14 @@ from .base import Base
 class Course(Base):
     """Represents a course/major that a student can study"""
 
-    __tablename__ = 'courses'
+    __tablename__ = "courses"
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     course_code = Column(String(30), nullable=False)
     course_name = Column(String(120), nullable=False)
 
     # relationship with students
-    students = relationship('Student', back_populates='course')
+    students = relationship("Student", back_populates="course")
 
     def __init__(self, course_code: str, course_name: str):
         """Initialize the Course instance"""

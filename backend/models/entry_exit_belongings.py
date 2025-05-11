@@ -11,18 +11,18 @@ from .base import Base
 class EntryExitBelonging(Base):
     """Represents a belonging that is tied to a specific entry or exit event"""
 
-    __tablename__ = 'entryExitBelongings'
+    __tablename__ = "entryExitBelongings"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     entry_exit_time_id = Column(
-        Integer, ForeignKey('entryExitTimes.id'), nullable=False
+        Integer, ForeignKey("entryExitTimes.id"), nullable=False
     )
-    belonging_id = Column(Integer, ForeignKey('belongings.id'), nullable=False)
+    belonging_id = Column(Integer, ForeignKey("belongings.id"), nullable=False)
 
     # relationships:
     # with entryExitTime
     entry_exit_times = relationship(
-        'EntryExitTime', back_populates='entry_exit_belongings'
+        "EntryExitTime", back_populates="entry_exit_belongings"
     )
 
     def __init__(self, entry_exit_time_id: int, belonging_id: int):
