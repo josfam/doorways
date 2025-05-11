@@ -65,7 +65,7 @@ const CodeRequestPage = () => {
       <div className="flex flex-col">
         {/* container for countdown timer */}
         <div className="absolute mr-[-30px] mt-[-30px] flex h-20 w-20 items-center justify-center self-end rounded-full bg-emerald-400 text-center text-5xl font-bold text-emerald-900">
-          {timeLeft}
+          {codeWasRequested ? timeLeft : "--"}
         </div>
         <div className="flex h-64 w-64 items-center justify-center rounded-xl border-8 text-9xl">
           {code}
