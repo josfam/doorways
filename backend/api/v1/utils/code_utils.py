@@ -35,9 +35,7 @@ class CodeManager:
         """Create pool of both used and unused codes"""
         self.codes_available: List[str] = [f"{i:02d}" for i in range(100)]
         self.codes_in_use: List[str] = []
-        self.code_issue_timestamps: Dict[str, float] = (
-            {}
-        )  # when codes were issued
+        self.code_issue_timestamps: Dict[str, float] = {}  # when codes were issued
         self._lock = threading.RLock()  # thread safety
 
     def _start_code_expiry_checker(self):
@@ -50,9 +48,7 @@ class CodeManager:
     def _check_expired_codes(self):
         """Checks for expired codes"""
         while True:
-            time.sleep(
-                self.CODE_EXPIRY_CHECK_INTERVAL
-            )  # check withing a given time
+            time.sleep(self.CODE_EXPIRY_CHECK_INTERVAL)  # check withing a given time
             self._release_expired_codes()
 
     def _release_expired_codes(self):

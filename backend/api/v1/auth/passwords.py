@@ -6,7 +6,7 @@ import bcrypt
 def hash_password(password: str) -> str:
     """Hashed a password using bcrypt"""
     salt = bcrypt.gensalt()
-    return bcrypt.hashpw(password.encode(), salt=salt).decode(encoding='utf-8')
+    return bcrypt.hashpw(password.encode(), salt=salt).decode(encoding="utf-8")
 
 
 def is_matching_password(password: str, hashed_password: str) -> bool:
