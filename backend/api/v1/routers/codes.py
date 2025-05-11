@@ -12,7 +12,7 @@ def get_random_code():
     code = code_manager.get_code()
     if code is None:
         return {"message": "No codes available"}, status.HTTP_404_NOT_FOUND
-    return {"random_code": code}, status.HTTP_200_OK
+    return {"random_code": code}
 
 
 @codes_router.post("/release-code/{code}", status_code=status.HTTP_200_OK)

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { baseAPIUrl } from "@/constants";
+import { codesAPIUrl } from "@/constants";
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -8,7 +8,7 @@ const CodeRequestPage = () => {
   const [code, setCode] = useState<string>("--");
 
   const handleCodeRequest = async () => {
-    const response = await fetch(`${baseAPIUrl}/random-code`, {
+    const response = await fetch(`${codesAPIUrl}/random-code`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -16,7 +16,7 @@ const CodeRequestPage = () => {
     });
     if (response.ok) {
       const data = await response.json();
-      setCode(data.code);
+      setCode(data.random_code);
     } else {
       console.error("Error requesting code:", response.statusText);
     }
