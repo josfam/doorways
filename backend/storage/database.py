@@ -23,15 +23,15 @@ from backend.models.user import User
 # load environment variables
 load_dotenv()
 
-db_port = int(os.getenv('DB_PORT')) or 5432
-db_name = os.getenv('DB_NAME') or 'doorways'
-db_user = os.getenv('DB_USER')
-db_host = os.getenv('DB_HOST') or 'localhost'
-db_password = os.getenv('DB_PASSWORD')
-db_url = f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
+db_port = int(os.getenv("DB_PORT")) or 5432
+db_name = os.getenv("DB_NAME") or "doorways"
+db_user = os.getenv("DB_USER")
+db_host = os.getenv("DB_HOST") or "localhost"
+db_password = os.getenv("DB_PASSWORD")
+db_url = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
 if not db_user or not db_password:
-    print('Database user or password not set in environment variables.')
+    print("Database user or password not set in environment variables.")
     sys.exit(1)
 
 engine = create_engine(url=db_url)
@@ -41,9 +41,9 @@ session_factory = sessionmaker(bind=engine)
 session_local = scoped_session(session_factory=session_factory)
 
 # file operations
-drop_tables_first = int(os.getenv('DROP_TABLES_FIRST', 0))
+drop_tables_first = int(os.getenv("DROP_TABLES_FIRST", 0))
 
-pre_population_dir = Path(__file__).resolve().parent / 'pre_populated_content'
+pre_population_dir = Path(__file__).resolve().parent / "pre_populated_content"
 
 
 def get_db():
@@ -68,17 +68,17 @@ def pre_populate_faculties():
     if existing_faculties:
         return
 
-    faculty_file = pre_population_dir / 'faculties.csv'
-    with open(faculty_file, 'r', encoding='utf-8') as f:
+    faculty_file = pre_population_dir / "faculties.csv"
+    with open(faculty_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        faculties = [Faculty(line['faculty name']) for line in reader]
+        faculties = [Faculty(line["faculty name"]) for line in reader]
     session = session_local()
     try:
         session.add_all(faculties)
         session.commit()
     except Exception as e:
         session.rollback()
-        print(f'Error inserting faculties to db: {e}')
+        print(f"Error inserting faculties to db: {e}")
     finally:
         session.close()
 
@@ -89,19 +89,17 @@ def pre_populate_courses():
     if existing_courses:
         return
 
-    courses_file = pre_population_dir / 'courses.csv'
-    with open(courses_file, 'r', encoding='utf-8') as f:
+    courses_file = pre_population_dir / "courses.csv"
+    with open(courses_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        courses = [
-            Course(line['course code'], line['course name']) for line in reader
-        ]
+        courses = [Course(line["course code"], line["course name"]) for line in reader]
     session = session_local()
     try:
         session.add_all(courses)
         session.commit()
     except Exception as e:
         session.rollback()
-        print(f'Error inserting courses to db: {e}')
+        print(f"Error inserting courses to db: {e}")
     finally:
         session.close()
 
@@ -112,17 +110,17 @@ def pre_populate_roles():
     if existing_roles:
         return
 
-    roles_file = pre_population_dir / 'roles.csv'
-    with open(roles_file, 'r', encoding='utf-8') as f:
+    roles_file = pre_population_dir / "roles.csv"
+    with open(roles_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        roles = [Role(line['role name']) for line in reader]
+        roles = [Role(line["role name"]) for line in reader]
     session = session_local()
     try:
         session.add_all(roles)
         session.commit()
     except Exception as e:
         session.rollback()
-        print(f'Error inserting roles to db: {e}')
+        print(f"Error inserting roles to db: {e}")
     finally:
         session.close()
 
@@ -133,19 +131,17 @@ def pre_populate_transition_types():
     if existing_transition_types:
         return
 
-    transition_types_file = pre_population_dir / 'transition_types.csv'
-    with open(transition_types_file, 'r', encoding='utf-8') as f:
+    transition_types_file = pre_population_dir / "transition_types.csv"
+    with open(transition_types_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        transition_types = [
-            TransitionType(line['transition type']) for line in reader
-        ]
+        transition_types = [TransitionType(line["transition type"]) for line in reader]
     session = session_local()
     try:
         session.add_all(transition_types)
         session.commit()
     except Exception as e:
         session.rollback()
-        print(f'Error inserting transition types to db: {e}')
+        print(f"Error inserting transition types to db: {e}")
     finally:
         session.close()
 
