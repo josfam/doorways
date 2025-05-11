@@ -72,7 +72,11 @@ const CodeRequestPage = () => {
           {code}
         </div>
       </div>
-      <Button className="h-16 w-64 p-4 text-xl" onClick={handleCodeRequest}>
+      <Button
+        className={`h-16 w-64 p-4 text-xl ${codeWasRequested ? "bg-slate-400" : "opacity-100"}`}
+        onClick={handleCodeRequest}
+        disabled={codeWasRequested}
+      >
         Request code
       </Button>
     </div>
