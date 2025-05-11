@@ -43,7 +43,7 @@ session_local = scoped_session(session_factory=session_factory)
 # file operations
 drop_tables_first = int(os.getenv('DROP_TABLES_FIRST', 0))
 
-pre_population_dir = Path.cwd() / 'storage' / 'pre_populated_content'
+pre_population_dir = Path(__file__).resolve().parent / 'pre_populated_content'
 
 
 def get_db():
