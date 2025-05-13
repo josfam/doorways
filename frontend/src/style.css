@@ -1,0 +1,7 @@
+.btn-cta {
+  @apply mt-6 bg-sky-600 py-5 hover:bg-sky-700 hover:shadow-sm active:scale-95;
+}
+
+.form-input {
+  @apply w-full bg-white text-lg;
+}

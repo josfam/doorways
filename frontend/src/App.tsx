@@ -1,10 +1,12 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
+import "./style.css";
 import AdminPage from "./pages/AdminPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import MainLayout from "./layouts/MainLayout";
 import CodeEntryPage from "./pages/CodeEntryPage";
 import CodeRequestPage from "./pages/CodeRequestPage";
+import LoginPage from "./pages/LoginPage";
 
 // tanstack react-query client
 const queryClient = new QueryClient();
@@ -15,6 +17,10 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Router>
           <Routes>
+            {/* Login */}
+            <Route path="/" element={<MainLayout />}>
+              <Route index element={<LoginPage />}></Route>
+            </Route>
             {/* Admin router */}
             <Route path="/admin" element={<MainLayout />}>
               <Route index element={<AdminPage />}></Route>
