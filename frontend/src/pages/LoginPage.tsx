@@ -102,7 +102,7 @@ const LoginPage = () => {
           )}
         </form.Field>
         <Button type="submit" className="btn-cta">
-          Submit
+          Login
         </Button>
       </form>
     </div>
