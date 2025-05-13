@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime as dt, timezone as tz, timedelta
 from fastapi import APIRouter, status, Depends
+from fastapi.responses import JSONResponse
 from backend.schema_validation.user_validation import LoginRequest
 from sqlalchemy.orm import Session
 from backend.storage.database import get_db
@@ -25,11 +26,17 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
     # check if the user exists in the db
     existing_user = db.query(User).filter_by(email=email).first()
     if not existing_user:
-        return {"message": "User not found"}, status.HTTP_404_NOT_FOUND
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"message": "User not found"},
+        )
     # check if the password is correct
     hashed_pwd = existing_user.password
     if not is_matching_password(password, hashed_pwd):
-        return {"message": "Invalid password"}, status.HTTP_401_UNAUTHORIZED
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={"message": "Incorrect username or password"},
+        )
 
     # generate a JWT token
     jwt_payload = {
@@ -46,14 +53,19 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
         secret_key,
         algorithm="HS256",
     )
-
-    return {
-        "message": "Login successful",
-        "jwt_token": jwt_token,
-    }, status.HTTP_200_OK
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "message": "Login successful",
+            "jwt_token": jwt_token,
+        },
+    )
 
 
 @auth_router.post("/logout", status_code=status.HTTP_200_OK)
 def logout():
     """Logs a user out of the system"""
-    return {"message": "Logout successful"}, status.HTTP_200_OK
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"message": "Logout successful"},
+    )
