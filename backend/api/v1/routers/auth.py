@@ -8,7 +8,7 @@ from fastapi import APIRouter, status, Depends
 from backend.schema_validation.user_validation import LoginRequest
 from sqlalchemy.orm import Session
 from backend.storage.database import get_db
-from backend.api.v1.auth.passwords import hash_password, is_matching_password
+from backend.api.v1.utils.auth_utils import hash_password, is_matching_password
 from backend.models.user import User
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])

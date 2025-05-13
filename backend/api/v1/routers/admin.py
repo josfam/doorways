@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from fastapi import APIRouter, status, Depends
 from backend.storage.database import get_db
-from backend.api.v1.auth.passwords import hash_password
+from backend.api.v1.utils.auth_utils import hash_password
 from backend.models.user import User
 from backend.models.student import Student
 from backend.models.lecturer import Lecturer
