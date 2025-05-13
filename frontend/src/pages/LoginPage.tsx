@@ -21,7 +21,7 @@ const LoginPage = () => {
       password: "",
     },
     validators: {
-      onSubmit: loginFormSchema, // validate with zod schema on change
+      onChange: loginFormSchema, // validate with zod schema on change
     },
     onSubmit: ({ value }) => {
       alert(JSON.stringify(value, null, 2));
