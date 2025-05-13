@@ -5,7 +5,10 @@ import {
 } from "@/constants";
 
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
+import { toastDuration } from "@/constants";
 
 const CodeRequestPage = () => {
   const [code, setCode] = useState<string>("--");
@@ -13,6 +16,19 @@ const CodeRequestPage = () => {
     useState<number>(codeExpirationTime);
   const [timeLeft, setTimeLeft] = useState<number>(expirationTime);
   const [codeWasRequested, setCodeWasRequested] = useState<boolean>(false);
+  const location = useLocation();
+  const toastShown = useRef(false); // prevent re-rendering twice
+
+  // Showing success toast after login
+  useEffect(() => {
+    if (location.state?.showSuccessToast && !toastShown.current) {
+      toast.success("Login successful", {
+        autoClose: toastDuration,
+        closeOnClick: true,
+      });
+      toastShown.current = true; // set to true to prevent re-rendering
+    }
+  }, [location.state]);
 
   // Timer for a countdown for expiration of the requested code
   useEffect(() => {
@@ -72,7 +88,7 @@ const CodeRequestPage = () => {
         </div>
       </div>
       <Button
-        className={`h-16 w-64 p-4 text-xl ${codeWasRequested ? "bg-slate-400" : "opacity-100"}`}
+        className={`btn-cta w-64 !py-6 text-xl ${codeWasRequested ? "bg-slate-400" : "opacity-100"}`}
         onClick={handleCodeRequest}
         disabled={codeWasRequested}
       >

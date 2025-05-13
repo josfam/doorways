@@ -4,6 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { authAPIUrl } from "@/constants";
+import { toast } from "react-toastify";
+import { toastDuration } from "@/constants";
+import { useNavigate } from "react-router-dom";
 
 const loginFormSchema = z.object({
   email: z
@@ -37,6 +40,8 @@ const useLogin = () => {
 };
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -54,10 +59,18 @@ const LoginPage = () => {
   const handleLogin = (value: z.infer<typeof loginFormSchema>) => {
     loginMutation.mutate(value, {
       onSuccess: (data) => {
-        console.log("Login successful:", data);
+        console.log("Navigating with state:", { showSuccessToast: true });
+        navigate("/code-request", {
+          state: { showSuccessToast: true },
+          replace: true,
+        });
       },
       onError: (error) => {
-        alert("Error logging in: " + error);
+        toast.error(error.message, {
+          autoClose: toastDuration,
+          closeOnClick: true,
+        });
+        // toast.error(error.message);
       },
     });
   };

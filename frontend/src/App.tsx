@@ -7,6 +7,7 @@ import MainLayout from "./layouts/MainLayout";
 import CodeEntryPage from "./pages/CodeEntryPage";
 import CodeRequestPage from "./pages/CodeRequestPage";
 import LoginPage from "./pages/LoginPage";
+import { ToastContainer } from "react-toastify";
 
 // tanstack react-query client
 const queryClient = new QueryClient();
@@ -14,6 +15,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <>
+      <ToastContainer />
       <QueryClientProvider client={queryClient}>
         <Router>
           <Routes>

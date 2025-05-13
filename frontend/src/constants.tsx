@@ -5,6 +5,7 @@ const authAPIUrl = `${baseAPIUrl}/auth`;
 
 const codeExpirationTime = 5; // seconds
 const expirationCountdownInterval = 1000; // milliseconds
+const toastDuration = 2000; // milliseconds
 
 export {
   baseAPIUrl,
@@ -12,4 +13,5 @@ export {
   codeExpirationTime,
   expirationCountdownInterval,
   authAPIUrl,
+  toastDuration,
 };
