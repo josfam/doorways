@@ -2,6 +2,8 @@ import { useForm } from "@tanstack/react-form";
 import { z } from "zod"; // form validation
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
+import { authAPIUrl } from "@/constants";
 
 const loginFormSchema = z.object({
   email: z
@@ -14,6 +16,26 @@ const loginFormSchema = z.object({
   password: z.string().nonempty("Password is required"),
 });
 
+// API calling function with tanstack
+const useLogin = () => {
+  return useMutation({
+    mutationFn: async (value: z.infer<typeof loginFormSchema>) => {
+      const response = await fetch(`${authAPIUrl}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+      const data = await response.json();
+      if (response.status !== 200) {
+        throw new Error(data.message);
+      }
+      return data;
+    },
+  });
+};
+
 const LoginPage = () => {
   const form = useForm({
     defaultValues: {
@@ -24,9 +46,21 @@ const LoginPage = () => {
       onChange: loginFormSchema, // validate with zod schema on change
     },
     onSubmit: ({ value }) => {
-      alert(JSON.stringify(value, null, 2));
+      handleLogin(value);
     },
   });
+
+  const loginMutation = useLogin();
+  const handleLogin = (value: z.infer<typeof loginFormSchema>) => {
+    loginMutation.mutate(value, {
+      onSuccess: (data) => {
+        console.log("Login successful:", data);
+      },
+      onError: (error) => {
+        alert("Error logging in: " + error);
+      },
+    });
+  };
 
   return (
     <div className="flex h-fit w-full flex-col items-center justify-center gap-3 rounded-lg border-2 border-slate-200 bg-slate-50 px-6 pb-12 pt-5 shadow-lg sm:w-3/4 sm:px-20 lg:w-1/2">
