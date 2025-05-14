@@ -1,16 +1,18 @@
 """Contains schemas for user-related classes."""
 
 from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy import Sequence
 from sqlalchemy.orm import relationship
 from .base import Base
 
+USER_ID_START = 100000
 
 class User(Base):
     """Represents a user of the system"""
 
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, Sequence('user_id_seq', start=USER_ID_START), primary_key=True)
     email = Column(String(120), nullable=False)
     surname = Column(String(240), nullable=False)
     given_name = Column(String(240), nullable=False)
