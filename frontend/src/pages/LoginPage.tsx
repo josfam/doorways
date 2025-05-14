@@ -59,7 +59,9 @@ const LoginPage = () => {
   const handleLogin = (value: z.infer<typeof loginFormSchema>) => {
     loginMutation.mutate(value, {
       onSuccess: (data) => {
-        console.log("Navigating with state:", { showSuccessToast: true });
+        // store token in local storage
+        const token = data.jwt_token;
+        localStorage.setItem("jwt_token", token);
         navigate("/code-request", {
           state: { showSuccessToast: true },
           replace: true,
