@@ -19,19 +19,11 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Router>
           <Routes>
-            {/* Login */}
             <Route path="/" element={<MainLayout />}>
-              <Route index element={<LoginPage />}></Route>
-            </Route>
-            {/* Admin router */}
-            <Route path="/admin" element={<MainLayout />}>
-              <Route index element={<AdminPage />}></Route>
-            </Route>
-            <Route path="/code-input" element={<MainLayout />}>
-              <Route index element={<CodeEntryPage />}></Route>
-            </Route>
-            <Route path="/code-request" element={<MainLayout />}>
-              <Route index element={<CodeRequestPage />}></Route>
+              <Route index element={<LoginPage />} />
+              <Route path="admin" element={<AdminPage />} />
+              <Route path="code-input" element={<CodeEntryPage />} />
+              <Route path="code-request" element={<CodeRequestPage />} />
             </Route>
           </Routes>
         </Router>
