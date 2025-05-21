@@ -44,7 +44,7 @@ const CodeEntryPage = () => {
         <Input
           type="number"
           autoFocus
-          className="h-32 w-[500px] border text-center !text-8xl [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          className="h-32 w-[500px] border-4 border-sky-600 text-center !text-8xl text-sky-900 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           inputMode="numeric"
           pattern="[0-9]*"
         />
