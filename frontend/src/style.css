@@ -9,3 +9,7 @@
 .form-input {
   @apply w-full bg-white text-lg;
 }
+
+.page-header {
+	@apply text-4xl font-bold text-sky-950
+}
