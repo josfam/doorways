@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import { toastDuration } from "@/constants";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useRef, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
+import { role_names } from "@/constants";
 
 const loginFormSchema = z.object({
   email: z
@@ -76,10 +78,27 @@ const LoginPage = () => {
         // store token in local storage
         const token = data.jwt_token;
         localStorage.setItem("jwt_token", token);
-        navigate("/code-request", {
-          state: { showSuccessToast: true },
-          replace: true,
-        });
+        // redirect to the proper page based on role
+        const role_name = jwtDecode(token).role_name;
+        if (
+          role_name === role_names.student ||
+          role_name === role_names.lecturer
+        ) {
+          navigate("/code-request", {
+            state: { showSuccessToast: true },
+            replace: true,
+          });
+        } else if (role_name === role_names.admin) {
+          navigate("/admin", {
+            state: { showSuccessToast: true },
+            replace: true,
+          });
+        } else {
+          navigate("/code-input", {
+            state: { showSuccessToast: true },
+            replace: true,
+          });
+        }
       },
       onError: (error) => {
         toast.error(error.message, {

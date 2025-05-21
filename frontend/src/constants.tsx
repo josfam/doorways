@@ -7,6 +7,13 @@ const codeExpirationTime = 5; // seconds
 const expirationCountdownInterval = 1000; // milliseconds
 const toastDuration = 2000; // milliseconds
 
+const role_names = {
+  admin: "admin",
+  lecturer: "lecturer",
+  security: "security",
+  student: "student",
+};
+
 export {
   baseAPIUrl,
   codesAPIUrl,
@@ -14,4 +21,5 @@ export {
   expirationCountdownInterval,
   authAPIUrl,
   toastDuration,
+  role_names,
 };

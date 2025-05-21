@@ -21,9 +21,9 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<LoginPage />} />
-              <Route path="admin" element={<AdminPage />} />
-              <Route path="code-input" element={<CodeEntryPage />} />
-              <Route path="code-request" element={<CodeRequestPage />} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/code-input" element={<CodeEntryPage />} />
+              <Route path="/code-request" element={<CodeRequestPage />} />
             </Route>
           </Routes>
         </Router>
