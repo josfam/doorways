@@ -85,7 +85,7 @@ const CodeRequestPage = () => {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-20">
       <div>
-        <h1 className="text-4xl">Request a code</h1>
+        <h1 className="page-header">Request a code</h1>
       </div>
       <div className="flex flex-col">
         {/* container for countdown timer */}
