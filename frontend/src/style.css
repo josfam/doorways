@@ -1,5 +1,9 @@
 .btn-cta {
-  @apply mt-6 bg-sky-600 py-5 hover:bg-sky-700 hover:shadow-sm active:scale-95;
+  @apply mt-6 bg-sky-600 py-6 text-xl hover:bg-sky-700 hover:shadow-sm active:scale-95;
+}
+
+.btn-ter {
+  @apply bg-transparent text-sky-700 hover:bg-transparent hover:underline hover:underline-offset-4;
 }
 
 .form-input {

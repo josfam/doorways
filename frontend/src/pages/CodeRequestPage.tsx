@@ -7,7 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toastDuration } from "@/constants";
 
 const CodeRequestPage = () => {
@@ -17,6 +17,7 @@ const CodeRequestPage = () => {
   const [timeLeft, setTimeLeft] = useState<number>(expirationTime);
   const [codeWasRequested, setCodeWasRequested] = useState<boolean>(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const toastShown = useRef(false); // prevent re-rendering twice
 
   // Showing success toast after login
@@ -56,6 +57,14 @@ const CodeRequestPage = () => {
     };
   }, [codeWasRequested, timeLeft]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("jwt_token");
+    navigate("/", {
+      state: { showSuccessToast: true },
+      replace: true,
+    });
+  };
+
   const handleCodeRequest = async () => {
     const response = await fetch(`${codesAPIUrl}/random-code`, {
       method: "GET",
@@ -87,13 +96,18 @@ const CodeRequestPage = () => {
           {code}
         </div>
       </div>
-      <Button
-        className={`btn-cta w-64 !py-6 text-xl ${codeWasRequested ? "bg-slate-400" : "opacity-100"}`}
-        onClick={handleCodeRequest}
-        disabled={codeWasRequested}
-      >
-        Request code
-      </Button>
+      <div className="flex flex-col">
+        <Button
+          className={`btn-cta w-64 ${codeWasRequested ? "bg-slate-400" : "opacity-100"}`}
+          onClick={handleCodeRequest}
+          disabled={codeWasRequested}
+        >
+          Request code
+        </Button>
+        <Button onClick={handleLogout} className="btn-cta btn-ter w-64">
+          Logout
+        </Button>
+      </div>
     </div>
   );
 };

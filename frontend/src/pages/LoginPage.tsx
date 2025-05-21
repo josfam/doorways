@@ -6,7 +6,8 @@ import { useMutation } from "@tanstack/react-query";
 import { authAPIUrl } from "@/constants";
 import { toast } from "react-toastify";
 import { toastDuration } from "@/constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useRef, useEffect } from "react";
 
 const loginFormSchema = z.object({
   email: z
@@ -41,6 +42,8 @@ const useLogin = () => {
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const toastShown = useRef(false); // prevent re-rendering twice
 
   const form = useForm({
     defaultValues: {
@@ -54,6 +57,17 @@ const LoginPage = () => {
       handleLogin(value);
     },
   });
+
+  // Showing success toast after logout
+  useEffect(() => {
+    if (location.state?.showSuccessToast && !toastShown.current) {
+      toast.success("Logout successful", {
+        autoClose: toastDuration,
+        closeOnClick: true,
+      });
+      toastShown.current = true; // set to true to prevent re-rendering
+    }
+  }, [location.state]);
 
   const loginMutation = useLogin();
   const handleLogin = (value: z.infer<typeof loginFormSchema>) => {
