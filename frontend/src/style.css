@@ -3,7 +3,8 @@
 }
 
 .btn-ter {
-  @apply bg-transparent text-sky-700 hover:bg-transparent hover:underline hover:underline-offset-4;
+  @apply bg-transparent text-amber-600
+   hover:bg-transparent hover:underline hover:underline-offset-4 bg-amber-100;
 }
 
 .form-input {
@@ -11,5 +12,5 @@
 }
 
 .page-header {
-	@apply text-4xl font-bold text-sky-950
+	@apply text-3xl font-bold text-amber-950
 }
