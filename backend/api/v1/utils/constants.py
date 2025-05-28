@@ -6,3 +6,8 @@ class RoleNumbers(Enum):
     LECTURER = 2
     STUDENT = 3
     SECURITY = 4
+
+
+class TransitionTypes(Enum):
+    ENTRY = 1
+    EXIT = 2

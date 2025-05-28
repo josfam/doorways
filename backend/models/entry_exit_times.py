@@ -29,8 +29,13 @@ class EntryExitTime(Base):
         "EntryExitBelonging", back_populates="entry_exit_times"
     )
 
-    def __init__(self, user_id: int, transition_type_id: int):
+    def __init__(
+        self,
+        user_id: int,
+        transition_type_id: int,
+        transition_time: dt = dt.now(tz.utc),
+    ):
         """Initialize the EntryExitTime instance"""
         self.user_id = user_id
         self.transition_type_id = transition_type_id
-        self.time = dt.now(tz.utc)
+        self.time = transition_time
