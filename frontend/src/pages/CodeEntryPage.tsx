@@ -3,37 +3,54 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { inputResetDelay } from "@/constants";
+import { codesAPIUrl } from "@/constants";
+import { toast } from "react-toastify";
+import { toastDuration } from "@/constants";
 
 const CodeEntryPage = () => {
-  // const { data, isLoading, isError } = useQuery({
-  //   queryKey: ["enter-code"],
-  //   queryFn: async () => {
-  //     const url = `${baseAPIUrl}/codes/release-code/`;
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     return response.json();
-  //   },
-  // });
+  const sendCode = async (
+    code: string,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    console.log(`Code entered: ${code}`);
+    // send the code to the server with a useQuery from tanstack
+    const url = `${codesAPIUrl}/release-code/${code}`;
+    await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        toast.success("Code processed!", {
+          autoClose: toastDuration,
+          closeOnClick: true,
+        });
+        console.log("Code sent successfully:", data);
+      })
+      .catch((error) => {
+        console.error("Error sending code:", error);
+      });
+    // create a small one second delay before clearing the input
+    setTimeout(() => {
+      e.target.value = "";
+    }, inputResetDelay);
+  };
 
-  // const handleComplete = (code: string) => {
-  //   console.log(`Code entered: ${code}`);
-  //   // You can handle the code submission logic here
-  // };
-
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (isError) {
-  //   return <div>Error loading data</div>;
-  // }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length == 2) {
+      e.target.value = value.slice(0, 2); // Limit input to 2 characters
+      sendCode(value, e); // Send the code when it reaches 2 characters
+    }
+  };
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-40">
@@ -43,6 +60,8 @@ const CodeEntryPage = () => {
       <div>
         <Input
           type="number"
+          maxLength={2}
+          onChange={handleChange}
           autoFocus
           className="h-32 w-[500px] border-4 border-sky-600 text-center !text-8xl text-sky-900 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           inputMode="numeric"
