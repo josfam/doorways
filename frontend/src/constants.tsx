@@ -1,5 +1,6 @@
 // API paths
-const baseAPIUrl = "http://127.0.0.1:8000/api/v1";
+const baseHost = "http://127.0.0.1"
+const baseAPIUrl = `${baseHost}:8000/api/v1`;
 const codesAPIUrl = `${baseAPIUrl}/codes`;
 const authAPIUrl = `${baseAPIUrl}/auth`;
 const baseWebSocketUrl = "ws://127.0.0.1:8000/api/v1";
