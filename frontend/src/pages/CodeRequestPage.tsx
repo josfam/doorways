@@ -2,6 +2,7 @@ import {
   codesAPIUrl,
   codeExpirationTime,
   expirationCountdownInterval,
+  baseWebSocketUrl,
 } from "@/constants";
 
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,19 @@ const CodeRequestPage = () => {
       toastShown.current = true; // set to true to prevent re-rendering
     }
   }, [location.state]);
+
+  // Notification when code has been accepted after entry on the guard's system
+  useEffect(() => {
+    if (code === "--" || !codeWasRequested) return;
+    const ws = new WebSocket(`${baseWebSocketUrl}/codes/ws/${code}`);
+    ws.onmessage = (event) => {
+      toast.success(event.data, {
+        autoClose: toastDuration,
+        closeOnClick: true,
+      });
+    };
+    return () => ws.close();
+  }, [code, codeWasRequested]);
 
   // Timer for a countdown for expiration of the requested code
   useEffect(() => {
