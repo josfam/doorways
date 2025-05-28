@@ -37,7 +37,7 @@ const CodeRequestPage = () => {
     setCode("--");
     setExpirationTime(codeExpirationTime);
     setCodeWasRequested(false);
-  }
+  };
 
   // Notification when code has been accepted after entry on the guard's system
   useEffect(() => {
