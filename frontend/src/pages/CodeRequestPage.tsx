@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toastDuration } from "@/constants";
+import { toastDuration, checkMarksDuration } from "@/constants";
 
 const CodeRequestPage = () => {
   const [code, setCode] = useState<string>("--");
@@ -17,6 +17,7 @@ const CodeRequestPage = () => {
     useState<number>(codeExpirationTime);
   const [timeLeft, setTimeLeft] = useState<number>(expirationTime);
   const [codeWasRequested, setCodeWasRequested] = useState<boolean>(false);
+  const [showCheckmark, setShowCheckmark] = useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
   const toastShown = useRef(false); // prevent re-rendering twice
@@ -48,7 +49,10 @@ const CodeRequestPage = () => {
         autoClose: toastDuration,
         closeOnClick: true,
       });
-
+      setShowCheckmark(true);
+      setTimeout(() => {
+        setShowCheckmark(false);
+      }, checkMarksDuration); // Hide checkmark after a delay
       // Reset the screen
       resetScreen();
     };
@@ -117,7 +121,13 @@ const CodeRequestPage = () => {
           {codeWasRequested ? timeLeft : "--"}
         </div>
         <div className="flex h-64 w-64 items-center justify-center rounded-xl border-8 text-9xl">
-          {code}
+          {showCheckmark ? (
+            <span className="animate-in inline-block text-emerald-500 transition-all duration-500">
+              ✔️
+            </span>
+          ) : (
+            code
+          )}
         </div>
       </div>
       <div className="flex flex-col">

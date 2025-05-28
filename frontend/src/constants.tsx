@@ -8,6 +8,7 @@ const codeExpirationTime = 5; // seconds
 const expirationCountdownInterval = 1000; // milliseconds
 const toastDuration = 2000; // milliseconds
 const inputResetDelay = 1000; // milliseconds
+const checkMarksDuration = 2000; // milliseconds
 
 const role_names = {
   admin: "admin",
@@ -21,6 +22,7 @@ export {
   baseWebSocketUrl,
   codesAPIUrl,
   codeExpirationTime,
+  checkMarksDuration,
   expirationCountdownInterval,
   authAPIUrl,
   toastDuration,
