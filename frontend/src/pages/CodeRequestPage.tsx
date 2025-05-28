@@ -32,6 +32,13 @@ const CodeRequestPage = () => {
     }
   }, [location.state]);
 
+  // Reset code and times
+  const resetScreen = () => {
+    setCode("--");
+    setExpirationTime(codeExpirationTime);
+    setCodeWasRequested(false);
+  }
+
   // Notification when code has been accepted after entry on the guard's system
   useEffect(() => {
     if (code === "--" || !codeWasRequested) return;
@@ -41,6 +48,9 @@ const CodeRequestPage = () => {
         autoClose: toastDuration,
         closeOnClick: true,
       });
+
+      // Reset the screen
+      resetScreen();
     };
     return () => ws.close();
   }, [code, codeWasRequested]);
