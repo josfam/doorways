@@ -98,6 +98,7 @@ const CodeRequestPage = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
       },
     });
     if (response.ok) {
@@ -121,13 +122,7 @@ const CodeRequestPage = () => {
           {codeWasRequested ? timeLeft : "--"}
         </div>
         <div className="flex h-64 w-64 items-center justify-center rounded-xl border-8 text-9xl">
-          {showCheckmark ? (
-            <span className="animate-in inline-block text-emerald-500 transition-all duration-500">
-              ✔️
-            </span>
-          ) : (
-            code
-          )}
+          {showCheckmark ? <span>✔️</span> : code}
         </div>
       </div>
       <div className="flex flex-col">
