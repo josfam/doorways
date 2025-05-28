@@ -1,9 +1,10 @@
 """API routes for code-generation and other related actions"""
 
-from fastapi import APIRouter, status, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, status, WebSocket, WebSocketDisconnect, Depends
 from fastapi.responses import JSONResponse
 from typing import Dict
 from backend.api.v1.utils.code_utils import code_manager
+from backend.api.v1.utils.auth_utils import get_current_user
 
 codes_router = APIRouter(prefix="/codes", tags=["codes"])
 
@@ -25,7 +26,7 @@ async def websocket_endpoint(websocket: WebSocket, code: str):
 
 
 @codes_router.get("/random-code", status_code=status.HTTP_200_OK)
-def get_random_code():
+def get_random_code(user: str = Depends(get_current_user)):
     """Get a random code from the pool of available codes"""
     code = code_manager.get_code()
     expiration_time = code_manager.expiration_time

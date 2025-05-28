@@ -1,9 +1,14 @@
 """Password-related functions"""
 
+import jwt
+import os
 import bcrypt
 from typing import Optional
-from fastapi import Header
+from fastapi import Depends, HTTPException, status
 from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordBearer
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def hash_password(password: str) -> str:
@@ -17,15 +22,29 @@ def is_matching_password(password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(password.encode(), hashed_password.encode())
 
 
-async def get_user_auth_token(authorization: Optional[str]) -> str:
+def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
     """
-    Extracts the JWT token from the Authorization header.
-    The token is expected to be in the format "Bearer <token>".
+    Decodes the JWT token and returns the user information.
+    Raises an error if the token is invalid or expired.
     """
-    if authorization is None:
-        return
+    secret_key = os.getenv("SECRET_KEY")
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
     try:
-        token = authorization.split(" ")[1]
-    except IndexError:
-        return ""
-    return token
+        payload = jwt.decode(token, secret_key, algorithms=["HS256"])
+        print("payload", payload)  # DEBUG
+        email: str = payload.get("email")
+        if email is None:
+            raise credentials_exception
+        return {"email": email}
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has expired",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except jwt.PyJWTError:
+        raise credentials_exception
