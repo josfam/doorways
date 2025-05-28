@@ -24,6 +24,10 @@ const CodeEntryPage = () => {
     })
       .then((response) => {
         if (!response.ok) {
+          toast.error("Invalid code", {
+            autoClose: toastDuration,
+            closeOnClick: true,
+          });
           throw new Error("Network response was not ok");
         }
         return response.json();

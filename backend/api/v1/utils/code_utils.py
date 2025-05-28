@@ -89,7 +89,7 @@ class CodeManager:
         Release a code back to the pool of available codes.
         If the code is not in use, return False.
         """
-        if code in self.codes_in_use:
+        if self.codes_in_use and code in self.codes_in_use:
             self.codes_in_use.remove(code)
             self.codes_available.append(code)
             return True

@@ -1,6 +1,7 @@
 """API routes for code-generation and other related actions"""
 
 from fastapi import APIRouter, status, WebSocket, WebSocketDisconnect
+from fastapi.responses import JSONResponse
 from typing import Dict
 from backend.api.v1.utils.code_utils import code_manager
 
@@ -36,13 +37,20 @@ def get_random_code():
 @codes_router.post("/release-code/{code}", status_code=status.HTTP_200_OK)
 async def release_code(code: str):
     """Release a code back to the pool of available codes"""
+    print(code_manager.codes_in_use)  # DEBUG
     if code_manager.release_code(code):
         # Notify the websocket if a client is listening for this code
         ws = web_socket_connections.get(code)
         if ws:
             await ws.send_text(f"Code {code} has been released back to the pool.")
-        return {"message": "Code released successfully"}, status.HTTP_200_OK
-    return {"message": "Code not in use"}, status.HTTP_404_NOT_FOUND
+        return JSONResponse(
+            content={"message": f"Code {code} released successfully"},
+            status_code=status.HTTP_200_OK,
+        )
+    return JSONResponse(
+        content={"message": f"Code {code} not in use"},
+        status_code=status.HTTP_404_NOT_FOUND,
+    )
 
 
 @codes_router.get("/codes-stats", status_code=status.HTTP_200_OK)
