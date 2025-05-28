@@ -7,8 +7,11 @@ import { inputResetDelay } from "@/constants";
 import { codesAPIUrl } from "@/constants";
 import { toast } from "react-toastify";
 import { toastDuration } from "@/constants";
+import { useNavigate } from "react-router-dom";
 
 const CodeEntryPage = () => {
+  const navigate = useNavigate();
+
   const sendCode = async (
     code: string,
     e: React.ChangeEvent<HTMLInputElement>,
@@ -48,6 +51,14 @@ const CodeEntryPage = () => {
     }, inputResetDelay);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("jwt_token");
+    navigate("/", {
+      state: { showSuccessToast: true },
+      replace: true,
+    });
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value.length == 2) {
@@ -71,7 +82,14 @@ const CodeEntryPage = () => {
           inputMode="numeric"
           pattern="[0-9]*"
         />
-        <Button className="btn-cta btn-ter w-[500px]">Use my ID instead</Button>
+        <div className="mt-8 flex flex-col items-center justify-center gap-4">
+          <Button className="btn-cta btn-ter border-1 w-[500px] border-amber-500">
+            Use my ID instead
+          </Button>
+          <Button onClick={handleLogout} className="btn-ter btn-ter w-[500px]">
+            Logout
+          </Button>
+        </div>
       </div>
     </div>
   );
