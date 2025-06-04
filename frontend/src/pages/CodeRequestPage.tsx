@@ -28,6 +28,7 @@ const CodeRequestPage = () => {
       toast.success("Login successful", {
         autoClose: toastDuration,
         closeOnClick: true,
+        pauseOnFocusLoss: false,
       });
       toastShown.current = true; // set to true to prevent re-rendering
     }
