@@ -10,6 +10,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { role_names } from "@/constants";
+import type { JwtPayload } from "@/types/types";
 
 const loginFormSchema = z.object({
   email: z
@@ -66,6 +67,7 @@ const LoginPage = () => {
       toast.success("Logout successful", {
         autoClose: toastDuration,
         closeOnClick: true,
+        pauseOnFocusLoss: false,
       });
       toastShown.current = true; // set to true to prevent re-rendering
     }
@@ -79,7 +81,7 @@ const LoginPage = () => {
         const token = data.jwt_token;
         localStorage.setItem("jwt_token", token);
         // redirect to the proper page based on role
-        const role_name = jwtDecode(token).role_name;
+        const role_name = jwtDecode<JwtPayload>(token).role_name;
         if (
           role_name === role_names.student ||
           role_name === role_names.lecturer
