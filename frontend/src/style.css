@@ -1,9 +1,14 @@
 .btn-cta {
-  @apply mt-6 bg-sky-600 py-6 text-xl hover:bg-sky-700 hover:shadow-sm active:scale-95;
+  @apply mt-6 h-14 w-full rounded-lg bg-sky-600 px-4 py-6 text-xl text-sky-100 hover:bg-sky-700 hover:shadow-sm active:scale-[99%] active:bg-sky-800;
 }
 
 .btn-ter {
-  @apply bg-amber-100 text-xl bg-transparent py-6 text-amber-600 hover:bg-transparent hover:underline hover:underline-offset-4;
+  @apply bg-amber-100 bg-transparent px-4 py-6 text-xl text-amber-600 hover:bg-transparent hover:underline hover:underline-offset-4;
+}
+
+.btn-sidebar,
+.link-sidebar {
+  @apply h-14 w-full rounded-lg bg-sky-100 px-4 py-6 text-xl text-sky-800 hover:bg-sky-300 active:scale-[99%] active:bg-sky-600;
 }
 
 .form-input {
