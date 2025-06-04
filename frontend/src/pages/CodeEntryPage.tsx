@@ -7,10 +7,24 @@ import { inputResetDelay } from "@/constants";
 import { codesAPIUrl } from "@/constants";
 import { toast } from "react-toastify";
 import { toastDuration } from "@/constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 const CodeEntryPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const toastShown = useRef(false); // prevent re-rendering twice
+  // Showing success toast after login
+  useEffect(() => {
+    if (location.state?.showSuccessToast && !toastShown.current) {
+      toast.success("Login successful", {
+        autoClose: toastDuration,
+        closeOnClick: true,
+        pauseOnFocusLoss: false,
+      });
+      toastShown.current = true; // set to true to prevent re-rendering
+    }
+  }, [location.state]);
 
   const sendCode = async (
     code: string,
