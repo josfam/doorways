@@ -6,7 +6,7 @@ from typing import Optional
 
 class UserCreate(BaseModel):
     """Schema validation for creating a user"""
-
+    id: str
     email: EmailStr
     surname: str
     given_name: str
@@ -20,7 +20,7 @@ class UserCreate(BaseModel):
 class UserRead(BaseModel):
     """Schema validation for reading a user"""
 
-    id: int
+    id: str
     email: EmailStr
     surname: str
     given_name: str
