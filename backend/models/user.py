@@ -13,8 +13,8 @@ class User(Base):
 
     __tablename__ = "users"
 
-    id = Column(Integer, Sequence("user_id_seq", start=USER_ID_START), primary_key=True)
-    email = Column(String(120), nullable=False)
+    id = Column(String(6), primary_key=True)
+    email = Column(String(120), nullable=True, default='')
     surname = Column(String(240), nullable=False)
     given_name = Column(String(240), nullable=False)
     phone_number = Column(String(60), nullable=False)
@@ -43,6 +43,7 @@ class User(Base):
 
     def __init__(
         self,
+        id: str,
         email: str,
         surname: str,
         given_name: str,
@@ -51,6 +52,7 @@ class User(Base):
         password: str,
     ):
         """Initialize the User instance"""
+        self.id = id
         self.email = email
         self.surname = surname
         self.given_name = given_name

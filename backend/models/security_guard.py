@@ -1,6 +1,6 @@
 """Contains schemas for security-guard-related classes."""
 
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 from .base import Base
 
@@ -13,7 +13,7 @@ class SecurityGuard(Base):
     __tablename__ = "securityGuards"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
 
     # a security guard is a user
     user = relationship("User", back_populates="security_guard_record", uselist=False)

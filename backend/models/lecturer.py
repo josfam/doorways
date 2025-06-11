@@ -11,7 +11,7 @@ class Lecturer(Base):
     __tablename__ = "lecturers"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
     faculty_id = Column(Integer, ForeignKey("faculties.id"))
 
     # A lecturer is a user

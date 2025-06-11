@@ -1,6 +1,6 @@
 """Contains schemas for admin-related classes."""
 
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 from .base import Base
 
@@ -11,7 +11,7 @@ class Admin(Base):
     __tablename__ = "admins"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
 
     # A user can have one admin role
     user = relationship("User", back_populates="admin_record", uselist=False)
