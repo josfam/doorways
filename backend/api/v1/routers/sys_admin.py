@@ -87,13 +87,13 @@ def add_user(user_data: UserCreate, db: Session = Depends(get_db)):
     return {"message": "User added successfully"}, status.HTTP_201_CREATED
 
 
-@admin_router.post("/users", status_code=status.HTTP_200_OK)
+@sys_admin_router.post("/users", status_code=status.HTTP_200_OK)
 def add_users(db: Session = Depends(get_db)):
     """Adds multiple users to the database"""
     pass
 
 
-@admin_router.get(
+@sys_admin_router.get(
     "/users", status_code=status.HTTP_200_OK, response_model=List[UserRead]
 )
 def get_users(db: Session = Depends(get_db)):
@@ -104,7 +104,7 @@ def get_users(db: Session = Depends(get_db)):
     return [UserRead.model_validate(user) for user in users]
 
 
-@admin_router.get(
+@sys_admin_router.get(
     "/users/students",
     status_code=status.HTTP_200_OK,
     response_model=List[StudentRead],
@@ -121,7 +121,7 @@ def get_students(db: Session = Depends(get_db)):
     return users
 
 
-@admin_router.get(
+@sys_admin_router.get(
     "/users/lecturers",
     status_code=status.HTTP_200_OK,
     response_model=List[LecturerRead],
@@ -139,7 +139,7 @@ def get_lecturers(db: Session = Depends(get_db)):
     return users
 
 
-@admin_router.get(
+@sys_admin_router.get(
     "/users/security_guards",
     status_code=status.HTTP_200_OK,
     response_model=List[UserRead],
@@ -155,7 +155,7 @@ def get_security_guards(db: Session = Depends(get_db)):
     return users
 
 
-@admin_router.patch("/user/{user_id}", status_code=status.HTTP_200_OK)
+@sys_admin_router.patch("/user/{user_id}", status_code=status.HTTP_200_OK)
 def update_user(user_id: int, user_data: UserCreate, db: Session = Depends(get_db)):
     """Updates a user's details"""
     # Check if user exists
@@ -175,7 +175,7 @@ def update_user(user_id: int, user_data: UserCreate, db: Session = Depends(get_d
     return {"message": "User updated successfully"}, status.HTTP_200_OK
 
 
-@admin_router.delete("/user/{user_id}", status_code=status.HTTP_200_OK)
+@sys_admin_router.delete("/user/{user_id}", status_code=status.HTTP_200_OK)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     """Deletes a user from the database"""
     pass
