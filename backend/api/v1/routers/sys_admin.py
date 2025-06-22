@@ -3,7 +3,7 @@
 import sys
 from sqlalchemy.orm import Session
 from typing import List
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, Body, Response
 from backend.storage.database import get_db
 from backend.api.v1.utils.auth_utils import hash_password
 from backend.models.user import User
@@ -17,38 +17,61 @@ from backend.schema_validation.user_validation import (
     StudentRead,
     LecturerRead,
 )
-from backend.api.v1.utils.role_utils import add_user_to_role_table
+from backend.api.v1.utils.role_utils import (
+    add_user_to_role_table,
+    get_role_id_from_name,
+)
 from backend.api.v1.utils.custom_exceptions import MissingUserAttributeError
+from backend.api.v1.utils.constants import role_names
 
-admin_router = APIRouter(prefix="/admin", tags=["admin"])
+sys_admin_router = APIRouter(prefix="/sys-admin", tags=["admin"])
 
 
-@admin_router.post("/user", status_code=status.HTTP_201_CREATED)
+@sys_admin_router.post("/user", status_code=status.HTTP_201_CREATED)
 def add_user(user_data: UserCreate, db: Session = Depends(get_db)):
     """Adds one user to the database"""
     # create a default password for this user if none has been provided
-    if not len(user_data.password):
+    password = ""
+    if user_data.email:
         password = (user_data.email.split("@")[0] + user_data.given_name).lower()
-        hashed_pwd = hash_password(password)
     else:
-        hashed_pwd = hash_password(user_data.password)
+        # security guards do not have an email
+        password = user_data.given_name.lower() + user_data.surname.lower()
+    hashed_pwd = hash_password(password)
     existing_email = db.query(User.email).filter(User.email == user_data.email).first()
     if existing_email:
         return {"message": "User already exists"}, status.HTTP_409_CONFLICT
 
+    role_name = user_data.role_name
+    if role_name not in role_names:
+        return Response(
+            content={"message": "Invalid role name"},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+    # print(f"Role name: {role_name}")  # DEBUG
+    role_info = get_role_id_from_name(user_data.role_name)
+    if not role_info["success"]:
+        return Response(
+            content={"message": role_info["message"]},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+    role_id = role_info["role_id"]
+    # print(f"Role ID: {role_id}")  # DEBUG
     new_user = User(
-        user_data.email,
-        user_data.surname,
-        user_data.given_name,
-        user_data.phone_number,
-        user_data.role_id,
+        id=user_data.id,
+        email=user_data.email,
+        surname=user_data.surname,
+        given_name=user_data.given_name,
+        phone_number=user_data.phone_number,
+        role_id=int(role_id),
         password=hashed_pwd,
     )
 
     try:
         db.add(new_user)
         add_user_to_role_table(
-            role_id=user_data.role_id,
+            role_name=user_data.role_name,
             user_data=user_data,
             user=new_user,
             session=db,

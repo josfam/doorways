@@ -3,7 +3,7 @@ const baseHost = "http://127.0.0.1";
 const baseAPIUrl = `${baseHost}:8000/api/v1`;
 const codesAPIUrl = `${baseAPIUrl}/codes`;
 const authAPIUrl = `${baseAPIUrl}/auth`;
-const adminAPIUrl = `${baseAPIUrl}/admin`;
+const sysAdminAPIUrl = `${baseAPIUrl}/sys-admin`;
 
 const baseWebSocketUrl = "ws://127.0.0.1:8000/api/v1";
 
@@ -21,7 +21,7 @@ const role_names = {
 };
 
 export {
-  adminAPIUrl,
+  sysAdminAPIUrl,
   baseAPIUrl,
   baseWebSocketUrl,
   codesAPIUrl,
