@@ -7,9 +7,9 @@ import CodeEntryPage from "./pages/CodeEntryPage";
 import CodeRequestPage from "./pages/CodeRequestPage";
 import LoginPage from "./pages/LoginPage";
 import { ToastContainer } from "react-toastify";
-import AdminLayout from "./layouts/AdminLayout";
-import { AdminUserViewPage } from "./pages/AdminUserViewPage";
-import { AdminUserAddPage } from "./pages/AdminUserAddPage";
+import SysAdminLayout from "./layouts/SysAdminLayout";
+import { SysAdminUserViewPage } from "./pages/SysAdminUserViewPage";
+import { SysAdminUserAddPage } from "./pages/SysAdminUserAddPage";
 
 // tanstack react-query client
 const queryClient = new QueryClient();
@@ -26,10 +26,10 @@ function App() {
               <Route path="/code-input" element={<CodeEntryPage />} />
               <Route path="/code-request" element={<CodeRequestPage />} />
             </Route>
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminUserViewPage />} />
-              <Route path="view-users" element={<AdminUserViewPage />} />
-              <Route path="add-users" element={<AdminUserAddPage />} />
+            <Route path="/sys-admin" element={<SysAdminLayout />}>
+              <Route index element={<SysAdminUserViewPage />} />
+              <Route path="view-users" element={<SysAdminUserViewPage />} />
+              <Route path="add-users" element={<SysAdminUserAddPage />} />
             </Route>
           </Routes>
         </Router>

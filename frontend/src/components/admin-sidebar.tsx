@@ -14,12 +14,12 @@ import { useLogout } from "@/hooks/use-logout";
 const SideBarItems = [
   {
     title: "Add users",
-    url: "/admin/add-users",
+    url: "/sys-admin/add-users",
     icon: UserRoundPlus,
   },
   {
     title: "View users",
-    url: "/admin/view-users",
+    url: "/sys-admin/view-users",
     icon: UserRoundPen,
   },
 ];
