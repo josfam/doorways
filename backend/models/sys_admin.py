@@ -5,10 +5,10 @@ from sqlalchemy.orm import relationship
 from .base import Base
 
 
-class Admin(Base):
+class SysAdmin(Base):
     """Represents an admin of the system"""
 
-    __tablename__ = "admins"
+    __tablename__ = "sysAdmins"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(String, ForeignKey("users.id"), nullable=False)

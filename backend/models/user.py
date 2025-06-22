@@ -14,7 +14,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(String(6), primary_key=True)
-    email = Column(String(120), nullable=True, default='')
+    email = Column(String(120), nullable=True, default="")
     surname = Column(String(240), nullable=False)
     given_name = Column(String(240), nullable=False)
     phone_number = Column(String(60), nullable=False)
@@ -34,8 +34,8 @@ class User(Base):
     lecturer_record = relationship("Lecturer", back_populates="user")
     # with a security guard
     security_guard_record = relationship("SecurityGuard", back_populates="user")
-    # with an admin
-    admin_record = relationship("Admin", back_populates="user")
+    # with a sys admin
+    admin_record = relationship("SysAdmin", back_populates="user")
     # with a belonging. Belongings are deleted if the user is deleted
     belongings = relationship(
         "Belonging", back_populates="user", cascade="all, delete-orphan"
