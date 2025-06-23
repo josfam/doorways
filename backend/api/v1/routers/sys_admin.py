@@ -1,6 +1,7 @@
 """API routes for admin-related actions"""
 
 import sys
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from typing import List
 from fastapi import APIRouter, status, Depends, Body, Response
@@ -30,6 +31,22 @@ sys_admin_router = APIRouter(prefix="/sys-admin", tags=["admin"])
 @sys_admin_router.post("/user", status_code=status.HTTP_201_CREATED)
 def add_user(user_data: UserCreate, db: Session = Depends(get_db)):
     """Adds one user to the database"""
+    # check for a duplicate email or id
+    if user_data.email:
+        existing_user = (
+            db.query(User)
+            .filter(or_(User.email == user_data.email, User.id == user_data.id))
+            .first()
+        )
+    else:
+        existing_user = db.query(User).filter(User.id == user_data.id).first()
+
+    if existing_user:
+        return Response(
+            content={"message": "User already exists"},
+            status_code=status.HTTP_409_CONFLICT,
+        )
+
     # create a default password for this user if none has been provided
     password = ""
     if user_data.email:
@@ -38,9 +55,6 @@ def add_user(user_data: UserCreate, db: Session = Depends(get_db)):
         # security guards do not have an email
         password = user_data.given_name.lower() + user_data.surname.lower()
     hashed_pwd = hash_password(password)
-    existing_email = db.query(User.email).filter(User.email == user_data.email).first()
-    if existing_email:
-        return {"message": "User already exists"}, status.HTTP_409_CONFLICT
 
     role_name = user_data.role_name
     if role_name not in role_names:
@@ -49,7 +63,6 @@ def add_user(user_data: UserCreate, db: Session = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    # print(f"Role name: {role_name}")  # DEBUG
     role_info = get_role_id_from_name(user_data.role_name)
     if not role_info["success"]:
         return Response(
@@ -57,7 +70,7 @@ def add_user(user_data: UserCreate, db: Session = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
         )
     role_id = role_info["role_id"]
-    # print(f"Role ID: {role_id}")  # DEBUG
+
     new_user = User(
         id=user_data.id,
         email=user_data.email,
