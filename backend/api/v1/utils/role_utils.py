@@ -7,9 +7,10 @@ from backend.models.student import Student
 from backend.models.lecturer import Lecturer
 from backend.models.security_guard import SecurityGuard
 from backend.models.sys_admin import SysAdmin
+from backend.models.course import Course
+from backend.models.faculty import Faculty
 from backend.models.role import Role
 from backend.api.v1.utils.constants import role_names
-from .custom_exceptions import MissingUserAttributeError
 
 
 def add_user_to_role_table(
@@ -22,19 +23,22 @@ def add_user_to_role_table(
 
     if role_name == "student":
         course_name = user_data.course_name
-        if not course_name:
-            raise MissingUserAttributeError("Course name is required for a student")
+        course_info = (
+            session.query(Course.id).filter_by(course_name=course_name).first()
+        )
+        if not course_info:
+            return {"success": False, "message": f"Course '{course_name}' not found"}
+        course_id = course_info[0]
         student = Student(user_id=user.id, course_id=course_id)
-        print(
-            f"Adding student with user ID: {user.id} and course ID: {course_id}"
-        )  # DEBUG
         session.add(student)
         return {"success": True, "message": "Student added successfully"}
     elif role_name == "lecturer":
-        faculty_id = user_data.faculty_id
-        if not faculty_id:
-            return {"success": False, "message": "Faculty for lecturer is required"}
-            # raise MissingUserAttributeError("Faculty ID is required for a lecturer")
+        faculty_name = user_data.faculty_name
+        # get the faculty ID
+        faculty_info = session.query(Faculty.id).filter_by(name=faculty_name).first()
+        if not faculty_info:
+            return {"success": False, "message": f"Faculty '{faculty_name}' not found"}
+        faculty_id = faculty_info[0]
         lecturer = Lecturer(user_id=user.id, faculty_id=faculty_id)
         print(
             f"Adding lecturer with user ID: {user.id} and faculty ID: {faculty_id}"
@@ -43,16 +47,12 @@ def add_user_to_role_table(
         return {"success": True, "message": "Lecturer added successfully"}
     elif role_name == "sys admin":
         sys_admin = SysAdmin(user_id=user.id)
-        print(f"Adding sys admin with user ID: {user.id}")  # DEBUG
         session.add(sys_admin)
         return {"success": True, "message": "Admin added successfully"}
     elif role_name == "security guard":
         security_guard = SecurityGuard(
             user_id=user.id, security_company=user_data.security_company
         )
-        print(
-            f"Adding security guard with user ID: {user.id} and security company: {user_data.security_company}"
-        )  # DEBUG
         session.add(security_guard)
         return {"success": True, "message": "Security guard added successfully"}
     else:
