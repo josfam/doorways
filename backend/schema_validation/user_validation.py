@@ -8,7 +8,7 @@ class UserCreate(BaseModel):
     """Schema validation for creating a user"""
 
     id: str
-    email: EmailStr
+    email: Optional[EmailStr] = None
     surname: str
     given_name: str = Field(..., alias="given name")
     phone_number: str = Field(..., alias="phone number")
