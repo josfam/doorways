@@ -19,7 +19,7 @@ class Student(Base):
     # relationship with course
     course = relationship("Course", back_populates="students")
 
-    def __init__(self, user_id: int, course_id: int):
+    def __init__(self, user_id: str, course_id: int):
         """Initialize the Student instance"""
         self.user_id = user_id
         self.course_id = course_id
