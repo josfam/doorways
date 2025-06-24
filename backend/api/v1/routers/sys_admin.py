@@ -147,6 +147,61 @@ def add_user(user_data: dict = Body(...), db: Session = Depends(get_db)):
     )
 
 
+@sys_admin_router.post("/upload/students", status_code=status.HTTP_200_OK)
+def upload_students(db: Session = Depends(get_db), students_data=Body(...)):
+    """Adds multiple students to the database"""
+    # track processed and unprocessed students
+    processed_students = []
+    unprocessed_students = []
+
+    for student_data in students_data:
+        # turn the "student id" key as the "user id" key for validation's sake
+        if "student id" in student_data and "user id" not in student_data:
+            student_data["user id"] = student_data.pop("student id")
+        try:
+            user_obj = StudentCreate.model_validate(student_data)
+            result = create_user_in_db(
+                user_data=user_obj,
+                db=db,
+                role_name="student",
+            )
+
+            if result["success"]:
+                processed_students.append(
+                    {
+                        "user id": user_obj.user_id,
+                        "email": user_obj.email,
+                        "surname": user_obj.surname,
+                        "course name": user_obj.course_name,
+                    }
+                )
+            else:
+                unprocessed_students.append(
+                    {
+                        "user id": user_obj.user_id,
+                        "email": user_obj.email,
+                        "surname": user_obj.surname,
+                        "error": result["message"],
+                    }
+                )
+
+        except ValidationError as e:
+            return JSONResponse(
+                content={"message": str(e)},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+    # commit the transactions
+    if len(processed_students):
+        db.commit()
+
+    return JSONResponse(
+        content={
+            "message": f"Processed {len(students_data)} students successfully.",
+            "processed students": processed_students,
+            "failed": unprocessed_students,
+        },
+        status_code=status.HTTP_200_OK,
+    )
 
 
 @sys_admin_router.get(
