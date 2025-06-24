@@ -3,10 +3,16 @@
 import jwt
 import os
 import bcrypt
-from typing import Optional
+from typing import Optional, Union
 from fastapi import Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
+from backend.schema_validation.user_validation import (
+    UserCreate,
+    LecturerCreate,
+    StudentCreate,
+    SecurityGuardCreate,
+)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -35,7 +41,6 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
     )
     try:
         payload = jwt.decode(token, secret_key, algorithms=["HS256"])
-        print("payload", payload)  # DEBUG
         email: str = payload.get("email")
         if email is None:
             raise credentials_exception
@@ -48,3 +53,17 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
         )
     except jwt.PyJWTError:
         raise credentials_exception
+
+
+def create_default_password(
+    user_data: Union[StudentCreate, UserCreate, LecturerCreate, SecurityGuardCreate],
+    email: Optional[str] = None,
+) -> str:
+    """Creates a default password for a user based on their data."""
+    password = ""
+    if email is not None:
+        password = (email.split("@")[0] + user_data.given_name).lower()
+    else:
+        # security guards do not have an email
+        password = user_data.given_name.lower() + user_data.surname.lower()
+    return hash_password(password)
