@@ -110,10 +110,43 @@ def create_user_in_db(
     }
 
 
-@sys_admin_router.post("/users", status_code=status.HTTP_200_OK)
-def add_users(db: Session = Depends(get_db)):
-    """Adds multiple users to the database"""
-    pass
+@sys_admin_router.post("/user", status_code=status.HTTP_201_CREATED)
+def add_user(user_data: dict = Body(...), db: Session = Depends(get_db)):
+    """Adds one user to the database"""
+    # check for a duplicate email or id
+
+    role_name = user_data["role name"]
+    if role_name not in role_names:
+        return JSONResponse(
+            content={"message": f"Role '{role_name}' is not recognized."},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+    # Validate with the appropriate model
+    if role_name == "student":
+        validated_data = StudentCreate.model_validate(user_data)
+    elif role_name == "lecturer":
+        validated_data = LecturerCreate.model_validate(user_data)
+    elif role_name == "security guard":
+        validated_data = SecurityGuardCreate.model_validate(user_data)
+    else:
+        validated_data = UserCreate.model_validate(user_data)
+
+    result = create_user_in_db(validated_data, db, role_name=user_data["role name"])
+    if not result["success"]:
+        return JSONResponse(
+            content={"message": result["message"]},
+            status_code=result["status_code"],
+        )
+    # commit the transactions
+    db.commit()
+
+    return JSONResponse(
+        content={"message": result["message"]},
+        status_code=result["status_code"],
+    )
+
+
 
 
 @sys_admin_router.get(
