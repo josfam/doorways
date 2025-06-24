@@ -1,12 +1,14 @@
 """API routes for admin-related actions"""
 
 import sys
+from pydantic_core import ValidationError
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Union, Optional
 from fastapi import APIRouter, status, Depends, Body, Response
+from fastapi.responses import JSONResponse
 from backend.storage.database import get_db
-from backend.api.v1.utils.auth_utils import hash_password
+from backend.api.v1.utils.auth_utils import hash_password, create_default_password
 from backend.models.user import User
 from backend.models.student import Student
 from backend.models.lecturer import Lecturer
@@ -14,6 +16,9 @@ from backend.models.security_guard import SecurityGuard
 
 from backend.schema_validation.user_validation import (
     UserCreate,
+    StudentCreate,
+    LecturerCreate,
+    SecurityGuardCreate,
     UserRead,
     StudentRead,
     LecturerRead,
@@ -21,83 +26,88 @@ from backend.schema_validation.user_validation import (
 from backend.api.v1.utils.role_utils import (
     add_user_to_role_table,
     get_role_id_from_name,
+    get_course_id_from_name,
 )
-from backend.api.v1.utils.custom_exceptions import MissingUserAttributeError
 from backend.api.v1.utils.constants import role_names
 
 sys_admin_router = APIRouter(prefix="/sys-admin", tags=["admin"])
 
 
-@sys_admin_router.post("/user", status_code=status.HTTP_201_CREATED)
-def add_user(user_data: UserCreate, db: Session = Depends(get_db)):
-    """Adds one user to the database"""
-    # check for a duplicate email or id
+def create_user_in_db(
+    user_data: UserCreate, db: Session, role_name: Optional[str] = None
+) -> dict:
+    """Helper function to create a user in the database"""
+    role_name = role_name or user_data.role_name
+
+    # Check that the role exists
+    if role_name not in role_names:
+        return {
+            "success": False,
+            "message": f"Role '{role_name}' is not recognized.",
+            "status_code": status.HTTP_400_BAD_REQUEST,
+        }
+
+    # Check for a duplicate email or id
     if user_data.email:
         existing_user = (
             db.query(User)
-            .filter(or_(User.email == user_data.email, User.id == user_data.id))
+            .filter(or_(User.email == user_data.email, User.id == user_data.user_id))
             .first()
         )
     else:
-        existing_user = db.query(User).filter(User.id == user_data.id).first()
+        existing_user = db.query(User).filter(User.id == user_data.user_id).first()
 
     if existing_user:
-        return Response(
-            content={"message": "User already exists"},
-            status_code=status.HTTP_409_CONFLICT,
-        )
+        return {
+            "success": False,
+            "message": f"User already exists",
+            "status_code": status.HTTP_409_CONFLICT,
+        }
 
-    # create a default password for this user if none has been provided
-    password = ""
-    if user_data.email:
-        password = (user_data.email.split("@")[0] + user_data.given_name).lower()
-    else:
-        # security guards do not have an email
-        password = user_data.given_name.lower() + user_data.surname.lower()
-    hashed_pwd = hash_password(password)
-
-    role_name = user_data.role_name
-    if role_name not in role_names:
-        return Response(
-            content={"message": "Invalid role name"},
-            status_code=status.HTTP_400_BAD_REQUEST,
-        )
-
-    role_info = get_role_id_from_name(user_data.role_name)
+    # Create a default password for the user
+    default_password = create_default_password(user_data, user_data.email)
+    role_info = get_role_id_from_name(role_name)
     if not role_info["success"]:
-        return Response(
-            content={"message": role_info["message"]},
-            status_code=status.HTTP_400_BAD_REQUEST,
-        )
+        return {
+            "success": False,
+            "message": role_info["message"],
+            "status_code": status.HTTP_400_BAD_REQUEST,
+        }
+
     role_id = role_info["role_id"]
 
+    # create a user and add them to the appropriate tables
     new_user = User(
-        id=user_data.id,
-        email=user_data.email,
+        id=user_data.user_id,
+        email=str(user_data.email),
         surname=user_data.surname,
         given_name=user_data.given_name,
         phone_number=user_data.phone_number,
         role_id=int(role_id),
-        password=hashed_pwd,
+        password=default_password,
     )
 
     try:
         db.add(new_user)
-        add_user_to_role_table(
-            role_name=user_data.role_name,
+        result = add_user_to_role_table(
+            role_name=role_name,
             user_data=user_data,
             user=new_user,
             session=db,
         )
-        db.commit()
-    except MissingUserAttributeError as e:
-        db.rollback()
-        return {"message": str(e)}, status.HTTP_400_BAD_REQUEST
+        # the caller handles the committing / rollback
     except Exception as e:
         db.rollback()
-        return {"message": str(e)}, status.HTTP_500_INTERNAL_SERVER_ERROR
-
-    return {"message": "User added successfully"}, status.HTTP_201_CREATED
+        return {
+            "success": False,
+            "message": str(e),
+            "status_code": status.HTTP_500_INTERNAL_SERVER_ERROR,
+        }
+    return {
+        "success": True,
+        "message": "User added successfully",
+        "status_code": status.HTTP_201_CREATED,
+    }
 
 
 @sys_admin_router.post("/users", status_code=status.HTTP_200_OK)
