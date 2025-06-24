@@ -1,7 +1,13 @@
 """For role-related functions"""
 
 from sqlalchemy.orm import Session
-from backend.schema_validation.user_validation import UserCreate
+from typing import Optional, Union
+from backend.schema_validation.user_validation import (
+    UserCreate,
+    StudentCreate,
+    LecturerCreate,
+    SecurityGuardCreate,
+)
 from backend.models.user import User
 from backend.models.student import Student
 from backend.models.lecturer import Lecturer
@@ -14,7 +20,10 @@ from backend.api.v1.utils.constants import role_names
 
 
 def add_user_to_role_table(
-    role_name: str, user_data: UserCreate, user: User, session: Session
+    role_name: str,
+    user_data: Union[UserCreate, StudentCreate, LecturerCreate, SecurityGuardCreate],
+    user: User,
+    session: Session,
 ) -> dict[str, bool | str]:
     """Adds a user to their respective role table, based on the role id"""
 
@@ -22,14 +31,21 @@ def add_user_to_role_table(
         return {"success": False, "message": "Role name is required"}
 
     if role_name == "student":
-        course_name = user_data.course_name
-        course_info = (
-            session.query(Course.id).filter_by(course_name=course_name).first()
-        )
-        if not course_info:
-            return {"success": False, "message": f"Course '{course_name}' not found"}
-        course_id = course_info[0]
-        student = Student(user_id=user.id, course_id=course_id)
+        # Check if user_data is a StudentCreate instance
+        if not isinstance(user_data, StudentCreate) and not hasattr(
+            user_data, "course_name"
+        ):
+            return {
+                "success": False,
+                "message": "Student data required for student role",
+            }
+
+        course_info = get_course_id_from_name(user_data.course_name, session)
+
+        if not course_info["success"]:
+            return {"success": False, "message": course_info["message"]}
+        course_id = int(course_info["course_id"])
+        student = Student(user_id=str(user.id), course_id=course_id)
         session.add(student)
         return {"success": True, "message": "Student added successfully"}
     elif role_name == "lecturer":
@@ -74,6 +90,16 @@ def get_role_id_from_name(role_name: str) -> dict[str, bool | int | str]:
     if role_name not in role_names:
         return {"success": False, "message": "Role name not recognized"}
     return {"success": True, "role_id": role_names[role_name]}
+
+
+def get_course_id_from_name(
+    course_name: str, session: Session
+) -> dict[str, bool | int | str]:
+    """Returns the course ID based on the course name"""
+    course_info = session.query(Course.id).filter_by(course_name=course_name).first()
+    if not course_info:
+        return {"success": False, "message": f"Course '{course_name}' not found"}
+    return {"success": True, "course_id": course_info[0]}
 
 
 def get_available_roles() -> list[str]:
