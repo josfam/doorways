@@ -7,29 +7,43 @@ from typing import Optional
 class UserCreate(BaseModel):
     """Schema validation for creating a user"""
 
-    id: str
-    email: Optional[EmailStr] = None
+    user_id: str = Field(..., alias="user id")  # predefined user id
+    email: Optional[EmailStr] = None  # optional email
     surname: str
     given_name: str = Field(..., alias="given name")
     phone_number: str = Field(..., alias="phone number")
     role_name: str = Field(..., alias="role name")
-    course_name: Optional[str] = Field(None, alias="course name")
-    faculty_name: Optional[str] = Field(None, alias="faculty name")
-    security_company: Optional[str] = Field(None, alias="security company")
+
+
+class StudentCreate(UserCreate):
+    """Schema validation for creating a student"""
+
+    course_name: str = Field(..., alias="course name")
+    email: EmailStr | None = None
+
+
+class LecturerCreate(UserCreate):
+    """Schema validation for creating a lecturer"""
+
+    faculty_name: str = Field(..., alias="faculty name")
+    email: EmailStr | None = None
+
+
+class SecurityGuardCreate(UserCreate):
+    """Schema validation for creating a security guard"""
+
+    security_company: str = Field(..., alias="security company")
 
 
 class UserRead(BaseModel):
     """Schema validation for reading a user"""
 
     id: str
-    email: EmailStr
+    email: Optional[EmailStr] = None  # optional email
     surname: str
     given_name: str = Field(..., alias="given name")
     phone_number: str = Field(..., alias="phone number")
     role_name: str = Field(..., alias="role name")
-    course_name: Optional[str] = Field(None, alias="course name")
-    faculty_name: Optional[str] = Field(None, alias="faculty name")
-    security_company: Optional[str] = Field(None, alias="security company")
 
     class Config:
         orm_mode = True
@@ -40,19 +54,19 @@ class UserRead(BaseModel):
 class StudentRead(UserRead):
     """Schema validation for reading a student"""
 
-    course_name: Optional[str] = Field(None, alias="course name")
+    course_name: str = Field(..., alias="course name")
 
 
 class LecturerRead(UserRead):
     """Schema validation for reading a lecturer"""
 
-    faculty_name: Optional[str] = Field(None, alias="faculty name")
+    faculty_name: str = Field(..., alias="faculty name")
 
 
 class SecurityGuardRead(UserRead):
     """Schema validation for reading a security guard"""
 
-    security_company: Optional[str] = Field(None, alias="security company")
+    security_company: str = Field(..., alias="security company")
 
 
 class LoginRequest(BaseModel):
