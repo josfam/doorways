@@ -8,7 +8,7 @@ class UserCreate(BaseModel):
     """Schema validation for creating a user"""
 
     user_id: str = Field(..., alias="user id")  # predefined user id
-    email: Optional[EmailStr] = None  # optional email
+    email: EmailStr
     surname: str
     given_name: str = Field(..., alias="given name")
     phone_number: str = Field(..., alias="phone number")
@@ -19,14 +19,12 @@ class StudentCreate(UserCreate):
     """Schema validation for creating a student"""
 
     course_name: str = Field(..., alias="course name")
-    email: EmailStr | None = None
 
 
 class LecturerCreate(UserCreate):
     """Schema validation for creating a lecturer"""
 
     faculty_name: str = Field(..., alias="faculty name")
-    email: EmailStr | None = None
 
 
 class SecurityGuardCreate(UserCreate):
@@ -39,7 +37,7 @@ class UserRead(BaseModel):
     """Schema validation for reading a user"""
 
     id: str
-    email: Optional[EmailStr] = None  # optional email
+    email: EmailStr
     surname: str
     given_name: str = Field(..., alias="given name")
     phone_number: str = Field(..., alias="phone number")
