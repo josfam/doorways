@@ -204,6 +204,63 @@ def upload_students(db: Session = Depends(get_db), students_data=Body(...)):
     )
 
 
+@sys_admin_router.post("/upload/lecturers", status_code=status.HTTP_200_OK)
+def upload_lecturers(db: Session = Depends(get_db), lecturers_data=Body(...)):
+    """Adds multiple students to the database"""
+    # track processed and unprocessed students
+    processed_lecturers = []
+    unprocessed_lecturers = []
+
+    for lecturer_data in lecturers_data:
+        # turn the "student id" key as the "user id" key for validation's sake
+        if "lecturer id" in lecturer_data and "user id" not in lecturer_data:
+            lecturer_data["user id"] = lecturer_data.pop("lecturer id")
+        try:
+            user_obj = LecturerCreate.model_validate(lecturer_data)
+            result = create_user_in_db(
+                user_data=user_obj,
+                db=db,
+                role_name="lecturer",
+            )
+
+            if result["success"]:
+                processed_lecturers.append(
+                    {
+                        "user id": user_obj.user_id,
+                        "email": user_obj.email,
+                        "surname": user_obj.surname,
+                        "course name": user_obj.faculty_name,
+                    }
+                )
+            else:
+                unprocessed_lecturers.append(
+                    {
+                        "user id": user_obj.user_id,
+                        "email": user_obj.email,
+                        "surname": user_obj.surname,
+                        "error": result["message"],
+                    }
+                )
+
+        except ValidationError as e:
+            return JSONResponse(
+                content={"message": str(e)},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+    # commit the transactions
+    if len(processed_lecturers):
+        db.commit()
+
+    return JSONResponse(
+        content={
+            "message": f"Processed {len(lecturers_data)} lecturers successfully.",
+            "processed lecturers": processed_lecturers,
+            "failed": unprocessed_lecturers,
+        },
+        status_code=status.HTTP_200_OK,
+    )
+
+
 @sys_admin_router.get(
     "/users", status_code=status.HTTP_200_OK, response_model=List[UserRead]
 )
