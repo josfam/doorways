@@ -1,5 +1,6 @@
 role name,
-admin,
+sys admin,
 lecturer,
 student,
-security_guard,
+security guard,
+admin,

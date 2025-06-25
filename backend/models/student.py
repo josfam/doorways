@@ -1,6 +1,6 @@
 """Contains schemas for student-related classes."""
 
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 from .base import Base
 
@@ -11,7 +11,7 @@ class Student(Base):
     __tablename__ = "students"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
     course_id = Column(Integer, ForeignKey("courses.id"))
 
     # a student is a user
@@ -19,7 +19,7 @@ class Student(Base):
     # relationship with course
     course = relationship("Course", back_populates="students")
 
-    def __init__(self, user_id: int, course_id: int):
+    def __init__(self, user_id: str, course_id: int):
         """Initialize the Student instance"""
         self.user_id = user_id
         self.course_id = course_id

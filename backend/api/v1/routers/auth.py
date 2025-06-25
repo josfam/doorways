@@ -10,8 +10,8 @@ from backend.schema_validation.user_validation import LoginRequest
 from sqlalchemy.orm import Session
 from backend.storage.database import get_db
 from backend.api.v1.utils.auth_utils import hash_password, is_matching_password
+from backend.api.v1.utils.role_utils import get_role_name_from_id
 from backend.models.user import User
-from backend.api.v1.utils.constants import RoleNumbers
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 TOKEN_EXPIRATION_TIME = 3600 * 3  # 3 hours
@@ -39,8 +39,14 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
             content={"message": "Incorrect username or password"},
         )
 
-    # get the role name from the id
-    role_name = RoleNumbers(existing_user.role_id).name.lower()
+    # get the role name from the role id
+    role_info = get_role_name_from_id(existing_user.role_id)
+    if not role_info["success"]:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"message": role_info["message"]},
+        )
+    role_name = str(role_info["role_name"]).lower()
 
     # generate a JWT token
     jwt_payload = {

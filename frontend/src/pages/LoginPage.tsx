@@ -90,8 +90,8 @@ const LoginPage = () => {
             state: { showSuccessToast: true },
             replace: true,
           });
-        } else if (role_name === role_names.admin) {
-          navigate("/admin", {
+        } else if (role_name === role_names["sys admin"]) {
+          navigate("/sys-admin", {
             state: { showSuccessToast: true },
             replace: true,
           });
