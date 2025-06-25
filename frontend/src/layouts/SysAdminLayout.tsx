@@ -5,7 +5,7 @@ import { AdminSidebar } from "@/components/admin-sidebar";
 // Container layout that wraps all admin pages
 const SysAdminLayout = () => {
   return (
-    <main className="admin-layout flex h-dvh">
+    <main className="sys-admin-layout flex h-max bg-white">
       {/* admin sidebar */}
       <div>
         <SidebarProvider>
@@ -14,7 +14,7 @@ const SysAdminLayout = () => {
         </SidebarProvider>
       </div>
       {/* main content area */}
-      <section className="flex w-full flex-col items-center gap-6 p-4 sm:p-12">
+      <section className="flex h-max w-full flex-col items-center gap-6 p-4 sm:p-12">
         <Outlet />
       </section>
     </main>
