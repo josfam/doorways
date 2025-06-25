@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from typing import Dict
 from backend.api.v1.utils.code_utils import code_manager
 from backend.api.v1.utils.auth_utils import get_current_user
-from backend.api.v1.utils.constants import TransitionTypes
+from backend.api.v1.utils.constants import transition_types
 from backend.storage.database import get_db
 from backend.models.user import User
 from backend.models.entry_exit_times import EntryExitTime
@@ -77,17 +77,16 @@ async def release_code(code: str, db: Session = Depends(get_db)):
         )
         if prev_record:
             # determine whether it was an entry or exit
-            prev_transition_type_id = prev_record.transition_type_id
-            if prev_transition_type_id == TransitionTypes.ENTRY.value:
+            prev_transition_type_id: int = prev_record.transition_type_id
+            if prev_transition_type_id == transition_types["entry"]:
                 # make this an exit
-                transition_type_id = TransitionTypes.EXIT.value
+                transition_type_id = transition_types["exit"]
             else:
                 # make this an entry
-                transition_type_id = TransitionTypes.ENTRY.value
-            ...
+                transition_type_id = transition_types["entry"]
         else:
             # create an entry of the "entry" type
-            transition_type_id: int = TransitionTypes.ENTRY.value
+            transition_type_id = transition_types["entry"]
         entry_exit_time = EntryExitTime(
             user_id=user_id,
             transition_type_id=transition_type_id,
