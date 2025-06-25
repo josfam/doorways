@@ -16,5 +16,5 @@
 }
 
 .page-header {
-  @apply text-3xl font-bold text-amber-950;
+  @apply text-2xl font-bold text-amber-950;
 }
