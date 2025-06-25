@@ -1,9 +1,9 @@
 from enum import Enum
 
-
-class TransitionTypes(Enum):
-    ENTRY = 1
-    EXIT = 2
+transition_types = {
+    "entry": 1,
+    "exit": 2,
+}
 
 
 role_names = {
