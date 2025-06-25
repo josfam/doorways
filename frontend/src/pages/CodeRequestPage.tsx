@@ -86,14 +86,6 @@ const CodeRequestPage = () => {
     };
   }, [codeWasRequested, timeLeft]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("jwt_token");
-    navigate("/", {
-      state: { showSuccessToast: true },
-      replace: true,
-    });
-  };
-
   const handleCodeRequest = async () => {
     const response = await fetch(`${codesAPIUrl}/random-code`, {
       method: "GET",
@@ -133,9 +125,6 @@ const CodeRequestPage = () => {
           disabled={codeWasRequested}
         >
           Request code
-        </Button>
-        <Button onClick={handleLogout} className="btn-cta btn-ter w-64">
-          Logout
         </Button>
       </div>
     </div>
