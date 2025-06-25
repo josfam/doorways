@@ -5,6 +5,7 @@ from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from dotenv import load_dotenv
+from backend.models.admin import Admin
 from backend.models.sys_admin import SysAdmin
 from backend.models.base import Base
 from backend.models.belongings import Belonging

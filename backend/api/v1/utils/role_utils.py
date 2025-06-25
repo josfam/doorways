@@ -13,6 +13,7 @@ from backend.models.student import Student
 from backend.models.lecturer import Lecturer
 from backend.models.security_guard import SecurityGuard
 from backend.models.sys_admin import SysAdmin
+from backend.models.admin import Admin
 from backend.models.course import Course
 from backend.models.faculty import Faculty
 from backend.models.role import Role
@@ -71,6 +72,11 @@ def add_user_to_role_table(
         )
         session.add(security_guard)
         return {"success": True, "message": "Security guard added successfully"}
+    elif role_name == "admin":
+        # Admin role is not explicitly defined in the models, but can be handled similarly
+        admin = Admin(user_id=user.id)
+        session.add(admin)
+        return {"success": True, "message": "Admin added successfully"}
     else:
         print(f"Role name '{role_name}' is not recognized")
         return {"success": False, "message": "Nothing was added to the role table"}

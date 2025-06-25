@@ -15,6 +15,18 @@ class UserCreate(BaseModel):
     role_name: str = Field(..., alias="role name")
 
 
+class SysAdminCreate(UserCreate):
+    """Schema validation for creating a system administrator"""
+
+    pass
+
+
+class AdminCreate(UserCreate):
+    """Schema validation for creating an administrator"""
+
+    pass
+
+
 class StudentCreate(UserCreate):
     """Schema validation for creating a student"""
 
@@ -47,6 +59,18 @@ class UserRead(BaseModel):
         orm_mode = True
         from_attributes = True
         allow_population_by_field_name = True
+
+
+class SysAdminRead(UserRead):
+    """Schema validation for reading a system administrator"""
+
+    pass
+
+
+class AdminRead(UserRead):
+    """Schema validation for reading an administrator"""
+
+    pass
 
 
 class StudentRead(UserRead):

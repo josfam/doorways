@@ -19,6 +19,8 @@ from backend.schema_validation.user_validation import (
     StudentCreate,
     LecturerCreate,
     SecurityGuardCreate,
+    SysAdminCreate,
+    AdminCreate,
     UserRead,
     StudentRead,
     LecturerRead,
@@ -150,7 +152,7 @@ def add_user(user_data: dict = Body(...), db: Session = Depends(get_db)):
 @sys_admin_router.post("/upload/students", status_code=status.HTTP_200_OK)
 def upload_students(db: Session = Depends(get_db), students_data=Body(...)):
     """Adds multiple students to the database"""
-    # track processed and unprocessed students
+    # track processed and unprocessed data
     processed_students = []
     unprocessed_students = []
 
@@ -196,7 +198,7 @@ def upload_students(db: Session = Depends(get_db), students_data=Body(...)):
 
     return JSONResponse(
         content={
-            "message": f"Processed {len(students_data)} students successfully.",
+            "message": f"Processed {len(processed_students)} students successfully.",
             "processed students": processed_students,
             "failed": unprocessed_students,
         },
@@ -206,8 +208,8 @@ def upload_students(db: Session = Depends(get_db), students_data=Body(...)):
 
 @sys_admin_router.post("/upload/lecturers", status_code=status.HTTP_200_OK)
 def upload_lecturers(db: Session = Depends(get_db), lecturers_data=Body(...)):
-    """Adds multiple students to the database"""
-    # track processed and unprocessed students
+    """Adds multiple lecturers to the database"""
+    # track processed and unprocessed data
     processed_lecturers = []
     unprocessed_lecturers = []
 
@@ -253,9 +255,178 @@ def upload_lecturers(db: Session = Depends(get_db), lecturers_data=Body(...)):
 
     return JSONResponse(
         content={
-            "message": f"Processed {len(lecturers_data)} lecturers successfully.",
+            "message": f"Processed {len(processed_lecturers)} lecturers successfully.",
             "processed lecturers": processed_lecturers,
             "failed": unprocessed_lecturers,
+        },
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@sys_admin_router.post("/upload/security-guards", status_code=status.HTTP_200_OK)
+def upload_security_guards(db: Session = Depends(get_db), guards_data=Body(...)):
+    """Adds multiple security guards data to the database"""
+    # track processed and unprocessed data
+    processed_guards = []
+    unprocessed_guards = []
+
+    for guard_data in guards_data:
+        # turn the "student id" key as the "user id" key for validation's sake
+        if "security id" in guard_data and "user id" not in guard_data:
+            guard_data["user id"] = guard_data.pop("security id")
+        try:
+            user_obj = SecurityGuardCreate.model_validate(guard_data)
+            result = create_user_in_db(
+                user_data=user_obj,
+                db=db,
+                role_name="security guard",
+            )
+
+            if result["success"]:
+                processed_guards.append(
+                    {
+                        "user id": user_obj.user_id,
+                        "email": user_obj.email,
+                        "surname": user_obj.surname,
+                        "security company": user_obj.security_company,
+                    }
+                )
+            else:
+                unprocessed_guards.append(
+                    {
+                        "user id": user_obj.user_id,
+                        "email": user_obj.email,
+                        "surname": user_obj.surname,
+                        "error": result["message"],
+                    }
+                )
+
+        except ValidationError as e:
+            return JSONResponse(
+                content={"message": str(e)},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+    # commit the transactions
+    if len(processed_guards):
+        db.commit()
+
+    return JSONResponse(
+        content={
+            "message": f"Processed {len(processed_guards)} guards successfully.",
+            "processed lecturers": processed_guards,
+            "failed": unprocessed_guards,
+        },
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@sys_admin_router.post("/upload/sys-admins", status_code=status.HTTP_200_OK)
+def upload_sys_admins(db: Session = Depends(get_db), sys_admins_data=Body(...)):
+    """Adds multiple sys admins to the database"""
+    # track processed and unprocessed data
+    processed_sys_admins = []
+    unprocessed_sys_admins = []
+
+    for sys_admin_data in sys_admins_data:
+        # turn the "student id" key as the "user id" key for validation's sake
+        if "sys admin id" in sys_admin_data and "user id" not in sys_admin_data:
+            sys_admin_data["user id"] = sys_admin_data.pop("sys admin id")
+        try:
+            user_obj = SysAdminCreate.model_validate(sys_admin_data)
+            result = create_user_in_db(
+                user_data=user_obj,
+                db=db,
+                role_name="sys admin",
+            )
+
+            if result["success"]:
+                processed_sys_admins.append(
+                    {
+                        "user id": user_obj.user_id,
+                        "email": user_obj.email,
+                        "surname": user_obj.surname,
+                    }
+                )
+            else:
+                unprocessed_sys_admins.append(
+                    {
+                        "user id": user_obj.user_id,
+                        "email": user_obj.email,
+                        "surname": user_obj.surname,
+                        "error": result["message"],
+                    }
+                )
+
+        except ValidationError as e:
+            return JSONResponse(
+                content={"message": str(e)},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+    # commit the transactions
+    if len(processed_sys_admins):
+        db.commit()
+
+    return JSONResponse(
+        content={
+            "message": f"Processed {len(processed_sys_admins)} sys admins successfully.",
+            "processed lecturers": processed_sys_admins,
+            "failed": unprocessed_sys_admins,
+        },
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@sys_admin_router.post("/upload/admins", status_code=status.HTTP_200_OK)
+def upload_admins(db: Session = Depends(get_db), admins_data=Body(...)):
+    """Adds multiple admins to the database"""
+    # track processed and unprocessed data
+    processed_admins = []
+    unprocessed_admins = []
+
+    for admin_data in admins_data:
+        # turn the "student id" key as the "user id" key for validation's sake
+        if "admin id" in admin_data and "user id" not in admin_data:
+            admin_data["user id"] = admin_data.pop("admin id")
+        try:
+            user_obj = AdminCreate.model_validate(admin_data)
+            result = create_user_in_db(
+                user_data=user_obj,
+                db=db,
+                role_name="admin",
+            )
+
+            if result["success"]:
+                processed_admins.append(
+                    {
+                        "user id": user_obj.user_id,
+                        "email": user_obj.email,
+                        "surname": user_obj.surname,
+                    }
+                )
+            else:
+                unprocessed_admins.append(
+                    {
+                        "user id": user_obj.user_id,
+                        "email": user_obj.email,
+                        "surname": user_obj.surname,
+                        "error": result["message"],
+                    }
+                )
+
+        except ValidationError as e:
+            return JSONResponse(
+                content={"message": str(e)},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+    # commit the transactions
+    if len(processed_admins):
+        db.commit()
+
+    return JSONResponse(
+        content={
+            "message": f"Processed {len(processed_admins)} admins successfully.",
+            "processed": processed_admins,
+            "failed": unprocessed_admins,
         },
         status_code=status.HTTP_200_OK,
     )

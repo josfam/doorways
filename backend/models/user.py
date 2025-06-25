@@ -35,7 +35,9 @@ class User(Base):
     # with a security guard
     security_guard_record = relationship("SecurityGuard", back_populates="user")
     # with a sys admin
-    admin_record = relationship("SysAdmin", back_populates="user")
+    sys_admin_record = relationship("SysAdmin", back_populates="user")
+    # with an admin, as in an administrator
+    admin_record = relationship("Admin", back_populates="user")
     # with a belonging. Belongings are deleted if the user is deleted
     belongings = relationship(
         "Belonging", back_populates="user", cascade="all, delete-orphan"
