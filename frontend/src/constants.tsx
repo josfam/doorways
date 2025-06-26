@@ -19,6 +19,7 @@ const role_names = {
   lecturer: "lecturer",
   security: "security",
   student: "student",
+  admin: "admin",
 };
 
 export {
