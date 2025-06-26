@@ -18,7 +18,7 @@ const SideBarItems = [
     icon: CircleDashed,
   },
   {
-    title: "My activity",
+    title: "My history",
     url: "/user/activity-history",
     icon: CalendarClock,
   },
