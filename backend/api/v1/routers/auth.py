@@ -48,8 +48,12 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
         )
     role_name = str(role_info["role_name"]).lower()
 
+    # get the user's id
+    user_id = existing_user.id
+
     # generate a JWT token
     jwt_payload = {
+        "id": user_id,
         "email": existing_user.email,
         "role_name": role_name,
         "expiration": (
