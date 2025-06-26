@@ -86,7 +86,7 @@ const LoginPage = () => {
           role_name === role_names.student ||
           role_name === role_names.lecturer
         ) {
-          navigate("/code-request", {
+          navigate("/user/code-request", {
             state: { showSuccessToast: true },
             replace: true,
           });

@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { toastDuration, checkMarksDuration } from "@/constants";
 
 const CodeRequestPage = () => {
@@ -19,7 +19,7 @@ const CodeRequestPage = () => {
   const [codeWasRequested, setCodeWasRequested] = useState<boolean>(false);
   const [showCheckmark, setShowCheckmark] = useState<boolean>(false);
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const toastShown = useRef(false); // prevent re-rendering twice
 
   // Showing success toast after login
@@ -86,14 +86,6 @@ const CodeRequestPage = () => {
     };
   }, [codeWasRequested, timeLeft]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("jwt_token");
-    navigate("/", {
-      state: { showSuccessToast: true },
-      replace: true,
-    });
-  };
-
   const handleCodeRequest = async () => {
     const response = await fetch(`${codesAPIUrl}/random-code`, {
       method: "GET",
@@ -133,9 +125,6 @@ const CodeRequestPage = () => {
           disabled={codeWasRequested}
         >
           Request code
-        </Button>
-        <Button onClick={handleLogout} className="btn-cta btn-ter w-64">
-          Logout
         </Button>
       </div>
     </div>
