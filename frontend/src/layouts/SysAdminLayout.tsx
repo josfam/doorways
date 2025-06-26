@@ -14,7 +14,7 @@ const SysAdminLayout = () => {
         </SidebarProvider>
       </div>
       {/* main content area */}
-      <section className="flex h-max w-full flex-col items-center gap-6 p-4 sm:p-12">
+      <section className="flex h-max w-full flex-col items-center gap-6 px-4 pt-12 sm:px-8 sm:pt-14">
         <Outlet />
       </section>
     </main>

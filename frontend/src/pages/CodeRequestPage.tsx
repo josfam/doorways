@@ -109,23 +109,25 @@ const CodeRequestPage = () => {
       <div>
         <h1 className="page-header">Request a code</h1>
       </div>
-      <div className="flex flex-col">
-        {/* container for countdown timer */}
-        <div className="absolute mr-[-30px] mt-[-30px] flex h-20 w-20 items-center justify-center self-end rounded-full bg-emerald-400 text-center text-5xl font-bold text-emerald-900">
-          {codeWasRequested ? timeLeft : "--"}
+      <div>
+        <div className="flex flex-col">
+          {/* container for countdown timer */}
+          <div className="absolute mr-[-30px] mt-[-30px] flex h-20 w-20 items-center justify-center self-end rounded-full bg-emerald-400 text-center text-5xl font-bold text-emerald-900">
+            {codeWasRequested ? timeLeft : "--"}
+          </div>
+          <div className="flex h-64 w-64 items-center justify-center rounded-xl border-8 text-9xl">
+            {showCheckmark ? <span>✔️</span> : code}
+          </div>
         </div>
-        <div className="flex h-64 w-64 items-center justify-center rounded-xl border-8 text-9xl">
-          {showCheckmark ? <span>✔️</span> : code}
+        <div className="flex flex-col">
+          <Button
+            className={`btn-cta w-64 ${codeWasRequested ? "bg-slate-400" : "opacity-100"}`}
+            onClick={handleCodeRequest}
+            disabled={codeWasRequested}
+          >
+            Request code
+          </Button>
         </div>
-      </div>
-      <div className="flex flex-col">
-        <Button
-          className={`btn-cta w-64 ${codeWasRequested ? "bg-slate-400" : "opacity-100"}`}
-          onClick={handleCodeRequest}
-          disabled={codeWasRequested}
-        >
-          Request code
-        </Button>
       </div>
     </div>
   );
