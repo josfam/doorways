@@ -39,3 +39,12 @@ class EntryExitTime(Base):
         self.user_id = user_id
         self.transition_type_id = transition_type_id
         self.time = transition_time
+
+    def to_dict(self) -> dict:
+        """Convert the EntryExitTime instance to a dictionary."""
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "transition_type_id": self.transition_type_id,
+            "time": self.time.isoformat(),
+        }
