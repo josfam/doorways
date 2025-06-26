@@ -12,6 +12,7 @@ from backend.storage.database import get_db
 from backend.api.v1.utils.auth_utils import hash_password, is_matching_password
 from backend.api.v1.utils.role_utils import get_role_name_from_id
 from backend.models.user import User
+from backend.api.v1.utils.code_utils import code_manager
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 TOKEN_EXPIRATION_TIME = 3600 * 3  # 3 hours
@@ -56,6 +57,7 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
         "id": user_id,
         "email": existing_user.email,
         "role_name": role_name,
+        "code_time_out": code_manager.code_expiration_time,
         "expiration": (
             dt.now(tz.utc) + timedelta(seconds=TOKEN_EXPIRATION_TIME)
         ).isoformat(),
