@@ -3,6 +3,7 @@ export type JwtPayload = {
   email: string;
   role_name: string;
   expiration: string;
+  code_time_out: number;
 };
 
 export type transitionItem = {
