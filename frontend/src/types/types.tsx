@@ -5,6 +5,13 @@ export type JwtPayload = {
   expiration: string;
 };
 
+export type transitionItem = {
+  id: number;
+  user_id: string;
+  transition_type_id: number;
+  time: string;
+};
+
 export type SysAdminDetails = {
   email: string;
   surname: string;

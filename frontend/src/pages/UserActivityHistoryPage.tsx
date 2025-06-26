@@ -1,6 +1,6 @@
 import {} from "@/constants";
 import { useQuery } from "@tanstack/react-query";
-import type { JwtPayload } from "@/types/types";
+import type { JwtPayload, transitionItem } from "@/types/types";
 import { jwtDecode } from "jwt-decode";
 import { statsAPIUrl } from "@/constants";
 import SingleTransitionDetail from "@/components/singleTransitionDetail";
@@ -75,7 +75,7 @@ const UserActivityHistoryPage = () => {
         <h1 className="page-header">Your History</h1>
       </div>
       <ul className="flex w-full flex-wrap items-center justify-center gap-4">
-        {data.history.map((transitionItem) => (
+        {data.history.map((transitionItem: transitionItem) => (
           <SingleTransitionDetail
             key={transitionItem.id}
             transitionData={{
