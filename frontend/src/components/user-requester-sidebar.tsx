@@ -33,13 +33,13 @@ export const UserRequesterSidebar = () => {
   const handleLogout = useLogout();
 
   return (
-    <Sidebar className="">
+    <Sidebar>
       <SidebarContent className="bg-amber-50">
-        <SidebarGroup className="relative">
+        <SidebarGroup className="h-full flex-col">
           <SidebarGroupLabel className="mb-8 flex h-10 items-center justify-center text-xl text-amber-900">
             System Admin
           </SidebarGroupLabel>
-          <SidebarGroupContent className="flex list-none flex-col gap-4 px-1">
+          <SidebarGroupContent className="flex flex-1 list-none flex-col gap-4 px-1">
             {SideBarItems.map((item) => {
               return (
                 <SidebarMenuItem key={item.title}>
@@ -54,7 +54,7 @@ export const UserRequesterSidebar = () => {
               );
             })}
 
-            <SidebarMenuItem>
+            <SidebarMenuItem className="mt-auto">
               <Button
                 className={`btn-sidebar flex justify-start gap-3 ${highlightBtn("/logout") ? "border-1 border-sky-800 !bg-sky-600" : ""}`}
                 onClick={handleLogout}
