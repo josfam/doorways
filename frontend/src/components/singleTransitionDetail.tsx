@@ -1,4 +1,4 @@
-import { ArrowDownToDot, ArrowUpFromDot, ChevronsDown } from "lucide-react";
+import { ArrowDownToDot, ArrowUpFromDot } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 interface TransitionHistoryProps {
   transitionDate: string;
