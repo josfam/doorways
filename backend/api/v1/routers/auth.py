@@ -19,6 +19,17 @@ TOKEN_EXPIRATION_TIME = 3600 * 3  # 3 hours
 load_dotenv()
 
 
+@auth_router.get("/config", status_code=status.HTTP_200_OK)
+def get_config():
+    """Returns the configuration for the authentication system"""
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "code_expiration_time": code_manager.code_expiration_time,
+        },
+    )
+
+
 @auth_router.post("/login", status_code=status.HTTP_200_OK)
 def login(credentials: LoginRequest, db: Session = Depends(get_db)):
     """Logs a user into the system"""

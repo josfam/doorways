@@ -1,6 +1,6 @@
 import {
   codesAPIUrl,
-  codeExpirationTime,
+  defaultCodeExpirationTime,
   expirationCountdownInterval,
   baseWebSocketUrl,
 } from "@/constants";
@@ -10,8 +10,12 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 import { toastDuration, checkMarksDuration } from "@/constants";
+import { useConfig } from "@/hooks/useConfig";
 
 const CodeRequestPage = () => {
+  // get code expiration from server
+  const codeExpirationTime =
+    useConfig().data?.code_expiration_time || defaultCodeExpirationTime;
   const [code, setCode] = useState<string>("--");
   const [expirationTime, setExpirationTime] =
     useState<number>(codeExpirationTime);

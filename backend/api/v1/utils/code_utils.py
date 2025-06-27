@@ -14,7 +14,7 @@ class CodeManager:
     """
 
     _instance = None
-    CODE_EXPIRATION_TIME = 5  # seconds
+    CODE_EXPIRATION_TIME = 8  # seconds
     CODE_EXPIRY_CHECK_INTERVAL = 1  # seconds
 
     def __new__(cls):

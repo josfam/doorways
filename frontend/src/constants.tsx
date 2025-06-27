@@ -8,7 +8,7 @@ const statsAPIUrl = `${baseAPIUrl}/stats`;
 
 const baseWebSocketUrl = "ws://127.0.0.1:8000/api/v1";
 
-const codeExpirationTime = 5; // seconds
+const defaultCodeExpirationTime = 5; // seconds
 const expirationCountdownInterval = 1000; // milliseconds
 const toastDuration = 2000; // milliseconds
 const inputResetDelay = 1000; // milliseconds
@@ -28,7 +28,7 @@ export {
   baseAPIUrl,
   baseWebSocketUrl,
   codesAPIUrl,
-  codeExpirationTime,
+  defaultCodeExpirationTime,
   checkMarksDuration,
   expirationCountdownInterval,
   authAPIUrl,
