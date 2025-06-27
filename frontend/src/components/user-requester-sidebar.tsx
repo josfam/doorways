@@ -10,6 +10,7 @@ import { Button } from "./ui/button";
 import { LogOut, CalendarClock, CircleDashed } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useLogout } from "@/hooks/use-logout";
+import { useRole } from "@/hooks/useRole";
 
 const SideBarItems = [
   {
@@ -26,6 +27,7 @@ const SideBarItems = [
 
 export const UserRequesterSidebar = () => {
   // const urlLocation = useLocation();
+  const userRole = useRole();
   const url = useLocation().pathname;
   const highlightBtn = (currentUrl: string) => {
     return url.includes(currentUrl);
@@ -35,9 +37,10 @@ export const UserRequesterSidebar = () => {
   return (
     <Sidebar>
       <SidebarContent className="bg-amber-50">
-        <SidebarGroup className="h-full flex-col">
-          <SidebarGroupLabel className="mb-8 flex h-10 items-center justify-center text-xl text-amber-900">
-            System Admin
+        <SidebarGroup className="relative h-full flex-col">
+          <SidebarGroupLabel className="mb-8 flex h-10 flex-col items-center justify-center bg-amber-200 text-xl capitalize text-amber-900">
+            {userRole}
+            {/* <hr className="h-1 mt-1 mb-0 w-full text-amber-600"/> */}
           </SidebarGroupLabel>
           <SidebarGroupContent className="flex flex-1 list-none flex-col gap-4 px-1">
             {SideBarItems.map((item) => {
