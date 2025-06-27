@@ -36,7 +36,7 @@ export const AdminSidebar = () => {
     <Sidebar>
       <SidebarContent className="bg-amber-50">
         <SidebarGroup className="flex h-full flex-col">
-          <SidebarGroupLabel className="mb-8 flex h-10 items-center justify-center text-xl text-amber-900">
+          <SidebarGroupLabel className="mb-8 flex h-10 flex-col items-center justify-center bg-amber-200 text-xl capitalize text-amber-900">
             System Admin
           </SidebarGroupLabel>
           <SidebarGroupContent className="flex flex-1 list-none flex-col gap-4 px-1">
