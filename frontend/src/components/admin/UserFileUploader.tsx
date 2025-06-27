@@ -8,7 +8,12 @@ import { UserDetailsArray } from "@/types/types";
 import Papa from "papaparse";
 
 interface UserFileUploaderProps {
-  userType: "students" | "lecturers" | "security-guards" | "sys-admins" | "admins";
+  userType:
+    | "students"
+    | "lecturers"
+    | "security-guards"
+    | "sys-admins"
+    | "admins";
   formatInstructions: React.ReactNode;
 }
 
@@ -42,9 +47,9 @@ export const UserFileUploader = ({
   };
 
   return (
-    <div className="relative flex h-max w-full min-w-[450px] flex-col sm:w-full">
+    <div className="min-w-400px] relative flex h-max w-full flex-col sm:w-full">
       <div className="group relative z-10 flex flex-col items-center justify-center gap-4 rounded-lg border border-dashed border-sky-300 bg-amber-50 p-4 hover:bg-amber-100 active:bg-amber-300">
-        <h2 className="-mt-2 text-xl text-sky-300 group-hover:text-sky-400 group-active:text-sky-400">
+        <h2 className="-mt-2 self-start text-xl text-sky-600 group-hover:text-sky-400 group-active:text-sky-400">
           {`${userType}`}
         </h2>
         <Popover>
