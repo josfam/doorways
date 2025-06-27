@@ -19,7 +19,7 @@ const SingleTransitionDetail = ({
       <div>{transitionData.transitionDate}</div>
       <div>{transitionData.transitionTime}</div>
       <div
-        className={`flex w-[110px] items-center justify-start gap-2 p-2 ${isEntry ? "bg-green-200" : "bg-amber-200"} rounded-lg`}
+        className={`flex w-max items-center justify-start gap-2 p-2 ${isEntry ? "bg-green-200" : "bg-amber-200"} rounded-lg`}
       >
         {isEntry ? (
           <ArrowDownToDot className="h-8 w-8 text-green-800" />
