@@ -62,29 +62,25 @@ const CodeRequestPage = () => {
 
   // Timer for a countdown for expiration of the requested code
   useEffect(() => {
-    let timer: NodeJS.Timeout;
     if (!codeWasRequested) return;
 
-    if (timeLeft >= 0) {
-      timer = setTimeout(() => {
-        setTimeLeft((prevTime) => {
-          if (prevTime <= 1) {
-            setCode("--");
-            setCodeWasRequested(false);
-            return codeExpirationTime;
-          }
-          return prevTime - 1;
-        });
-      }, expirationCountdownInterval);
-    }
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          // Time's up! Stop the timer and reset
+          setCode("--");
+          setCodeWasRequested(false);
+          return codeExpirationTime; // Reset for next use
+        }
+        return prev - 1; // Continue countdown
+      });
+    }, expirationCountdownInterval);
 
     // cleanup for the running timer
     return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
+      clearInterval(timer);
     };
-  }, [codeWasRequested, timeLeft]);
+  }, [codeWasRequested]);
 
   const handleCodeRequest = async () => {
     const response = await fetch(`${codesAPIUrl}/random-code`, {
