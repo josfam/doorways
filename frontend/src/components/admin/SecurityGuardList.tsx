@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { sysAdminAPIUrl } from "../../constants";
-// import { Button } from '../ui/button'
+import { sysAdminAPIUrl, role_names } from "../../constants";
+import { Loading } from "../loading";
 import UserList from "./userList";
 
 const SecurityGuardList = () => {
@@ -16,20 +16,21 @@ const SecurityGuardList = () => {
       return response.json();
     },
   });
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading size="lg" text="Loading guards..." />;
   }
 
   if (isError) {
-    return <div>Error loading students.</div>;
+    return <div>Error loading guards.</div>;
   }
 
   return (
-    <div className="border-1 min-h-[500px] overflow-y-auto rounded-md bg-white p-10">
+    <div className="max-h-[1000px] min-h-[300px] overflow-y-auto rounded-md border-2 border-amber-200 bg-white p-10">
       {data.length > 0 ? (
-        <UserList data={data} />
+        <UserList usersData={data} role={role_names.security} />
       ) : (
-        <div>No security guards</div>
+        <div>No guards</div>
       )}
     </div>
   );

@@ -314,6 +314,7 @@ const UserUpdateDialog = ({ userData, role }: UserUpdateDialogProps) => {
                       field.state.meta.errors.length > 0 &&
                       field.state.meta.isTouched
                     }
+                    disabled
                   />
                 </div>
               )}

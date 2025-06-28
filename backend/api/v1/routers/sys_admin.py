@@ -24,6 +24,7 @@ from backend.schema_validation.user_validation import (
     UserRead,
     StudentRead,
     LecturerRead,
+    SecurityGuardRead,
 )
 from backend.api.v1.utils.role_utils import (
     add_user_to_role_table,
@@ -513,17 +514,33 @@ def get_lecturers(db: Session = Depends(get_db)):
 @sys_admin_router.get(
     "/users/security-guards",
     status_code=status.HTTP_200_OK,
-    response_model=List[UserRead],
+    response_model=List[SecurityGuardRead],
 )
 def get_security_guards(db: Session = Depends(get_db)):
     """Returns all security guards in the database"""
-    security_guards = db.query(SecurityGuard).all()
-    users = [security_guard.user.to_dict() for security_guard in security_guards]
+    all_guards = db.query(SecurityGuard).all()
+    formatted_guards = []
 
-    if not security_guards:
-        return {"message": "No security guards found"}, status.HTTP_404_NOT_FOUND
+    for guard in all_guards:
+        # Get the security company name
+        security_company = guard.security_company
 
-    return users
+        # Format the guard data
+        formatted_guards.append(
+            {
+                **guard.user.to_dict(),
+                "security company": security_company,
+                "role name": "security guard",
+            }
+        )
+
+    if not all_guards:
+        return JSONResponse(
+            content={"message": "No security guards found"},
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
+
+    return formatted_guards
 
 
 @sys_admin_router.patch("/user/{user_id}", status_code=status.HTTP_200_OK)
