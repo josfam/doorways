@@ -12,6 +12,8 @@ from backend.api.v1.utils.auth_utils import hash_password, create_default_passwo
 from backend.models.user import User
 from backend.models.student import Student
 from backend.models.lecturer import Lecturer
+from backend.models.admin import Admin
+from backend.models.sys_admin import SysAdmin
 from backend.models.security_guard import SecurityGuard
 
 from backend.schema_validation.user_validation import (
@@ -25,6 +27,8 @@ from backend.schema_validation.user_validation import (
     StudentRead,
     LecturerRead,
     SecurityGuardRead,
+    AdminRead,
+    SysAdminRead,
 )
 from backend.api.v1.utils.role_utils import (
     add_user_to_role_table,
@@ -541,6 +545,64 @@ def get_security_guards(db: Session = Depends(get_db)):
         )
 
     return formatted_guards
+
+
+@sys_admin_router.get(
+    "/users/admins",
+    status_code=status.HTTP_200_OK,
+    response_model=List[AdminRead],
+)
+def get_admins(db: Session = Depends(get_db)):
+    """Returns all admins in the database"""
+    all_admins = db.query(Admin).all()
+    formatted_admins = []
+
+    for admin in all_admins:
+
+        # Format the admin data
+        formatted_admins.append(
+            {
+                **admin.user.to_dict(),
+                "role name": "admin",
+            }
+        )
+
+    if not all_admins:
+        return JSONResponse(
+            content={"message": "No admins found"},
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
+
+    return formatted_admins
+
+
+@sys_admin_router.get(
+    "/users/sys-admins",
+    status_code=status.HTTP_200_OK,
+    response_model=List[SysAdminRead],
+)
+def get_sys_admins(db: Session = Depends(get_db)):
+    """Returns all sys admins in the database"""
+    all_sys_admins = db.query(SysAdmin).all()
+    formatted_sys_admins = []
+
+    for sys_admin in all_sys_admins:
+
+        # Format the admin data
+        formatted_sys_admins.append(
+            {
+                **sys_admin.user.to_dict(),
+                "role name": "sys admin",
+            }
+        )
+
+    if not all_sys_admins:
+        return JSONResponse(
+            content={"message": "No sys admins found"},
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
+
+    return formatted_sys_admins
 
 
 @sys_admin_router.patch("/user/{user_id}", status_code=status.HTTP_200_OK)

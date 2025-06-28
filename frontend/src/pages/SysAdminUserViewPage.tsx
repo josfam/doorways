@@ -1,6 +1,8 @@
 import StudentList from "@/components/admin/StudentList";
 import LecturerList from "@/components/admin/LecturerList";
 import SecurityGuardList from "@/components/admin/SecurityGuardList";
+import AdminList from "@/components/admin/AdminList";
+import SysAdminList from "@/components/admin/SysAdminList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { role_names } from "@/constants";
 
@@ -31,8 +33,11 @@ export const SysAdminUserViewPage = () => {
           <TabsContent value={role_names.security}>
             <SecurityGuardList />
           </TabsContent>
+          <TabsContent value={role_names.admin}>
+            <AdminList />
+          </TabsContent>
           <TabsContent value={role_names["sys admin"]}>
-            {/* Content for sys admins */}
+            <SysAdminList />
           </TabsContent>
         </Tabs>
       </div>
