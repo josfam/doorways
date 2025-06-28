@@ -454,14 +454,10 @@ def get_students(db: Session = Depends(get_db)):
     formatted_students = []
 
     for student in all_students:
-        # Get the course name from the course ID
-        course_info = get_course_name_from_id(student.course_id, db)
-        if not course_info["success"]:
-            return JSONResponse(
-                content={"message": course_info["message"]},
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
-        course_name = course_info["course_name"]
+        # Get the course name
+        course_name: str = (
+            student.course.course_name if student.course else "unknown course"
+        )
 
         # Format the student data
         formatted_students.append(
@@ -474,7 +470,10 @@ def get_students(db: Session = Depends(get_db)):
         )
 
     if not all_students:
-        return {"message": "No students found"}, status.HTTP_404_NOT_FOUND
+        return JSONResponse(
+            content={"message": "No students found"},
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
     return formatted_students
 
 
@@ -485,15 +484,30 @@ def get_students(db: Session = Depends(get_db)):
 )
 def get_lecturers(db: Session = Depends(get_db)):
     """Returns all lecturers in the database"""
-    lecturers = db.query(Lecturer).all()
-    users = [
-        {**lecturer.user.to_dict(), "faculty_id": lecturer.faculty_id}
-        for lecturer in lecturers
-    ]
+    all_lecturers = db.query(Lecturer).all()
+    formatted_lecturers = []
 
-    if not lecturers:
-        return {"message": "No lecturers found"}, status.HTTP_404_NOT_FOUND
-    return users
+    for lecturer in all_lecturers:
+        # Get the faculty name
+        faculty_name = lecturer.faculty.name if lecturer.faculty else "unknown faculty"
+        lecturer.user.faculty_name = faculty_name
+
+        # Format the student data
+        formatted_lecturers.append(
+            {
+                **lecturer.user.to_dict(),
+                "faculty_id": lecturer.faculty_id,
+                "faculty name": faculty_name,
+                "role name": "lecturer",
+            }
+        )
+
+    if not all_lecturers:
+        return JSONResponse(
+            content={"message": "No students found"},
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
+    return formatted_lecturers
 
 
 @sys_admin_router.get(
