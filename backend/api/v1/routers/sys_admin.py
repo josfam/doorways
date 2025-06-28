@@ -28,7 +28,7 @@ from backend.schema_validation.user_validation import (
 from backend.api.v1.utils.role_utils import (
     add_user_to_role_table,
     get_role_id_from_name,
-    get_course_id_from_name,
+    get_course_name_from_id,
 )
 from backend.api.v1.utils.constants import role_names
 
@@ -450,14 +450,32 @@ def get_users(db: Session = Depends(get_db)):
 )
 def get_students(db: Session = Depends(get_db)):
     """Returns all students in the database"""
-    students = db.query(Student).all()
-    users = [
-        {**student.user.to_dict(), "course_id": student.course_id}
-        for student in students
-    ]
-    if not students:
+    all_students = db.query(Student).all()
+    formatted_students = []
+
+    for student in all_students:
+        # Get the course name from the course ID
+        course_info = get_course_name_from_id(student.course_id, db)
+        if not course_info["success"]:
+            return JSONResponse(
+                content={"message": course_info["message"]},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        course_name = course_info["course_name"]
+
+        # Format the student data
+        formatted_students.append(
+            {
+                **student.user.to_dict(),
+                "course_id": student.course_id,
+                "course name": course_name,
+                "role name": "student",
+            }
+        )
+
+    if not all_students:
         return {"message": "No students found"}, status.HTTP_404_NOT_FOUND
-    return users
+    return formatted_students
 
 
 @sys_admin_router.get(
@@ -479,7 +497,7 @@ def get_lecturers(db: Session = Depends(get_db)):
 
 
 @sys_admin_router.get(
-    "/users/security_guards",
+    "/users/security-guards",
     status_code=status.HTTP_200_OK,
     response_model=List[UserRead],
 )
@@ -495,23 +513,33 @@ def get_security_guards(db: Session = Depends(get_db)):
 
 
 @sys_admin_router.patch("/user/{user_id}", status_code=status.HTTP_200_OK)
-def update_user(user_id: int, user_data: UserCreate, db: Session = Depends(get_db)):
+def update_user(
+    user_id: str,
+    user_data: Union[
+        UserCreate,
+        StudentCreate,
+        SysAdminCreate,
+        AdminCreate,
+        SecurityGuardCreate,
+        LecturerCreate,
+    ] = Body(...),
+    db: Session = Depends(get_db),
+):
     """Updates a user's details"""
     # Check if user exists
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         return {"message": "User not found"}, status.HTTP_404_NOT_FOUND
-    # Update user details
-    user.email = user_data.email
+    # Change only updatable information
     user.surname = user_data.surname
     user.given_name = user_data.given_name
     user.phone_number = user_data.phone_number
-    user.role_id = user_data.role_id
-    user.password = hash_password(user_data.password)
-    # Commit changes to the database
+    print(user)
     db.commit()
     db.refresh(user)
-    return {"message": "User updated successfully"}, status.HTTP_200_OK
+    return JSONResponse(
+        content={"message": "Updated successfully"}, status_code=status.HTTP_200_OK
+    )
 
 
 @sys_admin_router.delete("/user/{user_id}", status_code=status.HTTP_200_OK)

@@ -108,6 +108,14 @@ def get_course_id_from_name(
     return {"success": True, "course_id": course_info[0]}
 
 
+def get_course_name_from_id(course_id: int, session: Session) -> dict[str, bool | str]:
+    """Returns the course name based on the course ID"""
+    course_info = session.query(Course.course_name).filter_by(id=course_id).first()
+    if not course_info:
+        return {"success": False, "message": f"Course ID '{course_id}' not found"}
+    return {"success": True, "course_name": course_info[0]}
+
+
 def get_available_roles() -> list[str]:
     """Returns a list of available roles"""
     return list(role_name.lower() for role_name in role_names.keys())
