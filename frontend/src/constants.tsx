@@ -15,11 +15,11 @@ const inputResetDelay = 1000; // milliseconds
 const checkMarksDuration = 2000; // milliseconds
 
 const role_names = {
-  "sys admin": "sys admin",
-  lecturer: "lecturer",
-  security: "security",
   student: "student",
+  lecturer: "lecturer",
   admin: "admin",
+  "sys admin": "sys admin",
+  security: "security",
 };
 
 export {
