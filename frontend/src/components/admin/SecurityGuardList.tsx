@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { baseAPIUrl } from "../../constants";
+import { sysAdminAPIUrl } from "../../constants";
 // import { Button } from '../ui/button'
 import UserList from "./userList";
 
 const SecurityGuardList = () => {
   // api call for security guard data
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["students"],
+    queryKey: ["allSecurityGuards"],
     queryFn: async () => {
-      const url = `${baseAPIUrl}/admin/users/security_guards`;
+      const url = `${sysAdminAPIUrl}/users/security-guards`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Network response was not ok");

@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { baseAPIUrl } from "../../constants";
-// import { Button } from '../ui/button'
+import { sysAdminAPIUrl } from "../../constants";
+import { Loading } from "../loading";
 import UserList from "./userList";
+import { role_names } from "../../constants";
 
 const StudentList = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["students"],
+    queryKey: ["allStudents"],
     queryFn: async () => {
-      const url = `${baseAPIUrl}/admin/users/students`;
+      const url = `${sysAdminAPIUrl}/users/students`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -17,7 +18,7 @@ const StudentList = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading size="lg" text="Loading students..." />;
   }
 
   if (isError) {
@@ -25,8 +26,12 @@ const StudentList = () => {
   }
 
   return (
-    <div className="border-1 max-h-[500px] min-h-[300px] overflow-y-auto rounded-md bg-white p-10">
-      {data.length > 0 ? <UserList data={data} /> : <div>No students</div>}
+    <div className="max-h-[1000px] min-h-[300px] overflow-y-auto rounded-md border-2 border-amber-200 bg-white p-10">
+      {data.length > 0 ? (
+        <UserList usersData={data} role={role_names.student} />
+      ) : (
+        <div>No students</div>
+      )}
     </div>
   );
 };

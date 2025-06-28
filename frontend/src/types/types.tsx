@@ -19,9 +19,8 @@ type BaseUserDetails = {
   surname: string;
   "given name": string;
   "phone number": string;
-  "role name": string
-}
-
+  "role name": string;
+};
 
 export type SysAdminDetails = BaseUserDetails;
 
@@ -29,7 +28,7 @@ export type StudentDetails = BaseUserDetails & {
   "course name": string;
 };
 
-export type LecturerDetails = BaseUserDetails &{
+export type LecturerDetails = BaseUserDetails & {
   "faculty name": string;
 };
 

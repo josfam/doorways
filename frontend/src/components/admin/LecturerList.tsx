@@ -6,7 +6,7 @@ import UserList from "./userList";
 const LecturerList = () => {
   // api call for lecturer data
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["students"],
+    queryKey: ["allLecturers"],
     queryFn: async () => {
       const url = `${baseAPIUrl}/admin/users/lecturers`;
       const response = await fetch(url);

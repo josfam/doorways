@@ -1,49 +1,331 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
   DialogFooter,
 } from "../ui/dialog";
-
+import { useForm } from "@tanstack/react-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { role_names, sysAdminAPIUrl } from "@/constants";
+import { z } from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { UserDetails } from "@/types/types";
+interface UserUpdateDialogProps {
+  userData: UserDetails;
+  role: string;
+}
 
-const UserUpdateDialog = ({ data }) => {
+// Alternative: Dynamic schema based on role
+const userUpdateSchema = (role: string) => {
+  const baseSchema = z.object({
+    "user id": z.string().min(1, "User ID is required"),
+    email: z.string().min(1, "Email is required"),
+    surname: z.string().min(1, "Surname is required"),
+    "given name": z.string().min(1, "Given name is required"),
+    "phone number": z.string().min(1, "Phone number is required"),
+    "role name": z.string().min(1, "Role name is required"),
+  });
+
+  // role-specific validations
+  if (role === role_names.student) {
+    return baseSchema.extend({
+      "course name": z.string().min(1, "Course name is required"),
+    });
+  }
+
+  if (role === role_names.lecturer) {
+    return baseSchema.extend({
+      "faculty name": z.string().min(1, "Faculty name is required"),
+    });
+  }
+
+  if (role === role_names.security) {
+    return baseSchema.extend({
+      "security company": z.string().min(1, "Security company is required"),
+    });
+  }
+
+  return baseSchema;
+};
+
+// Information change mutation API call
+// Create a type for user update data
+type UserUpdateData = z.infer<ReturnType<typeof userUpdateSchema>>;
+
+const useUpdateInfoMutation = () => {
+  return useMutation({
+    mutationFn: async (value: UserUpdateData) => {
+      console.log("Making API call");
+      console.log(`${JSON.stringify(value)}`); // DEBUG
+      const url = `${sysAdminAPIUrl}/user/${value["user id"]}`;
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      return data;
+    },
+  });
+};
+
+const UserUpdateDialog = ({ userData, role }: UserUpdateDialogProps) => {
+  const queryClient = useQueryClient();
+  const updateMutation = useUpdateInfoMutation();
+  const handleInfoUpdate = (value) => {
+    updateMutation.mutate(value, {
+      onSuccess: (data) => {
+        // invalidate the user list query to refresh the data
+        queryClient.invalidateQueries({ queryKey: ["allStudents"] });
+        queryClient.invalidateQueries({ queryKey: ["allLecturers"] });
+        queryClient.invalidateQueries({ queryKey: ["allSecurityGuards"] });
+        alert(JSON.stringify(data));
+      },
+    });
+  };
+
+  const form = useForm({
+    // defaultValues
+    defaultValues: {
+      "user id": userData.id,
+      email: userData.email,
+      surname: userData.surname,
+      "given name": userData["given name"],
+      "phone number": userData["phone number"],
+      // only for students
+      ...(role === role_names.student &&
+        "course name" in userData && {
+          "course name": userData["course name"],
+        }),
+      // only for lecturers
+      ...(role === role_names.lecturer &&
+        "faculty name" in userData && {
+          "faculty name": userData["faculty name"],
+        }),
+      // only for security guards
+      ...(role === role_names.security &&
+        "security company" in userData && {
+          "security company": userData["security company"],
+        }),
+      "role name": userData["role name"],
+    },
+    validators: {
+      onChange: userUpdateSchema(role), // validate with zod schema on change
+    },
+    onSubmit: ({ value }) => {
+      handleInfoUpdate(value);
+    },
+  });
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-30 ml-auto bg-sky-600 p-5 hover:bg-sky-800 active:bg-sky-900">
+        <Button className="w-30 ml-auto bg-sky-600 p-5 text-lg hover:bg-sky-800 active:bg-sky-900">
           Update
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="bg-amber-50 sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription>
+          <DialogTitle className="self-center">{`Edit ${role} profile`}</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input id="username" value="@peduarte" className="col-span-3" />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit();
+          }}
+          className="flex flex-col gap-4"
+        >
+          {/* Common fields for all users */}
+          <form.Field name="user id">
+            {(field) => (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="user id" className="text-right text-lg">
+                  Id
+                </Label>
+                <Input
+                  id="user id"
+                  className="col-span-3 bg-white !text-lg"
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 &&
+                    field.state.meta.isTouched
+                  }
+                  disabled
+                />
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field name="email">
+            {(field) => (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="email" className="text-right text-lg">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  className="col-span-3 bg-white !text-lg"
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 &&
+                    field.state.meta.isTouched
+                  }
+                  disabled
+                />
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field name="surname">
+            {(field) => (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="surname" className="text-right text-lg">
+                  Surname
+                </Label>
+                <Input
+                  id="surname"
+                  className="col-span-3 bg-white !text-lg"
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 &&
+                    field.state.meta.isTouched
+                  }
+                />
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field name="given name">
+            {(field) => (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="given-name" className="text-right text-lg">
+                  Given Name
+                </Label>
+                <Input
+                  id="given name"
+                  className="col-span-3 bg-white !text-lg"
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 &&
+                    field.state.meta.isTouched
+                  }
+                />
+              </div>
+            )}
+          </form.Field>
+
+          <form.Field name="phone number">
+            {(field) => (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="phone number" className="text-right text-lg">
+                  Phone
+                </Label>
+                <Input
+                  id="phone number"
+                  className="col-span-3 bg-white !text-lg"
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 &&
+                    field.state.meta.isTouched
+                  }
+                />
+              </div>
+            )}
+          </form.Field>
+
+          {/* role-specific */}
+
+          {role === role_names.student && (
+            <form.Field name="course name">
+              {(field) => (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="course-name" className="text-right text-lg">
+                    Course Name
+                  </Label>
+                  <Input
+                    id="course name"
+                    className="col-span-3 bg-white !text-lg"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={
+                      field.state.meta.errors.length > 0 &&
+                      field.state.meta.isTouched
+                    }
+                    disabled
+                  />
+                </div>
+              )}
+            </form.Field>
+          )}
+
+          {role === role_names.lecturer && (
+            <form.Field name="faculty name">
+              {(field) => (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="faculty-name" className="text-right text-lg">
+                    Faculty Name
+                  </Label>
+                  <Input
+                    id="faculty name"
+                    className="col-span-3 bg-white !text-lg"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={
+                      field.state.meta.errors.length > 0 &&
+                      field.state.meta.isTouched
+                    }
+                    disabled
+                  />
+                </div>
+              )}
+            </form.Field>
+          )}
+
+          {role === role_names.security && (
+            <form.Field name="security company">
+              {(field) => (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label
+                    htmlFor="security-company"
+                    className="text-right text-lg"
+                  >
+                    Security Company
+                  </Label>
+                  <Input
+                    id="security company"
+                    className="col-span-3 bg-white !text-lg"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={
+                      field.state.meta.errors.length > 0 &&
+                      field.state.meta.isTouched
+                    }
+                  />
+                </div>
+              )}
+            </form.Field>
+          )}
+
+          <DialogFooter>
+            <Button type="submit" className="btn-cta">
+              Save changes
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
