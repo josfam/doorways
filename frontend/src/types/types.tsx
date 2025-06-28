@@ -13,39 +13,28 @@ export type transitionItem = {
   time: string;
 };
 
-export type SysAdminDetails = {
+type BaseUserDetails = {
+  id: string;
   email: string;
   surname: string;
-  given_name: string;
-  phone_number: string;
-  role_id: string;
+  "given name": string;
+  "phone number": string;
+  "role name": string
+}
+
+
+export type SysAdminDetails = BaseUserDetails;
+
+export type StudentDetails = BaseUserDetails & {
+  "course name": string;
 };
 
-export type StudentDetails = {
-  email: string;
-  surname: string;
-  given_name: string;
-  phone_number: string;
-  role_id: string;
-  course_id: string;
+export type LecturerDetails = BaseUserDetails &{
+  "faculty name": string;
 };
 
-export type LecturerDetails = {
-  email: string;
-  surname: string;
-  given_name: string;
-  phone_number: string;
-  role_id: string;
-  faculty_id: string;
-};
-
-export type SecurityGuardDetails = {
-  email: string;
-  surname: string;
-  given_name: string;
-  phone_number: string;
-  role_id: string;
-  security_company: string;
+export type SecurityGuardDetails = BaseUserDetails & {
+  "security company": string;
 };
 
 export type StudentDetailsArray = StudentDetails[];
@@ -57,3 +46,8 @@ export type UserDetailsArray =
   | LecturerDetailsArray
   | SecurityGuardDetailsArray
   | SysAdminDetailsArray;
+export type UserDetails =
+  | StudentDetails
+  | LecturerDetails
+  | SecurityGuardDetails
+  | SysAdminDetails;
