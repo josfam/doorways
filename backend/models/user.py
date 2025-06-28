@@ -68,9 +68,9 @@ class User(Base):
             "id": self.id,
             "email": self.email,
             "surname": self.surname,
-            "given_name": self.given_name,
-            "phone_number": self.phone_number,
-            "role_id": self.role_id,
+            "given name": self.given_name,
+            "phone number": self.phone_number,
+            "role id": self.role_id,
         }
 
     def __str__(self):
