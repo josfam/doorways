@@ -22,7 +22,14 @@ def get_user_activity_history(user_id: str, db=Depends(get_db)):
         )
 
     # Get user's entry and exit entries
-    history_entries = db.query(EntryExitTime).filter_by(user_id=user_id).all()
+    from sqlalchemy import desc
+
+    history_entries = (
+        db.query(EntryExitTime)
+        .filter_by(user_id=user_id)
+        .order_by(desc(EntryExitTime.time))
+        .all()
+    )
     if not len(history_entries):
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
