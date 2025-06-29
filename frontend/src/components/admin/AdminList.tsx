@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { sysAdminAPIUrl } from "../../constants";
 import { Loading } from "../loading";
-import UserList from "./userList";
 import { role_names } from "../../constants";
 import ErrorMessage from "../ErrorComponent";
+import { UserList, UserListContainer } from "./userList";
+import { Link } from "react-router-dom";
+import { routeUrl } from "@/routing";
 
 const AdminList = () => {
   const role = role_names.admin;
@@ -30,15 +32,23 @@ const AdminList = () => {
       </div>
     );
   }
-
   return (
-    <div className="max-h-[1000px] min-h-[300px] overflow-y-auto rounded-md border-2 border-amber-200 bg-white p-10">
-      {data.length > 0 ? (
-        <UserList usersData={data} role={role_names.admin} />
-      ) : (
-        <div>{`No ${role}s`}</div>
-      )}
-    </div>
+    <UserListContainer
+      children={
+        <>
+          {data.data.length > 0 ? (
+            <UserList usersData={data.data} role={role_names.admin} />
+          ) : (
+            <div className="flex flex-col gap-2 text-2xl">
+              <p>{`${data.message}`}</p>
+              <Link to={`${routeUrl.absolutes.sysAdminAddUsers}`}>
+                Add some
+              </Link>
+            </div>
+          )}
+        </>
+      }
+    />
   );
 };
 

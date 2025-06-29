@@ -1,11 +1,16 @@
 import UserUpdateDialog from "./UserUpdateDialog";
 import { UserDetailsArray } from "@/types/types";
+import React, { ReactNode } from "react";
+interface UserListContainerProps {
+  children: ReactNode;
+}
+
 interface UserListProps {
   usersData: UserDetailsArray;
   role: string;
 }
 
-const UserList = ({ usersData, role }: UserListProps) => {
+export const UserList = ({ usersData, role }: UserListProps) => {
   return (
     <ul className="flex w-full flex-col gap-8">
       {usersData.map((user) => (
@@ -27,4 +32,14 @@ const UserList = ({ usersData, role }: UserListProps) => {
   );
 };
 
-export default UserList;
+export const UserListContainer: React.FC<UserListContainerProps> = ({
+  children,
+}) => {
+  return (
+    <div className="flex max-h-[1000px] min-h-[300px] flex-col items-center justify-center overflow-y-auto rounded-md border-2 border-amber-200 bg-white p-10">
+      {children}
+    </div>
+  );
+};
+
+// export default UserList;
