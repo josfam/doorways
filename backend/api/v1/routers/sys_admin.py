@@ -444,7 +444,8 @@ def get_users(db: Session = Depends(get_db)):
     """Returns all users in the database"""
     users = db.query(User).all()
     if not users:
-        return {"message": "No users found"}, status.HTTP_404_NOT_FOUND
+        return JSONResponse(content={"message": "No users found", "data": []})
+
     return [UserRead.model_validate(user) for user in users]
 
 
@@ -475,11 +476,10 @@ def get_students(db: Session = Depends(get_db)):
         )
 
     if not all_students:
-        return JSONResponse(
-            content={"message": "No students found"},
-            status_code=status.HTTP_404_NOT_FOUND,
-        )
-    return formatted_students
+        return JSONResponse(content={"message": "No students found", "data": []})
+    return JSONResponse(
+        content={"message": "Students found", "data": formatted_students}
+    )
 
 
 @sys_admin_router.get(
@@ -508,11 +508,10 @@ def get_lecturers(db: Session = Depends(get_db)):
         )
 
     if not all_lecturers:
-        return JSONResponse(
-            content={"message": "No students found"},
-            status_code=status.HTTP_404_NOT_FOUND,
-        )
-    return formatted_lecturers
+        return JSONResponse(content={"message": "No lecturers found", "data": []})
+    return JSONResponse(
+        content={"message": "Lecturers found", "data": formatted_lecturers}
+    )
 
 
 @sys_admin_router.get(
@@ -539,12 +538,8 @@ def get_security_guards(db: Session = Depends(get_db)):
         )
 
     if not all_guards:
-        return JSONResponse(
-            content={"message": "No security guards found"},
-            status_code=status.HTTP_404_NOT_FOUND,
-        )
-
-    return formatted_guards
+        return JSONResponse(content={"message": "No security guards found", "data": []})
+    return JSONResponse(content={"message": "Guards found", "data": formatted_guards})
 
 
 @sys_admin_router.get(
@@ -568,12 +563,8 @@ def get_admins(db: Session = Depends(get_db)):
         )
 
     if not all_admins:
-        return JSONResponse(
-            content={"message": "No admins found"},
-            status_code=status.HTTP_404_NOT_FOUND,
-        )
-
-    return formatted_admins
+        return JSONResponse(content={"message": "No admins found", "data": []})
+    return JSONResponse(content={"message": "Admins found", "data": formatted_admins})
 
 
 @sys_admin_router.get(
@@ -597,12 +588,10 @@ def get_sys_admins(db: Session = Depends(get_db)):
         )
 
     if not all_sys_admins:
-        return JSONResponse(
-            content={"message": "No sys admins found"},
-            status_code=status.HTTP_404_NOT_FOUND,
-        )
-
-    return formatted_sys_admins
+        return JSONResponse(content={"message": "No sys admins found", "data": []})
+    return JSONResponse(
+        content={"message": "Sys admins found", "data": formatted_sys_admins}
+    )
 
 
 @sys_admin_router.patch("/user/{user_id}", status_code=status.HTTP_200_OK)
