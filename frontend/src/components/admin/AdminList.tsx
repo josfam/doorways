@@ -3,8 +3,10 @@ import { sysAdminAPIUrl } from "../../constants";
 import { Loading } from "../loading";
 import UserList from "./userList";
 import { role_names } from "../../constants";
+import ErrorMessage from "../ErrorComponent";
 
 const AdminList = () => {
+  const role = role_names.admin;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["allAdmins"],
     queryFn: async () => {
@@ -18,11 +20,15 @@ const AdminList = () => {
   });
 
   if (isLoading) {
-    return <Loading size="lg" text="Loading admins..." />;
+    return <Loading size="lg" text={`Loading ${role}s...`} />;
   }
 
   if (isError) {
-    return <div>Error loading admins.</div>;
+    return (
+      <div className="flex w-full items-center justify-center">
+        <ErrorMessage message={`Error loading ${role}s.`} />
+      </div>
+    );
   }
 
   return (
@@ -30,7 +36,7 @@ const AdminList = () => {
       {data.length > 0 ? (
         <UserList usersData={data} role={role_names.admin} />
       ) : (
-        <div>No admins</div>
+        <div>{`No ${role}s`}</div>
       )}
     </div>
   );

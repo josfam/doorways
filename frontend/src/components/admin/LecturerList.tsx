@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { role_names, sysAdminAPIUrl } from "../../constants";
 import { Loading } from "../loading";
-// import { Button } from '../ui/button'
+import ErrorMessage from "../ErrorComponent";
 import UserList from "./userList";
 
 const LecturerList = () => {
+  const role = role_names.lecturer;
   // api call for lecturer data
   const { data, isLoading, isError } = useQuery({
     queryKey: ["allLecturers"],
@@ -19,11 +20,15 @@ const LecturerList = () => {
   });
 
   if (isLoading) {
-    return <Loading size="lg" text="Loading lecturers..." />;
+    return <Loading size="lg" text={`Loading ${role}s...`} />;
   }
 
   if (isError) {
-    return <div>Error loading lectures.</div>;
+    return (
+      <div className="flex w-full items-center justify-center">
+        <ErrorMessage message={`Error loading ${role}s`} />
+      </div>
+    );
   }
 
   return (
@@ -31,7 +36,7 @@ const LecturerList = () => {
       {data.length > 0 ? (
         <UserList usersData={data} role={role_names.lecturer} />
       ) : (
-        <div>No lecturers</div>
+        <div>{`No ${role}s`}</div>
       )}
     </div>
   );

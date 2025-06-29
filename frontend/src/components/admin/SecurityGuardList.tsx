@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { sysAdminAPIUrl, role_names } from "../../constants";
 import { Loading } from "../loading";
 import UserList from "./userList";
+import ErrorMessage from "../ErrorComponent";
 
 const SecurityGuardList = () => {
+  const role = role_names.security;
   // api call for security guard data
   const { data, isLoading, isError } = useQuery({
     queryKey: ["allSecurityGuards"],
@@ -18,11 +20,15 @@ const SecurityGuardList = () => {
   });
 
   if (isLoading) {
-    return <Loading size="lg" text="Loading guards..." />;
+    return <Loading size="lg" text={`Loading ${role} guards...`} />;
   }
 
   if (isError) {
-    return <div>Error loading guards.</div>;
+    return (
+      <div className="flex w-full items-center justify-center">
+        <ErrorMessage message={`Error loading ${role} guards`} />
+      </div>
+    );
   }
 
   return (
@@ -30,7 +36,7 @@ const SecurityGuardList = () => {
       {data.length > 0 ? (
         <UserList usersData={data} role={role_names.security} />
       ) : (
-        <div>No guards</div>
+        <div>{`No ${role} guards`}</div>
       )}
     </div>
   );

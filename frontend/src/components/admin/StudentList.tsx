@@ -3,8 +3,10 @@ import { sysAdminAPIUrl } from "../../constants";
 import { Loading } from "../loading";
 import UserList from "./userList";
 import { role_names } from "../../constants";
+import ErrorMessage from "../ErrorComponent";
 
 const StudentList = () => {
+  const role = role_names.student;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["allStudents"],
     queryFn: async () => {
@@ -18,11 +20,15 @@ const StudentList = () => {
   });
 
   if (isLoading) {
-    return <Loading size="lg" text="Loading students..." />;
+    return <Loading size="lg" text={`Loading ${role}s...`} />;
   }
 
   if (isError) {
-    return <div>Error loading students.</div>;
+    return (
+      <div className="flex w-full items-center justify-center">
+        <ErrorMessage message={`Error loading ${role}s`} />
+      </div>
+    );
   }
 
   return (
@@ -30,7 +36,7 @@ const StudentList = () => {
       {data.length > 0 ? (
         <UserList usersData={data} role={role_names.student} />
       ) : (
-        <div>No students</div>
+        <div>{`No ${role}s`}</div>
       )}
     </div>
   );
