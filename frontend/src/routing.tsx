@@ -1,20 +1,36 @@
-const baseRouteUrls = {
-  sysAdmin: "/sys-admin",
+// Define base routes
+export const baseRouteUrls = {
   codeInput: "/code-input",
+  sysAdmin: "/sys-admin",
   user: "/user",
 };
 
-export const routeUrl = {
-  codeInput: `${baseRouteUrls.codeInput}`,
+// Define route structure
+export const routes = {
+  codeInput: baseRouteUrls.codeInput,
   sysAdmin: {
-    root: `${baseRouteUrls.sysAdmin}`,
-    viewUsers: `view-users`,
-    addUsers: `add-users`,
+    root: baseRouteUrls.sysAdmin,
+    viewUsers: "view-users",
+    addUsers: "add-users",
   },
   user: {
-    root: `${baseRouteUrls.user}`,
-    codeInput: `code-input`,
-    codeRequest: `code-request`,
-    activityHistory: `activity-history`,
+    root: baseRouteUrls.user,
+    codeInput: "code-input",
+    codeRequest: "code-request",
+    activityHistory: "activity-history",
+  },
+};
+
+// Generate absolute paths automatically
+export const routeUrl = {
+  ...routes,
+  absolutes: {
+    sysAdminViewUsers: `${routes.sysAdmin.root}/${routes.sysAdmin.viewUsers}`,
+    sysAdminAddUsers: `${routes.sysAdmin.root}/${routes.sysAdmin.addUsers}`,
+    userRoot: routes.user.root,
+    userCodeInput: `${routes.user.root}/${routes.user.codeInput}`,
+    userCodeRequest: `${routes.user.root}/${routes.user.codeRequest}`,
+    userActivityHistory: `${routes.user.root}/${routes.user.activityHistory}`,
+    codeInput: routes.codeInput,
   },
 };

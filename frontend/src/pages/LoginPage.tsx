@@ -11,6 +11,7 @@ import { useRef, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { role_names } from "@/constants";
 import type { JwtPayload } from "@/types/types";
+import { routeUrl } from "@/routing";
 
 const loginFormSchema = z.object({
   email: z
@@ -86,17 +87,17 @@ const LoginPage = () => {
           role_name === role_names.student ||
           role_name === role_names.lecturer
         ) {
-          navigate("/user/code-request", {
+          navigate(`${routeUrl.absolutes.userCodeRequest}`, {
             state: { showSuccessToast: true },
             replace: true,
           });
         } else if (role_name === role_names["sys admin"]) {
-          navigate("/sys-admin", {
+          navigate(`${routeUrl.absolutes.sysAdminViewUsers}`, {
             state: { showSuccessToast: true },
             replace: true,
           });
         } else {
-          navigate("/code-input", {
+          navigate(`${routeUrl.absolutes.codeInput}`, {
             state: { showSuccessToast: true },
             replace: true,
           });
