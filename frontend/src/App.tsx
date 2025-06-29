@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import SysAdminLayout from "./layouts/SysAdminLayout";
 import { SysAdminUserViewPage } from "./pages/SysAdminUserViewPage";
 import { SysAdminUserAddPage } from "./pages/SysAdminUserAddPage";
+import { routeUrl } from "./routing";
 
 // tanstack react-query client
 const queryClient = new QueryClient();
@@ -25,19 +26,31 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<LoginPage />} />
-              <Route path="/code-input" element={<CodeEntryPage />} />
             </Route>
-            <Route path="/sys-admin" element={<SysAdminLayout />}>
+            <Route path={routeUrl.sysAdmin.root} element={<SysAdminLayout />}>
               <Route index element={<SysAdminUserViewPage />} />
-              <Route path="view-users" element={<SysAdminUserViewPage />} />
-              <Route path="add-users" element={<SysAdminUserAddPage />} />
-            </Route>
-            <Route path="/user" element={<UserRequesterLayout />}>
-              <Route index element={<CodeRequestPage />} />
-              <Route path="code-request" element={<CodeRequestPage />} />
               <Route
-                path="activity-history"
+                path={routeUrl.sysAdmin.viewUsers}
+                element={<SysAdminUserViewPage />}
+              />
+              <Route
+                path={routeUrl.sysAdmin.addUsers}
+                element={<SysAdminUserAddPage />}
+              />
+            </Route>
+            <Route path={routeUrl.user.root} element={<UserRequesterLayout />}>
+              <Route index element={<CodeRequestPage />} />
+              <Route
+                path={routeUrl.user.codeRequest}
+                element={<CodeRequestPage />}
+              />
+              <Route
+                path={routeUrl.user.activityHistory}
                 element={<UserActivityHistoryPage />}
+              />
+              <Route
+                path={routeUrl.user.codeInput}
+                element={<CodeEntryPage />}
               />
             </Route>
           </Routes>
