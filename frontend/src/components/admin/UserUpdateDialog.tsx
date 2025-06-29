@@ -134,9 +134,10 @@ const UserUpdateDialog = ({ userData, role }: UserUpdateDialogProps) => {
         </Button>
       </DialogTrigger>
       <DialogContent className="bg-amber-50 sm:max-w-[600px]">
-        <DialogHeader>
+        <DialogHeader className="mb-0 text-lg text-amber-900">
           <DialogTitle className="self-center">{`Edit ${role} profile`}</DialogTitle>
         </DialogHeader>
+        <hr className="mb-4 mt-0 h-[2px] bg-amber-200" />
         <form
           onSubmit={(e) => {
             e.preventDefault();
