@@ -14,6 +14,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { UserDetails } from "@/types/types";
+import { useRef, useState } from "react";
 interface UserUpdateDialogProps {
   userData: UserDetails;
   role: string;
@@ -59,7 +60,7 @@ type UserUpdateData = z.infer<ReturnType<typeof userUpdateSchema>>;
 const useUpdateInfoMutation = () => {
   return useMutation({
     mutationFn: async (value: UserUpdateData) => {
-      console.log("Making API call");
+      console.log("Making API call"); // DEBUG
       console.log(`${JSON.stringify(value)}`); // DEBUG
       const url = `${sysAdminAPIUrl}/user/${value["user id"]}`;
       const response = await fetch(url, {
@@ -78,17 +79,54 @@ const useUpdateInfoMutation = () => {
   });
 };
 
+const useDeleteUserMutation = () => {
+  return useMutation({
+    mutationFn: async (value: UserUpdateData) => {
+      console.log("deleting user"); // DEBUG
+      const url = `${sysAdminAPIUrl}/user/${value["user id"]}`;
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      return data;
+    },
+  });
+};
+
 const UserUpdateDialog = ({ userData, role }: UserUpdateDialogProps) => {
+  const actionRef = useRef("update"); // tracks possible action on the form
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const updateMutation = useUpdateInfoMutation();
+  const deleteMutation = useDeleteUserMutation();
+
+  const invalidateQueryCache = () => {
+    queryClient.invalidateQueries({ queryKey: ["allStudents"] });
+    queryClient.invalidateQueries({ queryKey: ["allLecturers"] });
+    queryClient.invalidateQueries({ queryKey: ["allSecurityGuards"] });
+  };
+
   const handleInfoUpdate = (value) => {
     updateMutation.mutate(value, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         // invalidate the user list query to refresh the data
-        queryClient.invalidateQueries({ queryKey: ["allStudents"] });
-        queryClient.invalidateQueries({ queryKey: ["allLecturers"] });
-        queryClient.invalidateQueries({ queryKey: ["allSecurityGuards"] });
-        alert(JSON.stringify(data));
+        invalidateQueryCache();
+      },
+    });
+  };
+
+  const handleUserDelete = (value) => {
+    deleteMutation.mutate(value, {
+      onSuccess: () => {
+        // invalidate the user list query to refresh the data
+        invalidateQueryCache();
       },
     });
   };
@@ -122,12 +160,18 @@ const UserUpdateDialog = ({ userData, role }: UserUpdateDialogProps) => {
       onChange: userUpdateSchema(role), // validate with zod schema on change
     },
     onSubmit: ({ value }) => {
-      handleInfoUpdate(value);
+      if (actionRef.current === "update") {
+        handleInfoUpdate(value);
+      } else if (actionRef.current === "delete") {
+        // this is a delete
+        setShowConfirmation(true);
+        // handleUserDelete(value);
+      }
     },
   });
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button className="w-30 ml-auto bg-sky-600 p-5 text-lg hover:bg-sky-800 active:bg-sky-900">
           Update
@@ -322,12 +366,55 @@ const UserUpdateDialog = ({ userData, role }: UserUpdateDialogProps) => {
             </form.Field>
           )}
 
-          <DialogFooter>
-            <Button type="submit" className="btn-cta">
-              Save changes
+          <DialogFooter className="flex items-center justify-center gap-1">
+            <Button
+              type="submit"
+              className="btn-cta btn-ter !w-1/4"
+              name="action"
+              value="delete"
+              onClick={() => (actionRef.current = "delete")}
+            >
+              Delete
+            </Button>
+            <Button
+              type="submit"
+              className="btn-cta !w-3/4"
+              name="action"
+              value="update"
+              onClick={() => (actionRef.current = "update")}
+            >
+              Update
             </Button>
           </DialogFooter>
         </form>
+        {showConfirmation && (
+          <div className="absolute flex h-full w-full flex-col items-center justify-center gap-6 rounded-lg bg-slate-200 px-6 text-xl opacity-95">
+            <div className="flex flex-col items-center justify-center gap-4">
+              <p>You are about to delete</p>
+              <p className="font-bold">{`${userData.surname} ${userData["given name"]}`}</p>
+            </div>
+            <div className="flex w-full flex-col">
+              <Button
+                className="btn-cta btn-ter"
+                onClick={() => {
+                  setShowConfirmation(false);
+                }}
+              >
+                No, Cancel
+              </Button>
+              <Button
+                className="btn-cta"
+                onClick={() => {
+                  handleUserDelete(form.state.values);
+                  setShowConfirmation(false);
+                  setDialogOpen(false); // close the original dialog box
+                }}
+              >
+                Yes, Delete
+              </Button>
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

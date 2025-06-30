@@ -1,11 +1,14 @@
 import { Input } from "../ui/input";
-import { FileUp, MoveRight } from "lucide-react";
+import { FileUp, MoveRight, LoaderCircle } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { toastDuration } from "@/constants";
 import { sysAdminAPIUrl } from "@/constants";
 import { UserDetailsArray } from "@/types/types";
 import Papa from "papaparse";
+import { useMutation } from "@tanstack/react-query";
 
 interface UserFileUploaderProps {
   userType:
@@ -24,31 +27,51 @@ export const UserFileUploader = ({
   const [fileName, setFileName] = useState<string>("");
   const [CSVFile, setCSVFile] = useState<File | null>(null);
 
+  // upload mutation
+  const uploadMutation = useMutation({
+    mutationFn: async (studentDetails: UserDetailsArray) => {
+      const url = `${sysAdminAPIUrl}/upload/${userType}`;
+      const result = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(studentDetails),
+      });
+      if (!result.ok) {
+        throw new Error("Upload failed. Try again.");
+      }
+      return await result.json();
+    },
+    onSuccess: () => {
+      toast.success(`${userType} upload successful!`, {
+        autoClose: toastDuration,
+        closeOnClick: true,
+        pauseOnFocusLoss: false,
+      });
+    },
+    onError: () => {
+      toast.error(`${userType} upload failed! Try again`, {
+        autoClose: toastDuration,
+        closeOnClick: true,
+        pauseOnFocusLoss: false,
+      });
+    },
+  });
+
   const parseUploadedFile = (file: File) => {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        // console.log("Parsed Results:", typeof(results.data));
-        uploadCSVFile(results.data as UserDetailsArray);
+        uploadMutation.mutate(results.data as UserDetailsArray);
       },
-    });
-  };
-
-  const uploadCSVFile = async (studentDetails: UserDetailsArray) => {
-    const url = `${sysAdminAPIUrl}/upload/${userType}`;
-    await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(studentDetails),
     });
   };
 
   return (
     <div className="min-w-400px] relative flex h-max w-full flex-col sm:w-full">
-      <div className="group relative z-10 flex flex-col items-center justify-center gap-4 rounded-lg border border-dashed border-sky-300 bg-amber-50 p-4 hover:bg-amber-100 active:bg-amber-300">
+      <div className="group relative z-10 flex flex-col items-center justify-center gap-4 rounded-b-none rounded-t-lg border border-dashed border-sky-300 bg-amber-50 p-4 hover:bg-amber-100 active:bg-amber-300">
         <h2 className="-mt-2 self-start text-xl text-sky-600 group-hover:text-sky-400 group-active:text-sky-400">
           {`${userType}`}
         </h2>
@@ -87,14 +110,23 @@ export const UserFileUploader = ({
         </div>
       </div>
       <Button
-        className="border-1 group mt-[-15px] flex h-16 items-center justify-center text-nowrap rounded-bl-lg rounded-br-lg border-sky-300 bg-sky-100 text-xl text-sky-600 opacity-100 hover:bg-sky-700 hover:text-white active:bg-sky-800"
-        disabled={!fileName}
+        className="border-1 group flex h-16 items-center justify-center text-nowrap rounded-t-none rounded-bl-lg rounded-br-lg border-sky-300 bg-sky-100 text-xl text-sky-600 opacity-100 hover:bg-sky-700 hover:text-white active:bg-sky-800"
+        disabled={uploadMutation.isPending || !fileName}
         onClick={() => {
           parseUploadedFile(CSVFile as File);
         }}
       >
-        <h2 className="mt-3 text-lg group-hover:font-semibold">Upload file</h2>
-        <MoveRight className="duration-400 mt-3 !h-6 !w-6 transition-all ease-in-out group-hover:-rotate-90" />
+        {uploadMutation.isPending ? (
+          <div className="flex w-full items-center justify-center">
+            <LoaderCircle className="m-0 !h-7 !w-7 animate-spin" />
+            <p>{`Uploading...`}</p>
+          </div>
+        ) : (
+          <>
+            <h2 className="text-lg group-hover:font-semibold">Upload file</h2>
+            <MoveRight className="duration-400 !h-6 !w-6 transition-all ease-in-out group-hover:-rotate-90" />
+          </>
+        )}
       </Button>
     </div>
   );
