@@ -1,6 +1,3 @@
-// import { useQuery } from "@tanstack/react-query";
-// import { baseAPIUrl } from "@/constants";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { inputResetDelay } from "@/constants";
@@ -9,6 +6,7 @@ import { toast } from "react-toastify";
 import { toastDuration } from "@/constants";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
+import { Footer } from "@/components/footer";
 
 const CodeEntryPage = () => {
   const location = useLocation();
@@ -105,6 +103,7 @@ const CodeEntryPage = () => {
           </Button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

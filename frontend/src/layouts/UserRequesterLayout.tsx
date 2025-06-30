@@ -15,7 +15,7 @@ const UserRequesterLayout = () => {
         </SidebarProvider>
       </div>
       {/* main content area */}
-      <section className="relative flex h-max w-full flex-col items-center gap-6 px-4 pt-12 sm:px-8 sm:pt-14">
+      <section className="relative mb-48 flex h-max w-full flex-col items-center gap-6 px-4 pt-12 sm:px-8 sm:pt-14">
         <Outlet />
         <Footer />
       </section>
