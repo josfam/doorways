@@ -388,10 +388,12 @@ const UserUpdateDialog = ({ userData, role }: UserUpdateDialogProps) => {
           </DialogFooter>
         </form>
         {showConfirmation && (
-          <div className="absolute flex h-full w-full flex-col items-center justify-center gap-6 rounded-lg bg-slate-200 px-6 text-xl opacity-95">
+          <div className="absolute flex h-full w-full flex-col items-center justify-center gap-6 rounded-lg bg-slate-200 px-6 text-xl opacity-[97%]">
             <div className="flex flex-col items-center justify-center gap-4">
               <p>You are about to delete</p>
               <p className="font-bold">{`${userData.surname} ${userData["given name"]}`}</p>
+              <hr className="h-[2px] w-full bg-slate-300" />
+              <p className="mt-4">Are you sure?</p>
             </div>
             <div className="flex w-full flex-col">
               <Button
