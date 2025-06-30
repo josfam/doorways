@@ -33,7 +33,7 @@ export const AdminSidebar = () => {
   const handleLogout = useLogout();
 
   return (
-    <Sidebar>
+    <Sidebar className="z-20">
       <SidebarContent className="bg-amber-50">
         <SidebarGroup className="flex h-full flex-col">
           <SidebarGroupLabel className="mb-8 flex h-10 flex-col items-center justify-center bg-amber-200 text-xl capitalize text-amber-900">
