@@ -13,7 +13,7 @@ class SecurityGuard(Base):
     __tablename__ = "securityGuards"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     security_company = Column(String, nullable=False, default="Unknown")
 
     # a security guard is a user

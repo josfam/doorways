@@ -625,6 +625,25 @@ def update_user(
 
 
 @sys_admin_router.delete("/user/{user_id}", status_code=status.HTTP_200_OK)
-def delete_user(user_id: int, db: Session = Depends(get_db)):
+def delete_user(user_id: str, db: Session = Depends(get_db)):
     """Deletes a user from the database"""
-    pass
+    existing_user = db.query(User).filter(User.id == user_id).first()
+    if not existing_user:
+        return JSONResponse(
+            content={"message": "User not found"},
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
+    try:
+        db.delete(existing_user)
+        db.commit()
+        return JSONResponse(
+            content={"message": "User deleted successfully"},
+            status_code=status.HTTP_200_OK,
+        )
+    except Exception as e:
+        db.rollback()
+        print(f"Error deleting user: {e}", file=sys.stderr)  # DEBUG
+        return JSONResponse(
+            content={"message": f"Error deleting user"},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )

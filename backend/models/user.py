@@ -29,15 +29,40 @@ class User(Base):
     )
     # Relationships:
     # with a student
-    student_record = relationship("Student", back_populates="user")
+    student_record = relationship(
+        "Student",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
     # with a lecturer
-    lecturer_record = relationship("Lecturer", back_populates="user")
+    lecturer_record = relationship(
+        "Lecturer",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
     # with a security guard
-    security_guard_record = relationship("SecurityGuard", back_populates="user")
+    security_guard_record = relationship(
+        "SecurityGuard",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
     # with a sys admin
-    sys_admin_record = relationship("SysAdmin", back_populates="user")
+    sys_admin_record = relationship(
+        "SysAdmin",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
     # with an admin, as in an administrator
-    admin_record = relationship("Admin", back_populates="user")
+    admin_record = relationship(
+        "Admin",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
     # with a belonging. Belongings are deleted if the user is deleted
     belongings = relationship(
         "Belonging", back_populates="user", cascade="all, delete-orphan"
