@@ -12,11 +12,11 @@ interface UserListProps {
 
 export const UserList = ({ usersData, role }: UserListProps) => {
   return (
-    <ul className="flex w-full flex-col gap-8">
+    <ul className="flex w-full flex-col gap-4">
       {usersData.map((user) => (
         <li
           key={user.id}
-          className="flex content-center items-center rounded bg-sky-100 p-4 text-lg"
+          className="flex content-center items-center rounded bg-sky-100 px-4 py-3 text-lg"
         >
           <div className="flex gap-4">
             <div className="font-semibold">{user.surname}</div>

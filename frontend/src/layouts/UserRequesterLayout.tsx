@@ -14,8 +14,11 @@ const UserRequesterLayout = () => {
         </SidebarProvider>
       </div>
       {/* main content area */}
-      <section className="flex h-max w-full flex-col items-center gap-6 px-4 pt-12 sm:px-8 sm:pt-14">
+      <section className="relative flex h-max w-full flex-col items-center gap-6 px-4 pt-12 sm:px-8 sm:pt-14">
         <Outlet />
+        <footer className="fixed bottom-0 flex h-16 w-full items-center justify-center rounded-t-lg bg-slate-200">
+          <p className="text-lg text-slate-700">Copyright 2025</p>
+        </footer>
       </section>
     </main>
   );
