@@ -97,7 +97,7 @@ const LoginPage = () => {
             replace: true,
           });
         } else {
-          navigate(`${routeUrl.absolutes.codeInput}`, {
+          navigate(`${routeUrl.absolutes.userCodeInput}`, {
             state: { showSuccessToast: true },
             replace: true,
           });
