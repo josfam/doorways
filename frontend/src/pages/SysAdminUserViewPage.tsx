@@ -11,7 +11,7 @@ export const SysAdminUserViewPage = () => {
     <>
       <h1 className="page-header">View users</h1>
       <div className="flex w-full flex-col items-center justify-center">
-        <Tabs defaultValue="Student" className="w-full">
+        <Tabs defaultValue={role_names.student} className="w-full">
           <TabsList className="mb-4 border-2 border-amber-200 bg-amber-50 px-4 py-8">
             {Object.keys(role_names).map((roleName) => (
               <TabsTrigger
