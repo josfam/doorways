@@ -26,6 +26,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<LoginPage />} />
+              <Route path={routeUrl.codeInput} element={<CodeEntryPage />} />
             </Route>
             <Route path={routeUrl.sysAdmin.root} element={<SysAdminLayout />}>
               <Route index element={<SysAdminUserViewPage />} />
@@ -47,10 +48,6 @@ function App() {
               <Route
                 path={routeUrl.user.activityHistory}
                 element={<UserActivityHistoryPage />}
-              />
-              <Route
-                path={routeUrl.user.codeInput}
-                element={<CodeEntryPage />}
               />
             </Route>
           </Routes>
