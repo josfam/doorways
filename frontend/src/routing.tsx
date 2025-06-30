@@ -31,6 +31,5 @@ export const routeUrl = {
     userCodeInput: `${routes.user.root}/${routes.user.codeInput}`,
     userCodeRequest: `${routes.user.root}/${routes.user.codeRequest}`,
     userActivityHistory: `${routes.user.root}/${routes.user.activityHistory}`,
-    codeInput: routes.codeInput,
   },
 };
