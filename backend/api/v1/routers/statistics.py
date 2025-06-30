@@ -32,13 +32,12 @@ def get_user_activity_history(user_id: str, db=Depends(get_db)):
     )
     if not len(history_entries):
         return JSONResponse(
-            status_code=status.HTTP_404_NOT_FOUND,
-            content={"message": "You have no activity history yet."},
+            content={"message": "No history found.", "data": []},
         )
 
     history = [entry.to_dict() for entry in history_entries]
 
     return JSONResponse(
-        content={"message": f"Activity history for user {user_id}", "history": history},
+        content={"message": f"Activity history for user {user_id}", "data": history},
         status_code=status.HTTP_200_OK,
     )

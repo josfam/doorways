@@ -4,6 +4,10 @@ import type { JwtPayload, transitionItem } from "@/types/types";
 import { jwtDecode } from "jwt-decode";
 import { statsAPIUrl } from "@/constants";
 import SingleTransitionDetail from "@/components/singleTransitionDetail";
+import { Loading } from "@/components/loading";
+import ErrorMessage from "@/components/ErrorComponent";
+import { Link } from "react-router-dom";
+import { routeUrl } from "@/routing";
 // import { useIsMobile } from "@/hooks/use-mobile";
 
 const UserActivityHistoryPage = () => {
@@ -23,15 +27,20 @@ const UserActivityHistoryPage = () => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      return response.json();
+      return await response.json();
     },
   });
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading size="lg" text={`fetching your history`} />;
   }
 
   if (isError) {
-    return <div>Error loading your history.</div>;
+    return (
+      <div className="flex w-full items-center justify-center">
+        <ErrorMessage message={`Can't load history right now.`} />
+      </div>
+    );
   }
 
   // Format the date into a human-readable format
@@ -75,18 +84,27 @@ const UserActivityHistoryPage = () => {
         <h1 className="page-header">Your History</h1>
       </div>
       <ul className="flex w-full flex-wrap items-center justify-center gap-4">
-        {data.history.map((transitionItem: transitionItem) => (
-          <SingleTransitionDetail
-            key={transitionItem.id}
-            transitionData={{
-              transitionDate: formatDate(transitionItem.time),
-              transitionTime: formatTime(transitionItem.time),
-              transitionType: getTransitionTypeText(
-                transitionItem.transition_type_id,
-              ),
-            }}
-          />
-        ))}
+        {data.data.length > 0 ? (
+          data.data.map((transitionItem: transitionItem) => (
+            <SingleTransitionDetail
+              key={transitionItem.id}
+              transitionData={{
+                transitionDate: formatDate(transitionItem.time),
+                transitionTime: formatTime(transitionItem.time),
+                transitionType: getTransitionTypeText(
+                  transitionItem.transition_type_id,
+                ),
+              }}
+            />
+          ))
+        ) : (
+          <div className="flex min-h-[200px] w-full flex-col items-center justify-center gap-2 rounded-lg bg-amber-100 text-2xl">
+            <p>{`${data.message}`}</p>
+            <Link to={`${routeUrl.absolutes.userCodeRequest}`}>
+              Request a code to start
+            </Link>
+          </div>
+        )}
       </ul>
     </div>
   );
