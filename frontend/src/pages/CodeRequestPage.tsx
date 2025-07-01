@@ -6,7 +6,7 @@ import {
 } from "@/constants";
 
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 import { toastDuration, checkMarksDuration } from "@/constants";
@@ -44,7 +44,7 @@ const CodeRequestPage = () => {
     setExpirationTime(codeExpirationTime);
     setCodeWasRequested(false);
     setTimeLeft(expirationTime);
-  }, [codeExpirationTime, expirationTime])
+  }, [codeExpirationTime, expirationTime]);
 
   // Notification when code has been accepted after entry on the guard's system
   useEffect(() => {
