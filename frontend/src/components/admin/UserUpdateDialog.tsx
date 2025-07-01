@@ -111,6 +111,8 @@ const UserUpdateDialog = ({ userData, role }: UserUpdateDialogProps) => {
     queryClient.invalidateQueries({ queryKey: ["allStudents"] });
     queryClient.invalidateQueries({ queryKey: ["allLecturers"] });
     queryClient.invalidateQueries({ queryKey: ["allSecurityGuards"] });
+    queryClient.invalidateQueries({ queryKey: ["allSysAdmins"] });
+    queryClient.invalidateQueries({ queryKey: ["allAdmins"] });
   };
 
   const handleInfoUpdate = (value) => {
