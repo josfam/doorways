@@ -16,6 +16,7 @@ class CodeManager:
     _instance = None
     CODE_EXPIRATION_TIME = 8  # seconds
     CODE_EXPIRY_CHECK_INTERVAL = 1  # seconds
+    POSSIBLE_CODES_AVAILABLE = 100  # total number of codes available
 
     def __new__(cls):
         if cls._instance is None:
@@ -33,7 +34,9 @@ class CodeManager:
 
     def _initialize_code_pools(self):
         """Create pool of both used and unused codes"""
-        self.codes_available: List[str] = [f"{i:02d}" for i in range(100)]
+        self.codes_available: List[str] = [
+            f"{i:02d}" for i in range(self.POSSIBLE_CODES_AVAILABLE)
+        ]
         self.codes_in_use: List[str] = []
         self.code_issue_timestamps: Dict[str, float] = {}  # when codes were issued
         self._lock = threading.RLock()  # thread safety
@@ -58,8 +61,9 @@ class CodeManager:
 
         with self._lock:
             for code, timestamp in self.code_issue_timestamps.items():
-                if current_time - timestamp > self.CODE_EXPIRATION_TIME:
+                if (current_time - timestamp) > self.CODE_EXPIRATION_TIME:
                     expired_codes.append(code)
+            print("Expired codes...", expired_codes)  # DEBUG
 
             for code in expired_codes:
                 if code in self.codes_in_use:
@@ -82,6 +86,7 @@ class CodeManager:
             self.code_issue_timestamps[code] = (
                 time.time()
             )  # record when this code was issued
+            print(f"Code {code} issued at {self.code_issue_timestamps[code]}")  # DEBUG
             return code
 
     def release_code(self, code: str) -> bool:
@@ -89,11 +94,15 @@ class CodeManager:
         Release a code back to the pool of available codes.
         If the code is not in use, return False.
         """
-        if self.codes_in_use and code in self.codes_in_use:
-            self.codes_in_use.remove(code)
-            self.codes_available.append(code)
-            return True
-        return False
+        with self._lock:
+            if self.codes_in_use and code in self.codes_in_use:
+                self.codes_in_use.remove(code)
+                self.codes_available.append(code)
+                # clean up timestamps
+                if code in self.code_issue_timestamps:
+                    del self.code_issue_timestamps[code]
+                return True
+            return False
 
     def show_pool_stats(self) -> dict:
         """
