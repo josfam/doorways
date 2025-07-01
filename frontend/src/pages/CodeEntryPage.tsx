@@ -51,6 +51,7 @@ const CodeEntryPage = () => {
         toast.success("Code processed!", {
           autoClose: toastDuration,
           closeOnClick: true,
+          pauseOnFocusLoss: false,
         });
         console.log("Code sent successfully:", data);
       })
