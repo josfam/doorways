@@ -1,5 +1,6 @@
 "Route for statistics related to the application."
 
+from datetime import datetime as dt, timezone as tz, timedelta
 from fastapi import APIRouter, status, Depends
 from fastapi.responses import JSONResponse
 from backend.models.user import User
@@ -7,6 +8,8 @@ from backend.models.entry_exit_times import EntryExitTime
 from backend.storage.database import get_db
 
 stats_router = APIRouter(prefix="/stats", tags=["statistics"])
+
+EAT_TIMEZOME_OFFSET = 3
 
 
 @stats_router.get("/activity-history/user/{user_id}", status_code=status.HTTP_200_OK)
@@ -35,7 +38,20 @@ def get_user_activity_history(user_id: str, db=Depends(get_db)):
             content={"message": "No history found.", "data": []},
         )
 
-    history = [entry.to_dict() for entry in history_entries]
+    history = []
+
+    # add offset to UTC+3 (East African Time)
+    utc_plus_3 = tz(timedelta(hours=EAT_TIMEZOME_OFFSET))
+    for entry in history_entries:
+        # convert the time to East African Time
+        entry_dict = entry.to_dict()
+        print("Entry dict before EAT offset:", entry_dict)  # DEBUG
+        utc_time_str = entry_dict["time"]
+        utc_time = dt.fromisoformat(utc_time_str)
+        local_time = utc_time.astimezone(utc_plus_3)
+        entry_dict["time"] = local_time.isoformat()
+        print("Entry dict after EAT offset:", entry_dict)  # DEBUG
+        history.append(entry_dict)
 
     return JSONResponse(
         content={"message": f"Activity history for user {user_id}", "data": history},
