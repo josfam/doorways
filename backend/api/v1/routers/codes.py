@@ -42,11 +42,22 @@ def get_random_code(user: str = Depends(get_current_user)):
     code = code_manager.get_code()
     # store email associated with the code
     if code is None:
-        return {"message": "No codes available"}, status.HTTP_404_NOT_FOUND
+        return JSONResponse(
+            content={"message": "No codes available"},
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
 
     expiration_time = code_manager.expiration_time
     code_to_email[code] = email
-    return {"random_code": code, "expiration_time": expiration_time}
+    print("At code request\n", code_manager.codes_in_use, code_to_email)  # DEBUG
+    return JSONResponse(
+        content={
+            "message": f"Code {code} issued successfully",
+            "random_code": code,
+            "expiration_time": expiration_time,
+        },
+        status_code=status.HTTP_200_OK,
+    )
 
 
 @codes_router.post("/release-code/{code}", status_code=status.HTTP_200_OK)
@@ -95,13 +106,18 @@ async def release_code(code: str, db: Session = Depends(get_db)):
         db.add(entry_exit_time)
         db.commit()
 
-    print(code_manager.codes_in_use, code_to_email)  # DEBUG
     if code_manager.release_code(code):
         # Notify the websocket if a client is listening for this code
         ws = web_socket_connections.get(code)
         if ws:
             record_entry_time()
             await ws.send_text(f"Code {code} processed successfully.")
+            # remove the code from the code_to_email mapping
+            if code in code_to_email:
+                del code_to_email[code]
+            print(
+                "After code release\n", code_manager.codes_in_use, code_to_email
+            )  # DEBUG
         return JSONResponse(
             content={"message": f"Code {code} released successfully"},
             status_code=status.HTTP_200_OK,
