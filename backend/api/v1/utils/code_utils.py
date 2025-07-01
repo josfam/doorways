@@ -63,7 +63,6 @@ class CodeManager:
             for code, timestamp in self.code_issue_timestamps.items():
                 if (current_time - timestamp) > self.CODE_EXPIRATION_TIME:
                     expired_codes.append(code)
-            print("Expired codes...", expired_codes)  # DEBUG
 
             for code in expired_codes:
                 if code in self.codes_in_use:
