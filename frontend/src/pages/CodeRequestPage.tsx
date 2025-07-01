@@ -6,7 +6,7 @@ import {
 } from "@/constants";
 
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 import { toastDuration, checkMarksDuration } from "@/constants";
@@ -39,11 +39,12 @@ const CodeRequestPage = () => {
   }, [location.state]);
 
   // Reset code and times
-  const resetScreen = () => {
+  const resetScreen = useCallback(() => {
     setCode("--");
     setExpirationTime(codeExpirationTime);
     setCodeWasRequested(false);
-  };
+    setTimeLeft(expirationTime);
+  }, [codeExpirationTime, expirationTime])
 
   // Notification when code has been accepted after entry on the guard's system
   useEffect(() => {
@@ -62,7 +63,7 @@ const CodeRequestPage = () => {
       resetScreen();
     };
     return () => ws.close();
-  }, [code, codeWasRequested]);
+  }, [code, codeWasRequested, resetScreen]);
 
   // Timer for a countdown for expiration of the requested code
   useEffect(() => {
@@ -84,7 +85,7 @@ const CodeRequestPage = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [codeWasRequested]);
+  }, [codeWasRequested, codeExpirationTime]);
 
   const handleCodeRequest = async () => {
     const response = await fetch(`${codesAPIUrl}/random-code`, {
