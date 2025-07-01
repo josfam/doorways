@@ -96,9 +96,9 @@ const CodeEntryPage = () => {
           pattern="[0-9]*"
         />
         <div className="mt-8 flex flex-col items-center justify-center gap-4">
-          <Button className="btn-cta btn-ter border-1 w-[500px] border-amber-500">
+          {/* <Button className="btn-cta btn-ter border-1 w-[500px] border-amber-500">
             Use my ID instead
-          </Button>
+          </Button> */}
           <Button onClick={handleLogout} className="btn-ter btn-ter w-[500px]">
             Logout
           </Button>
