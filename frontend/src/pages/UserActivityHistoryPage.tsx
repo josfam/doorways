@@ -61,9 +61,12 @@ const UserActivityHistoryPage = () => {
   // Format the time into a human-readable format
   const formatTime = (isoString: string) => {
     const date = new Date(isoString);
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    return `${hours}:${minutes}`;
+    const localDate = date.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    return localDate;
   };
 
   // Get transition type text from id
@@ -79,9 +82,15 @@ const UserActivityHistoryPage = () => {
   };
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-20">
+    <div className="flex w-full flex-col items-center justify-center gap-10">
       <div>
         <h1 className="page-header">Your History</h1>
+      </div>
+      <div className="relative">
+        <div className="rounded-md bg-blue-50 px-4 py-2 text-xl text-amber-800">
+          🗓️ Times are displayed in UTC (EAT -3) timezone
+        </div>
+        <div className="absolute left-[-5px] top-[-5px] h-4 w-4 rounded-full bg-amber-500"></div>
       </div>
       <ul className="flex w-full flex-wrap items-center justify-center gap-4">
         {data.data.length > 0 ? (
