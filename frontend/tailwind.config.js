@@ -63,7 +63,10 @@ export default {
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
   			}
-  		}
+  		},
+      fontFamily: {
+        'sans': ['Open Sauce Sans', 'ui-sans-serif', 'system-ui', 'sans-serif']
+      },
   	}
   },
   plugins: [require("tailwindcss-animate")],
