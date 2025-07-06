@@ -5,7 +5,7 @@ const authAPIUrl = `${baseAPIUrl}/auth`;
 const sysAdminAPIUrl = `${baseAPIUrl}/sys-admin`;
 const statsAPIUrl = `${baseAPIUrl}/stats`;
 
-const baseWebSocketUrl = `ws://${baseAPIUrl}/api/v1`;
+const baseWebSocketUrl = `${import.meta.env.VITE_WS_BASE_API_URL}/api/v1`;
 
 const defaultCodeExpirationTime = 5; // seconds
 const expirationCountdownInterval = 1000; // milliseconds
