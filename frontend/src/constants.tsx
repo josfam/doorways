@@ -1,6 +1,5 @@
 // API paths
-const baseHost = "http://127.0.0.1";
-const baseAPIUrl = `${baseHost}:8000/api/v1`;
+const baseAPIUrl = import.meta.env.VITE_API_BASE_URL;
 const codesAPIUrl = `${baseAPIUrl}/codes`;
 const authAPIUrl = `${baseAPIUrl}/auth`;
 const sysAdminAPIUrl = `${baseAPIUrl}/sys-admin`;
