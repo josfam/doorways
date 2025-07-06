@@ -10,8 +10,8 @@ import UserActivityHistoryPage from "./pages/UserActivityHistoryPage";
 import LoginPage from "./pages/LoginPage";
 import { ToastContainer } from "react-toastify";
 import SysAdminLayout from "./layouts/SysAdminLayout";
-import { SysAdminUserViewPage } from "./pages/SysAdminUserViewPage";
-import { SysAdminUserAddPage } from "./pages/SysAdminUserAddPage";
+import SysAdminUserViewPage from "./pages/SysAdminUserViewPage";
+import SysAdminUserAddPage from "./pages/SysAdminUserAddPage";
 import { routeUrl } from "./routing";
 
 // fonts

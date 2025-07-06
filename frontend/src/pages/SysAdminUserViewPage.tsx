@@ -6,7 +6,7 @@ import SysAdminList from "@/components/admin/SysAdminList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { role_names } from "@/constants";
 
-export const SysAdminUserViewPage = () => {
+const SysAdminUserViewPage = () => {
   return (
     <>
       <h1 className="page-header">View users</h1>
@@ -44,3 +44,5 @@ export const SysAdminUserViewPage = () => {
     </>
   );
 };
+
+export default SysAdminUserViewPage;

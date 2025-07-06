@@ -1,6 +1,6 @@
 import { UserFileUploader } from "@/components/admin/UserFileUploader";
 
-export const SysAdminUserAddPage = () => {
+const SysAdminUserAddPage = () => {
   // const inputId = "file-upload";  // accessibility
   const studentFormatInstructions = (
     <>
@@ -162,3 +162,5 @@ export const SysAdminUserAddPage = () => {
     </>
   );
 };
+
+export default SysAdminUserAddPage;

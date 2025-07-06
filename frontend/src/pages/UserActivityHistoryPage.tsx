@@ -8,7 +8,6 @@ import { Loading } from "@/components/loading";
 import ErrorMessage from "@/components/ErrorComponent";
 import { Link } from "react-router-dom";
 import { routeUrl } from "@/routing";
-// import { useIsMobile } from "@/hooks/use-mobile";
 
 const UserActivityHistoryPage = () => {
   // const isMobile = useIsMobile();
