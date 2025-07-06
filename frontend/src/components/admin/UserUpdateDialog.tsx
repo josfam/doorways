@@ -60,8 +60,6 @@ type UserUpdateData = z.infer<ReturnType<typeof userUpdateSchema>>;
 const useUpdateInfoMutation = () => {
   return useMutation({
     mutationFn: async (value: UserUpdateData) => {
-      console.log("Making API call"); // DEBUG
-      console.log(`${JSON.stringify(value)}`); // DEBUG
       const url = `${sysAdminAPIUrl}/user/${value["user id"]}`;
       const response = await fetch(url, {
         method: "PATCH",
@@ -82,7 +80,6 @@ const useUpdateInfoMutation = () => {
 const useDeleteUserMutation = () => {
   return useMutation({
     mutationFn: async (value: UserUpdateData) => {
-      console.log("deleting user"); // DEBUG
       const url = `${sysAdminAPIUrl}/user/${value["user id"]}`;
       const response = await fetch(url, {
         method: "DELETE",

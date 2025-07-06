@@ -85,7 +85,7 @@ class CodeManager:
             self.code_issue_timestamps[code] = (
                 time.time()
             )  # record when this code was issued
-            print(f"Code {code} issued at {self.code_issue_timestamps[code]}")  # DEBUG
+
             return code
 
     def release_code(self, code: str) -> bool:

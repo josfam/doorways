@@ -642,7 +642,6 @@ def delete_user(user_id: str, db: Session = Depends(get_db)):
         )
     except Exception as e:
         db.rollback()
-        print(f"Error deleting user: {e}", file=sys.stderr)  # DEBUG
         return JSONResponse(
             content={"message": f"Error deleting user"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

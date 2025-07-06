@@ -45,12 +45,10 @@ def get_user_activity_history(user_id: str, db=Depends(get_db)):
     for entry in history_entries:
         # convert the time to East African Time
         entry_dict = entry.to_dict()
-        print("Entry dict before EAT offset:", entry_dict)  # DEBUG
         utc_time_str = entry_dict["time"]
         utc_time = dt.fromisoformat(utc_time_str)
         local_time = utc_time.astimezone(utc_plus_3)
         entry_dict["time"] = local_time.isoformat()
-        print("Entry dict after EAT offset:", entry_dict)  # DEBUG
         history.append(entry_dict)
 
     return JSONResponse(

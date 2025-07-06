@@ -31,7 +31,6 @@ async def websocket_endpoint(websocket: WebSocket, code: str):
             await websocket.receive_text()  # Keep the connection alive
     except WebSocketDisconnect:
         del web_socket_connections[code]
-        print(f"WebSocket connection for code {code} closed.")  # DEBUG
 
 
 @codes_router.get("/random-code", status_code=status.HTTP_200_OK)
@@ -49,7 +48,7 @@ def get_random_code(user: str = Depends(get_current_user)):
 
     expiration_time = code_manager.expiration_time
     code_to_email[code] = email
-    print("At code request\n", code_manager.codes_in_use, code_to_email)  # DEBUG
+
     return JSONResponse(
         content={
             "message": f"Code {code} issued successfully",
@@ -115,9 +114,7 @@ async def release_code(code: str, db: Session = Depends(get_db)):
             # remove the code from the code_to_email mapping
             if code in code_to_email:
                 del code_to_email[code]
-            print(
-                "After code release\n", code_manager.codes_in_use, code_to_email
-            )  # DEBUG
+
         return JSONResponse(
             content={"message": f"Code {code} released successfully"},
             status_code=status.HTTP_200_OK,

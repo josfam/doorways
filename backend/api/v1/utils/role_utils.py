@@ -57,9 +57,6 @@ def add_user_to_role_table(
             return {"success": False, "message": f"Faculty '{faculty_name}' not found"}
         faculty_id = faculty_info[0]
         lecturer = Lecturer(user_id=user.id, faculty_id=faculty_id)
-        print(
-            f"Adding lecturer with user ID: {user.id} and faculty ID: {faculty_id}"
-        )  # DEBUG
         session.add(lecturer)
         return {"success": True, "message": "Lecturer added successfully"}
     elif role_name == "sys admin":
