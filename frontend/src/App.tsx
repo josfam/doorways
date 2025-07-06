@@ -4,21 +4,26 @@ import "./style.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import MainLayout from "./layouts/MainLayout";
 import UserRequesterLayout from "./layouts/UserRequesterLayout";
-import CodeEntryPage from "./pages/CodeEntryPage";
-import CodeRequestPage from "./pages/CodeRequestPage";
-import UserActivityHistoryPage from "./pages/UserActivityHistoryPage";
-import LoginPage from "./pages/LoginPage";
 import { ToastContainer } from "react-toastify";
 import SysAdminLayout from "./layouts/SysAdminLayout";
-import SysAdminUserViewPage from "./pages/SysAdminUserViewPage";
-import SysAdminUserAddPage from "./pages/SysAdminUserAddPage";
 import { routeUrl } from "./routing";
+import { lazy } from "react";
 
 // fonts
 import "@fontsource/open-sauce-sans/300.css";
 import "@fontsource/open-sauce-sans/400.css";
 import "@fontsource/open-sauce-sans/500.css";
 import "@fontsource/open-sauce-sans/600.css";
+
+// lazy load pages (chunk)
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const SysAdminUserViewPage = lazy(() => import("./pages/SysAdminUserViewPage"));
+const SysAdminUserAddPage = lazy(() => import("./pages/SysAdminUserAddPage"));
+const CodeEntryPage = lazy(() => import("./pages/CodeEntryPage"));
+const CodeRequestPage = lazy(() => import("./pages/CodeRequestPage"));
+const UserActivityHistoryPage = lazy(
+  () => import("./pages/UserActivityHistoryPage"),
+);
 
 // tanstack react-query client
 const queryClient = new QueryClient();
