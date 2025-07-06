@@ -4,8 +4,12 @@ Short code manager for temporary access codes during check-in and check-out
 
 import random
 import time
+import os
 import threading
 from typing import List, Optional, Dict
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class CodeManager:
@@ -14,9 +18,11 @@ class CodeManager:
     """
 
     _instance = None
-    CODE_EXPIRATION_TIME = 8  # seconds
-    CODE_EXPIRY_CHECK_INTERVAL = 1  # seconds
-    POSSIBLE_CODES_AVAILABLE = 100  # total number of codes available
+    CODE_EXPIRATION_TIME = os.getenv("DEFAULT_CODE_EXPIRATION") or 8  # seconds
+    CODE_EXPIRY_CHECK_INTERVAL = os.getenv("CODE_EXPIRY_CHECK_INTERVAL") or 2  # seconds
+    POSSIBLE_CODES_AVAILABLE = (
+        os.getenv("POSSIBLE_CODES_AVAILABLE") or 100
+    )  # total codes available
 
     def __new__(cls):
         if cls._instance is None:
@@ -30,12 +36,12 @@ class CodeManager:
         """
         Get the expiration time for the codes.
         """
-        return self.CODE_EXPIRATION_TIME
+        return int(self.CODE_EXPIRATION_TIME)
 
     def _initialize_code_pools(self):
         """Create pool of both used and unused codes"""
         self.codes_available: List[str] = [
-            f"{i:02d}" for i in range(self.POSSIBLE_CODES_AVAILABLE)
+            f"{i:02d}" for i in range(int(self.POSSIBLE_CODES_AVAILABLE))
         ]
         self.codes_in_use: List[str] = []
         self.code_issue_timestamps: Dict[str, float] = {}  # when codes were issued
@@ -51,7 +57,9 @@ class CodeManager:
     def _check_expired_codes(self):
         """Checks for expired codes"""
         while True:
-            time.sleep(self.CODE_EXPIRY_CHECK_INTERVAL)  # check withing a given time
+            time.sleep(
+                int(self.CODE_EXPIRY_CHECK_INTERVAL)
+            )  # check withing a given time
             self._release_expired_codes()
 
     def _release_expired_codes(self):
@@ -61,7 +69,7 @@ class CodeManager:
 
         with self._lock:
             for code, timestamp in self.code_issue_timestamps.items():
-                if (current_time - timestamp) > self.CODE_EXPIRATION_TIME:
+                if (current_time - timestamp) > int(self.CODE_EXPIRATION_TIME):
                     expired_codes.append(code)
 
             for code in expired_codes:

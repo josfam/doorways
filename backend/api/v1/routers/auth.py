@@ -14,9 +14,10 @@ from backend.api.v1.utils.role_utils import get_role_name_from_id
 from backend.models.user import User
 from backend.api.v1.utils.code_utils import code_manager
 
-auth_router = APIRouter(prefix="/auth", tags=["auth"])
-TOKEN_EXPIRATION_TIME = 3600 * 3  # 3 hours
 load_dotenv()
+
+auth_router = APIRouter(prefix="/auth", tags=["auth"])
+TOKEN_EXPIRATION_TIME = os.getenv("JWT_EXPIRATION_TIME") or 3600 * 3  # 3 hours
 
 
 @auth_router.get("/config", status_code=status.HTTP_200_OK)
@@ -70,7 +71,7 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
         "role_name": role_name,
         "code_time_out": code_manager.code_expiration_time,
         "expiration": (
-            dt.now(tz.utc) + timedelta(seconds=TOKEN_EXPIRATION_TIME)
+            dt.now(tz.utc) + timedelta(seconds=int(TOKEN_EXPIRATION_TIME))
         ).isoformat(),
     }
     secret_key = os.getenv("SECRET_KEY")
