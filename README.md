@@ -1,6 +1,8 @@
 # doorways
 
-An entry-exit system for students and lecturers. Case study: Cavendish University Uganda
+A Checkpoint management system for students and lecturers, using randomized, ephemeral short-codes.
+\
+Case study: Cavendish University Uganda
 
 ## E-R diagram for the application
 
