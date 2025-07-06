@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer";
 // Container layout that wraps most pages
 const MainLayout = () => {
   return (
-    <main className="flex h-full mb-48 w-full flex-col items-center justify-center 0 p-4">
+    <main className="0 mb-48 flex h-max w-full flex-col items-center justify-center p-4 sm:h-full">
       <Outlet />
       <Footer />
     </main>
