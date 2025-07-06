@@ -14,8 +14,7 @@ const UserActivityHistoryPage = () => {
   // const isMobile = useIsMobile();
 
   // fetch the user's id from the jwt token
-  const token = localStorage.getItem("jwt_token");
-
+  const token = localStorage.getItem("jwt_token")!;
   const userId = jwtDecode<JwtPayload>(token).id;
 
   // fetch user activity history from the API
