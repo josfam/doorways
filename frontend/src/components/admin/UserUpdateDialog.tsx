@@ -112,7 +112,7 @@ const UserUpdateDialog = ({ userData, role }: UserUpdateDialogProps) => {
     queryClient.invalidateQueries({ queryKey: ["allAdmins"] });
   };
 
-  const handleInfoUpdate = (value) => {
+  const handleInfoUpdate = (value: UserUpdateData) => {
     updateMutation.mutate(value, {
       onSuccess: () => {
         // invalidate the user list query to refresh the data
@@ -121,7 +121,7 @@ const UserUpdateDialog = ({ userData, role }: UserUpdateDialogProps) => {
     });
   };
 
-  const handleUserDelete = (value) => {
+  const handleUserDelete = (value: UserUpdateData) => {
     deleteMutation.mutate(value, {
       onSuccess: () => {
         // invalidate the user list query to refresh the data
