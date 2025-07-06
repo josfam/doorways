@@ -5,7 +5,7 @@ const authAPIUrl = `${baseAPIUrl}/auth`;
 const sysAdminAPIUrl = `${baseAPIUrl}/sys-admin`;
 const statsAPIUrl = `${baseAPIUrl}/stats`;
 
-const baseWebSocketUrl = "ws://127.0.0.1:8000/api/v1";
+const baseWebSocketUrl = `ws://${baseAPIUrl}/api/v1`;
 
 const defaultCodeExpirationTime = 5; // seconds
 const expirationCountdownInterval = 1000; // milliseconds
