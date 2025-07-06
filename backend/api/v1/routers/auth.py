@@ -1,7 +1,6 @@
 """API routes for user authentication"""
 
 import jwt
-import os
 from dotenv import load_dotenv
 from datetime import datetime as dt, timezone as tz, timedelta
 from fastapi import APIRouter, status, Depends
@@ -13,11 +12,10 @@ from backend.api.v1.utils.auth_utils import hash_password, is_matching_password
 from backend.api.v1.utils.role_utils import get_role_name_from_id
 from backend.models.user import User
 from backend.api.v1.utils.code_utils import code_manager
-
-load_dotenv()
+from backend.config import config
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
-TOKEN_EXPIRATION_TIME = os.getenv("JWT_EXPIRATION_TIME") or 3600 * 3  # 3 hours
+TOKEN_EXPIRATION_TIME = config.JWT_EXPIRATION_TIME
 
 
 @auth_router.get("/config", status_code=status.HTTP_200_OK)
@@ -74,7 +72,7 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
             dt.now(tz.utc) + timedelta(seconds=int(TOKEN_EXPIRATION_TIME))
         ).isoformat(),
     }
-    secret_key = os.getenv("SECRET_KEY")
+    secret_key = config.SECRET_KEY
     jwt_token = jwt.encode(
         jwt_payload,
         secret_key,

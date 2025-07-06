@@ -1,7 +1,7 @@
-from backend.storage.database import create_tables, pre_populate_tables
-
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+from backend.config import config
+from backend.storage.database import create_tables, pre_populate_tables
 from backend.api.v1.routers import sys_admin, user, codes, auth, statistics
 
 
@@ -22,16 +22,11 @@ main_router.include_router(statistics.stats_router)
 app.include_router(main_router)
 
 # CORS middleware
-origins = [
-    'http://localhost:5173',
-    'http://localhost:5173/',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:5173/',
-]
+cors_origins = config.CORS_ORIGINS
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
