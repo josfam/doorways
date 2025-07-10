@@ -122,15 +122,15 @@ const LoginPage = () => {
           alt=""
         />
         <div>
-          <p className="text-2xl leading-3 tracking-[1.5px] text-green-500 sm:text-3xl sm:leading-none">
+          <h1 className="text-2xl leading-3 tracking-[1.5px] text-green-600 sm:text-3xl sm:leading-none">
             door
-          </p>
-          <p className="text-2xl text-amber-500 sm:text-3xl">ways</p>
+          </h1>
+          <h1 className="text-2xl text-amber-600 sm:text-3xl">ways</h1>
         </div>
       </div>
       <div className="z-10 flex h-fit w-full flex-col items-center justify-center gap-3 rounded-lg border-2 border-slate-200 bg-slate-50 px-6 pb-12 pt-5 shadow-lg sm:w-3/4 sm:px-20 lg:w-1/2">
         <div className="flex w-full flex-col">
-          <h1 className="py-2 text-xl font-bold text-slate-600">Login</h1>
+          <h2 className="py-2 text-xl font-bold text-slate-600">Login</h2>
           <div className="h-[2px] w-full bg-slate-200"></div>
         </div>
         <form
