@@ -24,7 +24,7 @@ export default defineConfig({
             src: "/doorways-logo-app.png",
             sizes: "250x250",
             type: "image/png",
-            purpose: "maskable",
+            purpose: "any",
           },
         ],
         background_color: "#e17100", // closest to amber-600 in tailwindcss
