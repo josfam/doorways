@@ -115,13 +115,18 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="mb-6 flex flex-col items-center justify-center gap-2">
+      <div className="mb-6 flex items-center justify-center gap-2">
         <img
-          className="w-[90px] sm:w-[100px]"
+          className="w-[50px] sm:w-[100px]"
           src="/doorways-logo.svg"
           alt=""
         />
-        <p className="text-3xl text-amber-500">doorways</p>
+        <div>
+          <p className="text-2xl leading-3 tracking-[1.5px] text-green-500 sm:text-3xl sm:leading-none">
+            door
+          </p>
+          <p className="text-2xl text-amber-500 sm:text-3xl">ways</p>
+        </div>
       </div>
       <div className="z-10 flex h-fit w-full flex-col items-center justify-center gap-3 rounded-lg border-2 border-slate-200 bg-slate-50 px-6 pb-12 pt-5 shadow-lg sm:w-3/4 sm:px-20 lg:w-1/2">
         <div className="flex w-full flex-col">
