@@ -86,7 +86,7 @@ const UserActivityHistoryPage = () => {
       </div>
       <div className="relative">
         <div className="rounded-md bg-blue-50 px-4 py-2 text-xl text-amber-800">
-          🗓️ Times are displayed in UTC (EAT -3) timezone
+          🗓️ Times are displayed in EAT timezone
         </div>
         <div className="absolute left-[-5px] top-[-5px] h-4 w-4 rounded-full bg-amber-500"></div>
       </div>
