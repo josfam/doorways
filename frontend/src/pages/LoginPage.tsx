@@ -7,11 +7,12 @@ import { authAPIUrl } from "@/constants";
 import { toast } from "react-toastify";
 import { toastDuration } from "@/constants";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { role_names } from "@/constants";
 import type { JwtPayload } from "@/types/types";
 import { routeUrl } from "@/routing";
+import { Eye, EyeClosed } from "lucide-react";
 
 const loginFormSchema = z.object({
   email: z
@@ -47,6 +48,7 @@ const useLogin = () => {
 const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const toastShown = useRef(false); // prevent re-rendering twice
 
   const form = useForm({
@@ -61,6 +63,10 @@ const LoginPage = () => {
       handleLogin(value);
     },
   });
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   // Showing success toast after logout
   useEffect(() => {
@@ -176,19 +182,28 @@ const LoginPage = () => {
                 <label htmlFor="password" className="text-lg">
                   Password
                 </label>
-                <Input
-                  type="password"
-                  id="password"
-                  name="password"
-                  className={`form-input`}
-                  placeholder="Your password"
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  aria-invalid={
-                    field.state.meta.errors.length > 0 &&
-                    field.state.meta.isTouched
-                  }
-                />
+                <div className="flex w-full">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    className={`form-input flex flex-grow rounded-r-none`}
+                    placeholder="Your password"
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={
+                      field.state.meta.errors.length > 0 &&
+                      field.state.meta.isTouched
+                    }
+                  />
+                  <Button
+                    type="button"
+                    onClick={() => togglePasswordVisibility()}
+                    className="border-l-none rounded-l-none border-l-0 border-slate-200 bg-white text-black shadow-none hover:bg-slate-300 active:ring-0"
+                  >
+                    {showPassword ? <EyeClosed /> : <Eye />}
+                  </Button>
+                </div>
                 {field.state.meta.errors.length > 0 &&
                 field.state.meta.isTouched ? (
                   <div className="text-sm text-destructive">
