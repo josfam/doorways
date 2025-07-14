@@ -5,8 +5,6 @@ from sqlalchemy import Sequence
 from sqlalchemy.orm import relationship
 from .base import Base
 
-USER_ID_START = 100000
-
 
 class User(Base):
     """Represents a user of the system"""
