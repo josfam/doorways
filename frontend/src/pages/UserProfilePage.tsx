@@ -47,15 +47,23 @@ const UserProfilePage = () => {
             <span className="text-xl">{`${data.surname} ${data["given name"]}`}</span>
           </div>
         </div>
-        <div className="grid grid-cols-[90px_1fr] flex-col items-start gap-3 p-[--profile-card-padding] text-xl">
-          <span className="text-left font-medium">ID</span>
-          <span className="text-left text-amber-900">{data.id}</span>
-          <span className="text-left font-medium">Email</span>
-          <span className="text-left text-amber-900">{data.email}</span>
-          <span className="text-left font-medium">Phone</span>
-          <span className="text-left text-amber-900">
-            {data["phone number"]}
-          </span>
+        <div className="flex flex-col items-start gap-3 p-[--profile-card-padding] text-xl">
+          <div className="flex flex-col sm:grid sm:grid-cols-[90px_1fr]">
+            <span className="text-left font-medium">ID</span>
+            <span className="text-left text-amber-900">{data.id}</span>
+          </div>
+          <div className="flex flex-col sm:grid sm:grid-cols-[90px_1fr]">
+            <span className="text-left font-medium">Email</span>
+            <span className="w-60 truncate text-left text-amber-900 md:w-full">
+              {data.email}
+            </span>
+          </div>
+          <div className="flex flex-col sm:grid sm:grid-cols-[90px_1fr]">
+            <span className="text-left font-medium">Phone</span>
+            <span className="text-left text-amber-900">
+              {data["phone number"]}
+            </span>
+          </div>
         </div>
       </div>
     </>
