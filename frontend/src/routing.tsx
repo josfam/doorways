@@ -18,6 +18,7 @@ export const routes = {
     codeInput: "code-input",
     codeRequest: "code-request",
     activityHistory: "activity-history",
+    profile: "profile",
   },
 };
 
@@ -31,5 +32,6 @@ export const routeUrl = {
     userCodeInput: `${routes.user.root}/${routes.user.codeInput}`,
     userCodeRequest: `${routes.user.root}/${routes.user.codeRequest}`,
     userActivityHistory: `${routes.user.root}/${routes.user.activityHistory}`,
+    userProfile: `${routes.user.root}/${routes.user.profile}`,
   },
 };

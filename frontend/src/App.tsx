@@ -25,6 +25,7 @@ const CodeRequestPage = lazy(() => import("./pages/CodeRequestPage"));
 const UserActivityHistoryPage = lazy(
   () => import("./pages/UserActivityHistoryPage"),
 );
+const UserProfilePage = lazy(() => import("./pages/UserProfilePage"));
 
 // tanstack react-query client
 const queryClient = new QueryClient();
@@ -74,6 +75,10 @@ function App() {
                 <Route
                   path={routeUrl.user.activityHistory}
                   element={<UserActivityHistoryPage />}
+                />
+                <Route
+                  path={routeUrl.user.profile}
+                  element={<UserProfilePage />}
                 />
               </Route>
             </Routes>

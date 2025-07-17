@@ -7,10 +7,11 @@ import {
   SidebarMenuItem,
 } from "./ui/sidebar";
 import { Button } from "./ui/button";
-import { LogOut, CalendarClock, CircleDashed } from "lucide-react";
+import { LogOut, CalendarClock, CircleDashed, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useLogout } from "@/hooks/use-logout";
 import { useRole } from "@/hooks/useRole";
+import { routeUrl } from "@/routing";
 
 const SideBarItems = [
   {
@@ -22,6 +23,11 @@ const SideBarItems = [
     title: "My history",
     url: "/user/activity-history",
     icon: CalendarClock,
+  },
+  {
+    title: "My profile",
+    url: routeUrl.absolutes.userProfile,
+    icon: User,
   },
 ];
 

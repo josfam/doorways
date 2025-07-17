@@ -4,6 +4,7 @@ const codesAPIUrl = `${baseAPIUrl}/codes`;
 const authAPIUrl = `${baseAPIUrl}/auth`;
 const sysAdminAPIUrl = `${baseAPIUrl}/sys-admin`;
 const statsAPIUrl = `${baseAPIUrl}/stats`;
+const baseUserAPIUrl = `${baseAPIUrl}/users`;
 
 const baseWebSocketUrl = `${import.meta.env.VITE_WS_BASE_API_URL}/api/v1`;
 
@@ -34,4 +35,5 @@ export {
   toastDuration,
   role_names,
   inputResetDelay,
+  baseUserAPIUrl,
 };
