@@ -37,7 +37,7 @@ const UserProfilePage = () => {
     <>
       <h1 className="page-header">Your Profile</h1>
 
-      <div className="border-1 flex h-max w-full flex-col rounded-b-xl rounded-t-xl border border-sky-200 bg-amber-50 [--profile-card-padding:theme(spacing.10)] sm:w-[800px]">
+      <div className="@container border-1 flex h-max w-full flex-col rounded-b-xl rounded-t-xl border border-sky-200 bg-amber-50 [--profile-card-padding:theme(spacing.10)] sm:max-w-[800px]">
         <div className="flex w-full items-center justify-start gap-4 rounded-t-xl bg-sky-100 p-[--profile-card-padding]">
           <CircleUser className="h-20 w-20 stroke-slate-400 stroke-2" />
           <div className="flex flex-col gap-1">
@@ -54,7 +54,7 @@ const UserProfilePage = () => {
           </div>
           <div className="flex flex-col sm:grid sm:grid-cols-[90px_1fr]">
             <span className="text-left font-medium">Email</span>
-            <span className="w-60 truncate text-left text-amber-900 md:w-full">
+            <span className="@xs:w-60 @md:w-full @xs:truncate text-left text-amber-900 sm:w-full">
               {data.email}
             </span>
           </div>
